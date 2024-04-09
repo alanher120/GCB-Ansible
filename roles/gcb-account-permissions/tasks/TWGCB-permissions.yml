@@ -1,114 +1,4 @@
 
-- name: /etc/securetty RedHat6 TWGCB-01-003-0059,TWGCB-01-003-0060,TWGCB-01-003-0061,TWGCB-01-003-0062
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["5","6"]
-  template:
-    owner: root
-    group: root
-    mode: 0600
-    dest: /etc/securetty
-    src: TWGCB-003-securetty-RedHat6
-
-- name: /etc/securetty RedHat7 TWGCB-01-003-0059,TWGCB-01-003-0060,TWGCB-01-003-0061,TWGCB-01-003-0062
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["7"]
-  template:
-    owner: root
-    group: root
-    mode: 0600
-    dest: /etc/securetty
-    src: TWGCB-003-securetty-RedHat7
-
-- name: /etc/pam.d/su
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["7"]
-  template:
-    owner: root
-    group: root
-    mode: 0644
-    dest: /etc/pam.d/su
-    src: su
-
-- name: /etc/pam.d/system-auth
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["5","6","7"]
-  template:
-    owner: root
-    group: root
-    mode: 0644
-    dest: /etc/pam.d/system-auth
-    src: system-auth
-
-- name: /etc/sudoers in RedHat 5,6
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["5","6"]
-  template:
-    owner: root
-    group: root
-    mode: 0640
-    dest: /etc/sudoers
-    src: TWGCB-003-sudoers-RedHat6
-
-- name: /etc/sudoers in RedHat 7
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["7"]
-  template:
-    owner: root
-    group: root
-    mode: 0640
-    dest: /etc/sudoers
-    src: TWGCB-003-sudoers-RedHat7
-
-- name: /etc/default/useradd
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["5","6","7"]
-  template:
-    owner: root
-    group: root
-    mode: 0600
-    dest: /etc/default/useradd
-    src: TWGCB-003-useradd
-
-- name: /etc/profile.d/autologout.csh
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["5","6","7"]
-  template:
-    owner: root
-    group: root
-    mode: 0644
-    dest: /etc/profile.d/autologout.csh
-    src: TWGCB-003-autologout.csh
-
-- name: /etc/sysconfig/init in RedHat 5,6
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["5","6","7"]
-  template:
-    owner: root
-    group: root
-    mode: 0644
-    dest: /etc/sysconfig/init
-    src: init-RedHat6
-
-
-- name: TWGCB-01-003-0092 /boot/grub/grub.conf
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["6"]
-  become: true
-  file:
-    path: /boot/grub/grub.conf
-    mode: '0600' # TWGCB-01-003-0092
-    owner: root # TWGCB-01-003-0094
-    group: root # TWGCB-01-003-0093
-
-
-- name: /etc/sysconfig/init in RedHat 7
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["7"]
-  template:
-    owner: root
-    group: root
-    mode: 0644
-    dest: /etc/sysconfig/init
-    src: init-RedHat7
-
-- name: /etc/libuser.conf
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["5","6","7"]
-  template:
-    owner: root
-    group: root
-    mode: 0644
-    dest: /etc/libuser.conf
-    src: libuser.conf
-
 - name: /etc/profile.d/tmout.sh
   template:
     owner: root
@@ -117,23 +7,6 @@
     dest: /etc/profile.d/tmout.sh
     src: tmout.sh
 
-- name: /etc/profile in RedHat 5,6
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["5","6"]
-  template:
-    owner: root
-    group: root
-    mode: 0644
-    dest: /etc/profile
-    src: profile-RedHat6
-
-- name: /etc/profile in RedHat 7
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["7"]
-  template:
-    owner: root
-    group: root
-    mode: 0644
-    dest: /etc/profile
-    src: profile-RedHat7
 
 - name: /etc/bashrc
   template:
@@ -151,21 +24,140 @@
     dest: /etc/csh.cshrc
     src: csh.cshrc
 
-- name: /etc/issue in RedHat 5,6
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["5","6"]
-  template:
-    owner: root
-    group: root
-    mode: 0644
-    dest: /etc/issue
-    src: issue-RedHat6
+#################### execute in RedHat 6 ####################
 
-- name: /etc/issue in RedHat 7
+- name: execute in RedHat 6
+  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["6"]
+  block:
+  - name: TWGCB-01-003-0092 /boot/grub/grub.conf
+    become: true
+    file:
+      path: /boot/grub/grub.conf
+      mode: '0600' # TWGCB-01-003-0092
+      owner: root # TWGCB-01-003-0094
+      group: root # TWGCB-01-003-0093
+
+#################### execute in RedHat 7 ####################
+
+- name: execute in RedHat 7
   when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["7"]
-  template:
-    owner: root
-    group: root
-    mode: 0644
-    dest: /etc/issue
-    src: issue-RedHat7
+  block:
+  - name: /etc/securetty RedHat7 TWGCB-01-003-0059,TWGCB-01-003-0060,TWGCB-01-003-0061,TWGCB-01-003-0062
+    template:
+      owner: root
+      group: root
+      mode: 0600
+      dest: /etc/securetty
+      src: TWGCB-003-securetty-RedHat7
+  - name: /etc/pam.d/su
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/pam.d/su
+      src: su
+  - name: /etc/sudoers in RedHat 7
+    template:
+      owner: root
+      group: root
+      mode: 0640
+      dest: /etc/sudoers
+      src: TWGCB-003-sudoers-RedHat7
+  - name: /etc/sysconfig/init in RedHat 7
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/sysconfig/init
+      src: init-RedHat7
+  - name: /etc/profile in RedHat 7
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/profile
+      src: profile-RedHat7
+  - name: /etc/issue in RedHat 7
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/issue
+      src: issue-RedHat7
 
+#################### execute in RedHat 5 6 ####################
+
+- name: execute in RedHat 5 6
+  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["5","6"]
+  block:
+  - name: /etc/securetty RedHat6 TWGCB-01-003-0059,TWGCB-01-003-0060,TWGCB-01-003-0061,TWGCB-01-003-0062
+    template:
+      owner: root
+      group: root
+      mode: 0600
+      dest: /etc/securetty
+      src: TWGCB-003-securetty-RedHat6
+  - name: /etc/profile in RedHat 5,6
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/profile
+      src: profile-RedHat6
+  - name: /etc/sudoers in RedHat 5,6
+    template:
+      owner: root
+      group: root
+      mode: 0640
+      dest: /etc/sudoers
+      src: TWGCB-003-sudoers-RedHat6
+  - name: /etc/issue in RedHat 5,6
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/issue
+      src: issue-RedHat6
+
+- name: execute in RedHat 5,6,7
+  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["5","6","7"]
+  block:
+
+  - name: /etc/pam.d/system-auth
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/pam.d/system-auth
+      src: system-auth
+
+  - name: /etc/default/useradd
+    template:
+      owner: root
+      group: root
+      mode: 0600
+      dest: /etc/default/useradd
+      src: TWGCB-003-useradd
+
+  - name: /etc/profile.d/autologout.csh
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/profile.d/autologout.csh
+      src: TWGCB-003-autologout.csh
+
+  - name: /etc/sysconfig/init in RedHat 5,6
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/sysconfig/init
+      src: init-RedHat6
+  - name: /etc/libuser.conf
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/libuser.conf
+      src: libuser.conf
