@@ -35,17 +35,16 @@ fi
 
 # Path manipulation
 if [ "$EUID" = "0" ]; then
+    pathmunge /sbin
     pathmunge /usr/sbin
     pathmunge /usr/local/sbin
 else
     pathmunge /usr/local/sbin after
     pathmunge /usr/sbin after
+    pathmunge /sbin after
 fi
 
-HOSTNAME=$(/usr/bin/hostnamectl --transient 2>/dev/null) || \
-HOSTNAME=$(/usr/bin/hostname 2>/dev/null) || \
-HOSTNAME=$(/usr/bin/uname -n)
-
+HOSTNAME=`/bin/hostname 2>/dev/null`
 HISTSIZE=1000
 if [ "$HISTCONTROL" = "ignorespace" ] ; then
     export HISTCONTROL=ignoreboth
@@ -55,26 +54,26 @@ fi
 
 export PATH USER LOGNAME MAIL HOSTNAME HISTSIZE HISTCONTROL
 
-for i in /etc/profile.d/*.sh /etc/profile.d/sh.local ; do
+# By default, we want umask to get set. This sets it for login shell
+# Current threshold for system reserved uid/gids is 200
+# You could check uidgid reservation validity in
+# /usr/share/doc/setup-*/uidgid file
+if [ $UID -gt 199 ] && [ "`/usr/bin/id -gn`" = "`/usr/bin/id -un`" ]; then
+    umask 002
+else
+    # TWGCB-01-008-0241,TWGCB-01-003-0089(是建議077)
+    umask 077
+fi
+
+for i in /etc/profile.d/*.sh ; do
     if [ -r "$i" ]; then
-        if [ "${-#*i}" != "$-" ]; then 
+        if [ "${-#*i}" != "$-" ]; then
             . "$i"
         else
-            . "$i" >/dev/null
+            . "$i" >/dev/null 2>&1
         fi
     fi
 done
 
 unset i
 unset -f pathmunge
-
-if [ -n "${BASH_VERSION-}" ] ; then
-        if [ -f /etc/bashrc ] ; then
-                # Bash login shells run only /etc/profile
-                # Bash non-login shells run only /etc/bashrc
-                # Check for double sourcing is done in /etc/bashrc.
-                . /etc/bashrc
-       fi
-fi
-# TWGCB-01-008-0241,TWGCB-01-003-0089(是建議077)
-umask 077
