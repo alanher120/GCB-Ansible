@@ -1,3 +1,15 @@
+- name: change mode before
+  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["5","6","7"]
+  file:
+    path: "{{item}}"
+    mode: 0644
+    owner: root
+    group: root
+  with_items: 
+    - /etc/default/useradd
+    - /etc/securetty
+
+
 - name: /etc/securetty RedHat6 TWGCB-01-003-0059,TWGCB-01-003-0060,TWGCB-01-003-0061,TWGCB-01-003-0062
   when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["5","6"]
   template:
@@ -5,7 +17,7 @@
     group: root
     mode: 0600
     dest: /etc/securetty
-    src: "{{ TWGCB_003_securetty_RedHat6 }}"
+    src: TWGCB-003-securetty-RedHat6
 
 - name: /etc/securetty RedHat7 TWGCB-01-003-0059,TWGCB-01-003-0060,TWGCB-01-003-0061,TWGCB-01-003-0062
   when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["7"]
@@ -14,7 +26,7 @@
     group: root
     mode: 0600
     dest: /etc/securetty
-    src: "{{ TWGCB_003_securetty_RedHat7 }}"
+    src: TWGCB-003-securetty-RedHat7
 
 - name: /etc/pam.d/su
   when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["7"]
@@ -23,8 +35,7 @@
     group: root
     mode: 0644
     dest: /etc/pam.d/su
-    src: "{{ su }}"
-
+    src: su
 
 - name: /etc/pam.d/system-auth
   when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["5","6","7"]
@@ -33,25 +44,34 @@
     group: root
     mode: 0644
     dest: /etc/pam.d/system-auth
-    src: "{{ system_auth }}"
+    src: system-auth
 
-- name: /etc/sudoers
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["5","6","7"]
+- name: /etc/sudoers in RedHat 5,6
+  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["5","6"]
   template:
     owner: root
     group: root
     mode: 0640
     dest: /etc/sudoers
-    src: "{{ TWGCB_003_sudoers }}"
+    src: TWGCB-003-sudoers-RedHat-6
+
+- name: /etc/sudoers in RedHat 7
+  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["7"]
+  template:
+    owner: root
+    group: root
+    mode: 0640
+    dest: /etc/sudoers
+    src: TWGCB-003-sudoers-RedHat-7
 
 - name: /etc/default/useradd
   when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["5","6","7"]
   template:
     owner: root
     group: root
-    mode: 0644
+    mode: 0600
     dest: /etc/default/useradd
-    src: "{{ TWGCB_003_useradd }}"
+    src: TWGCB-003-useradd
 
 - name: /etc/profile.d/autologout.csh
   when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["5","6","7"]
@@ -60,7 +80,7 @@
     group: root
     mode: 0644
     dest: /etc/profile.d/autologout.csh
-    src: "{{ TWGCB_003_autologout_csh }}"
+    src: TWGCB-003-autologout.csh
 
 - name: /etc/profile.d/tmout.sh
   template:
@@ -68,7 +88,7 @@
     group: root
     mode: 0644
     dest: /etc/profile.d/tmout.sh
-    src: "{{ TWGCB_003_autologout_csh }}"
+    src: tmout.sh
 
 
 - name: /etc/libuser.conf
@@ -78,7 +98,7 @@
     group: root
     mode: 0644
     dest: /etc/libuser.conf
-    src: "{{ libuser_conf }}"
+    src: libuser.conf
 
 - name: /etc/profile
   template:
@@ -86,15 +106,15 @@
     group: root
     mode: 0644
     dest: /etc/profile
-    src: "{{ profile }}"
+    src: profile
 
 - name: /etc/bashrc
   template:
     owner: root
     group: root
     mode: 0644
-    dest: /etc/profile
-    src: "{{ bashrc }}"
+    dest: /etc/bashrc
+    src: bashrc
 
 - name: /etc/csh.cshrc
   template:
@@ -102,7 +122,7 @@
     group: root
     mode: 0644
     dest: /etc/csh.cshrc
-    src: "{{ csh_cshrc }}"
+    src: csh.cshrc
 
 - name: /etc/sysconfig/init
   template:
@@ -110,7 +130,7 @@
     group: root
     mode: 0644
     dest: /etc/sysconfig/init
-    src: "{{ sysconfig_init }}"
+    src: init
 
 - name: /etc/issue
   template:
@@ -118,7 +138,7 @@
     group: root
     mode: 0644
     dest: /etc/issue
-    src: "{{ TWGCB_issue_RedHat6 }}"
+    src: issue
 
 - name: TWGCB-01-003-0092 /boot/grub/grub.conf
   when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["6"]
