@@ -14,6 +14,8 @@ x86_64
 
 * /etc/yum.repos.d/media.repo
 
+下列是 RHEL6 RHEL7 設定方式
+
 ```
 [InstallMedia]
 name=Red Hat Enterprise Linux 6.10
@@ -24,3 +26,20 @@ gpgcheck=0
 cost=500
 ```
 
+下列是 RHEL8 設定方式
+
+```
+[dvd-BaseOS]
+name=DVD for RHEL8 – BaseOS
+baseurl=file:///mnt/BaseOS
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+
+[dvd-AppStream]
+name=DVD for RHEL8 – AppStream
+baseurl=file:///mnt/AppStream
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+```
