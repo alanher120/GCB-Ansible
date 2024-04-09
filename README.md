@@ -93,6 +93,7 @@ ansible-playbook check-os-version.yml -i inventorys/develop
 ### 已完成測試的Linux發行板
 
 * RedHat 6.10
+* RedHat 7.9
 
 ### 測試項目
 
