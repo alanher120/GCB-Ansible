@@ -27,7 +27,7 @@
 #################### execute in RedHat 6 ####################
 
 - name: execute in RedHat 6
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["6"]
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version in ["6"]
   block:
   - name: TWGCB-01-003-0092 /boot/grub/grub.conf
     become: true
@@ -40,7 +40,7 @@
 #################### execute in RedHat 7 ####################
 
 - name: execute in RedHat 7
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["7"]
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version in ["7"]
   block:
   - name: /etc/securetty RedHat7 TWGCB-01-003-0059,TWGCB-01-003-0060,TWGCB-01-003-0061,TWGCB-01-003-0062
     template:
@@ -88,7 +88,7 @@
 #################### execute in RedHat 5 6 ####################
 
 - name: execute in RedHat 5 6
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["5","6"]
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version in ["5","6"]
   block:
   - name: /etc/securetty RedHat6 TWGCB-01-003-0059,TWGCB-01-003-0060,TWGCB-01-003-0061,TWGCB-01-003-0062
     template:
@@ -120,7 +120,7 @@
       src: issue-RedHat6
 
 - name: execute in RedHat 5,6,7
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["5","6","7"]
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version in ["5","6","7"]
   block:
 
   - name: /etc/pam.d/system-auth

@@ -2,7 +2,7 @@
 - name: TWGCB-01-008-0145 push /etc/aide.conf
   become: true
   copy:
-    src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/aide.conf
+    src: files/{{ansible_os_family}}/{{ansible_distribution_major_version}}/etc/aide.conf
     dest: /etc/default
     owner: root
     group: root

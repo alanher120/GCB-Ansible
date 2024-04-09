@@ -1,7 +1,7 @@
 - name: TWGCB-selinux push /etc/selinux/config
   become: true
   copy:
-    src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/selinux/config
+    src: files/{{ansible_os_family}}/{{ansible_distribution_major_version}}/etc/selinux/config
     dest: /etc/selinux
     owner: root
     group: root

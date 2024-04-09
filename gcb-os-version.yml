@@ -1,5 +1,5 @@
 ---
 - hosts: servers
   tasks:
-  - name: OS:"{{ ansible_distribution }}" Version:"{{ansible_distribution_major_version}}" 
+  - name: OS:"{{ ansible_os_family }}" Version:"{{ansible_distribution_major_version}}" 
     ping:

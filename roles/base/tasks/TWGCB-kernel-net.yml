@@ -3,7 +3,7 @@
 - name: TWGCB-01-008-0042 push /etc/sysctl.d/gcb.conf
   become: true
   copy:
-    src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/sysctl.d/gcb.conf
+    src: files/{{ansible_os_family}}/{{ansible_distribution_major_version}}/etc/sysctl.d/gcb.conf
     dest: /etc/sysctl.d
     owner: root
     group: root
@@ -12,7 +12,7 @@
 - name: TWGCB-01-008-0042 push /etc/systemd/coredump.conf
   become: true
   copy:
-    src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/systemd/coredump.conf
+    src: files/{{ansible_os_family}}/{{ansible_distribution_major_version}}/etc/systemd/coredump.conf
     dest: /etc/systemd
     owner: root
     group: root

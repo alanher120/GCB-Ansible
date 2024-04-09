@@ -8,7 +8,7 @@
     name: "{{ item }}"
   with_items:
     "{{ enable_packages }}"
-  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == "6"
+  when: ansible_os_family == "CentOS" and ansible_distribution_major_version == "6"
 
 - name: TWGCB-base-check-disable CentOS-7
   ignore_errors: true
@@ -19,7 +19,7 @@
     name: "{{ item }}"
   with_items:
     "{{ enable_packages }}"
-  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == "7"
+  when: ansible_os_family == "CentOS" and ansible_distribution_major_version == "7"
 
 - name: TWGCB-base-check-disable OracleLinux-9
   ignore_errors: true
@@ -30,5 +30,5 @@
     name: "{{ item }}"
   with_items:
     "{{ enable_packages }}"
-  when: ansible_distribution == "OracleLinux" and ansible_distribution_major_version == "9"
+  when: ansible_os_family == "OracleLinux" and ansible_distribution_major_version == "9"
 

@@ -2,7 +2,7 @@
 - name: TWGCB-audit push /etc/audit/auditd.conf
   become: true
   copy:
-    src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/audit/auditd.conf
+    src: files/{{ansible_os_family}}/{{ansible_distribution_major_version}}/etc/audit/auditd.conf
     dest: /etc/audit
     owner: root
     group: root
@@ -11,7 +11,7 @@
 - name: TWGCB-audit push /etc/audit/rules.d/audit.rules
   become: true
   copy:
-    src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/audit/rules.d/audit.rules
+    src: files/{{ansible_os_family}}/{{ansible_distribution_major_version}}/etc/audit/rules.d/audit.rules
     dest: /etc/audit/rules.d
     owner: root
     group: root

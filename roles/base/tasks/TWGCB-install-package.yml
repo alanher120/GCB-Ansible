@@ -14,7 +14,7 @@
 #     name: "{{ item }}"
 #   with_items:
 #     "{{ install_package }}"
-#   when: ansible_distribution == "OracleLinux" and ansible_distribution_major_version == "9"
+#   when: ansible_os_family == "OracleLinux" and ansible_distribution_major_version == "9"
 
 # - name: TWGCB-install-package
 #   become: true
@@ -23,4 +23,4 @@
 #     name: "{{ item }}"
 #   with_items:
 #     "{{ install_package }}"
-#   when: ansible_distribution == "CentOS" and ansible_distribution_major_version == "7"
+#   when: ansible_os_family == "CentOS" and ansible_distribution_major_version == "7"

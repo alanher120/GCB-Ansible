@@ -29,13 +29,13 @@
 #################### execute in RedHat 6 ####################
 
 # - name: execute in RedHat 6
-#   when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["6"]
+#   when: ansible_os_family == "RedHat" and ansible_distribution_major_version in ["6"]
 #   block:
 
 #################### execute in RedHat 7 ####################
 
 - name: execute in RedHat 7
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["7"]
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version in ["7"]
   block:
   - name: /etc/sysctl.conf RedHat7
     template:
@@ -48,7 +48,7 @@
 #################### execute in RedHat 5 6 ####################
 
 - name: execute in RedHat 5 6
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["5","6"]
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version in ["5","6"]
   block:
   - name: /etc/sysctl.conf RedHat6
     template:
@@ -61,7 +61,7 @@
 #################### execute in RedHat 5 6 7 ####################
 
 - name: execute in RedHat 5 6 7
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["5","6","7"]
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version in ["5","6","7"]
   block:
   - name: /etc/security/limits.conf TWGCB_003
     template:
@@ -84,7 +84,7 @@
 #################### execute in RedHat older 8 ####################
 
 - name: execute in RedHat older 8
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version | int >= 8
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version | int >= 8
   block:
 
   - name: /etc/passwd-

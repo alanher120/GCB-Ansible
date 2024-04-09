@@ -1,5 +1,5 @@
 - name: /etc/logrotate.d/syslog
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["5","6","7"]
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version in ["5","6","7"]
   become: true
   template:
     owner: root
@@ -9,7 +9,7 @@
     src: "{{ syslog }}"
 
 - name: TWGCB-01-003-0145
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["5"]
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version in ["5"]
   become: true
   file:
     owner: root

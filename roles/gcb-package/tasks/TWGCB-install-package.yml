@@ -1,6 +1,6 @@
 
 - name: Debian Base version
-  when: ansible_distribution == "Debian"
+  when: ansible_os_family == "Debian"
   block:
   - name: TWGCB-install-package
     apt:
@@ -9,7 +9,7 @@
       "{{ install_package }}"
 
 - name: RedHat Base version
-  when: ansible_distribution == "RedHat"
+  when: ansible_os_family == "RedHat"
   block:
   - name: TWGCB-install-package
     yum:
@@ -46,7 +46,7 @@
 #       "{{ install_package }}"
     
 # - name: RedHat Base version 7
-#   when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "6"
+#   when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "6"
 #   block:
 #   - name: TWGCB-install-package
 #     yum:
@@ -56,7 +56,7 @@
     
 
 - name: RedHat Base version 5 6 7
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version in ["5","6","7"]
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version in ["5","6","7"]
   block:
   - name: TWGCB-install-package-TWGCB-01-003
     yum:
@@ -66,7 +66,7 @@
     
 
 - name: RedHat Base version is no less than 8
-  when: ansible_distribution == "RedHat" and ansible_distribution_major_version | int >= 8
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version | int >= 8
   block:
   - name: TWGCB-install-package-TWGCB-01-008
     dnf:
