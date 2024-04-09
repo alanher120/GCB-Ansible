@@ -85,3 +85,13 @@ ansible-playbook check-os-version.yml -i inventorys/develop
 ## 注意事項
 
 * 設定完 playbook-base.yml 需要重新開機
+
+## 測試
+
+### 已完成測試的Linux發行板
+
+* RedHat 6.10
+
+### 測試項目
+
+1. reboot
