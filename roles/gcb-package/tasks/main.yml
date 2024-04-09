@@ -1,5 +1,19 @@
 
-- include_tasks: TWGCB-install-package.yml
-- include_tasks: TWGCB-remove-package.yml
-- include_tasks: TWGCB-disable-packages.yml
-- include_tasks: TWGCB-enable-package.yml
+- include_tasks: 
+    file: TWGCB-install-package.yml
+    apply:
+      become: true
+- include_tasks: 
+    file: TWGCB-remove-package.yml
+    apply:
+      become: true
+- include_tasks:
+    file: TWGCB-disable-packages.yml
+    apply:
+      become: true
+      ignore_errors: true
+- include_tasks: 
+    file: TWGCB-enable-package.yml
+    apply:
+      become: true
+      ignore_errors: true

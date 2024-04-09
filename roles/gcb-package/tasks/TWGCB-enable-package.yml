@@ -2,7 +2,7 @@
   when: ansible_distribution == "Debian"
   block:
   - name: enable_packages
-    ansible.builtin.systemctl:
+    ansible.builtin.systemd:
       name: "{{item}}"
       enabled: on
     with_items:
