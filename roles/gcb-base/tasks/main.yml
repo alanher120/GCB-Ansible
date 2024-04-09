@@ -1,5 +1,6 @@
 - name: /etc/sysconfig/network
   when: ansible_distribution == "RedHat" and ansible_distribution_major_version == "6"
+  become: true
   template:
     owner: root
     group: root
