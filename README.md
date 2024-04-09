@@ -26,6 +26,8 @@ yum install -y libselinux-python
 
 ### 開發環境設定
 
+注意：只是為了開發腳本方便，正式環境不建議使用
+
 ```bash
 tee /etc/sudoers.d/pollo-develop<<EOF
 ansible ALL=(ALL)   NOPASSWD: ALL
