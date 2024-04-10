@@ -11,3 +11,13 @@
       mode: 0644
       dest: /usr/lib/systemd/system/rescue.service
       src: "{{rescue_service}}"
+
+  - name: /usr/lib/systemd/system/emergency.service
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /usr/lib/systemd/system/emergency.service
+      src: "{{emergency_service}}"
+      
+

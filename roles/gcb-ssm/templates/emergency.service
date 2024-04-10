@@ -8,19 +8,20 @@
 #  (at your option) any later version.
 
 [Unit]
-Description=Rescue Shell
+Description=Emergency Shell
 Documentation=man:sulogin(8)
 DefaultDependencies=no
 Conflicts=shutdown.target
-After=sysinit.target plymouth-start.service
+Conflicts=rescue.service
 Before=shutdown.target
+Before=rescue.service
 
 [Service]
 Environment=HOME=/root
 WorkingDirectory=-/root
 ExecStartPre=-/bin/plymouth --wait quit
 # TWGCB-01-008-0041
-ExecStart=-/usr/lib/systemd/systemd-sulogin-shell rescue
+ExecStart=-/usr/lib/systemd/systemd-sulogin-shell emergency
 Type=idle
 StandardInput=tty-force
 StandardOutput=inherit

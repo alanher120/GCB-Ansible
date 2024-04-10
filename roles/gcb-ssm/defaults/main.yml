@@ -1,1 +1,2 @@
 rescue_service: rescue.service
+emergency_service: emergency.service

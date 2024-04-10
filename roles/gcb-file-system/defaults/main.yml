@@ -2,6 +2,8 @@ gcb_blacklist: gcb-blacklist
 sysconfig_init: sysconfig-init
 etc_sysctl_redhat6_conf: etc-sysctl-redhat6.conf
 etc_sysctl_redhat7_conf: etc-sysctl-redhat7.conf
+etc_sysctl_redhat8_1: etc-sysctl-redhat8-1.conf
+etc_sysctl_redhat8_2: etc-sysctl-redhat8-2.conf
 TWGCB_003_limits_gcb_conf: TWGCB-003-limits-gcb.conf
 TWGCB_008_limits_gcb_conf: TWGCB-008-limits-gcb.conf
 console_perms: console.perms
@@ -12,3 +14,4 @@ cramfs_conf: cramfs.conf
 squashfs_conf: squashfs.conf
 udf_conf: udf.conf
 usb_storage_conf: usb-storage.conf
+coredump_conf: coredump.conf

@@ -123,4 +123,47 @@
       dest: /etc/security/limits.d/gcb.conf
       src: "{{ TWGCB_008_limits_gcb_conf }}"
 
+  - name: /etc/sysctl.d/gcb.conf
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/sysctl.d/gcb.conf
+      src: "{{ etc_sysctl_redhat8_1 }}"
 
+  - name: /etc/sysctl.d/50-coredump.conf
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/sysctl.d/50-coredump.conf
+      src: "{{ etc_sysctl_redhat8_2 }}"
+
+  - name: execute command
+    command: "{{ item }}"
+    with_items: 
+    - sysctl -w fs.suid_dumpable=0 # TWGCB-01-008-0042
+    - sysctl -w kernel.core_pattern=|/bin/false # TWGCB-01-008-0042
+    - sysctl -w kernel.randomize_va_space=2 # TWGCB-01-008-0042
+
+  - name: Gather the package facts
+    ansible.builtin.package_facts:
+      manager: auto
+
+  - name: 已安裝coredump服務 才需要處理
+    when: "'coredump' in ansible_facts.packages"
+    block:
+    - name: /etc/systemd/coredump.conf
+      template:
+        owner: root
+        group: root
+        mode: 0644
+        dest: /etc/systemd/coredump.conf
+        src: "{{ coredump_conf }}"
+
+    - name: execute command
+      command: "{{ item }}"
+      with_items: 
+      - systemctl daemon-reload # TWGCB-01-008-0042
+      - systemctl mask systemd-coredump.socket # TWGCB-01-008-0042
+    
