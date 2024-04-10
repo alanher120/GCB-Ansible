@@ -1,0 +1,13 @@
+
+#################### execute in RedHat older 8 ####################
+
+- name: execute in RedHat older 8
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version | int >= 8
+  block:
+  - name: TWGCB-01-008-0037
+    cron:
+      user: root
+      name: TWGCB-01-008-0037
+      minute: 0 
+      hour: 5
+      job: /usr/sbin/aide --check

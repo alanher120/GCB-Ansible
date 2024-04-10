@@ -46,25 +46,6 @@ find PART -xdev -type d -perm -0002 -uid +500 -print
 grep -E "ttyS0|ttyS1" /etc/securetty
 ```
 
-### 基本項目
-
-以下是通用項目
-
-### TWGCB-01-008-0034,TWGCB-01-008-0035: /etc/sudoers.d/
-
-* TWGCB-01-008-0034: 設定sudo指令使用pty
-* TWGCB-01-008-0035: sudo自定義日誌檔案
-
-* /etc/sudoers.d/gcb
-
-```bash
-visudo -f /etc/sudoers.d/gcb
-```
-
-```conf
-Defaults use_pty
-Defaults logfile="/var/log/sudo.log"
-```
 
 ## 依需求設定
 
