@@ -1,3 +1,0 @@
-
-- name: TWGCB-01-003-0006
-  command: wget -O /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release 

@@ -7,3 +7,8 @@ TWGCB_008_limits_gcb_conf: TWGCB-008-limits-gcb.conf
 console_perms: console.perms
 TWGCB_003_securetty_RedHat6: TWGCB-003-securetty-RedHat6
 TWGCB_003_securetty_RedHat7: TWGCB-003-securetty-RedHat7
+
+cramfs_conf: cramfs.conf
+squashfs_conf: squashfs.conf
+udf_conf: udf.conf
+usb_storage_conf: usb-storage.conf

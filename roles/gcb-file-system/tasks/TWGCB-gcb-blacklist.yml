@@ -1,7 +1,62 @@
-- name: TWGCB-01-003-0024,TWGCB-01-003-0025,TWGCB-01-003-0026,TWGCB-01-003-0027,TWGCB-01-003-0028,TWGCB-01-003-0029,TWGCB-01-003-0030
-  template:
-    owner: root
-    group: root
-    mode: 0644
-    dest: /etc/modprobe.d/gcb-blacklist
-    src: "{{ gcb_blacklist }}"
+
+
+#################### execute in RedHat 5 6 7 ####################
+
+- name: execute in RedHat 5 6
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version in ["5","6"]
+  block:
+
+  - name: TWGCB-01-003-0024,TWGCB-01-003-0025,TWGCB-01-003-0026,TWGCB-01-003-0027,TWGCB-01-003-0028,TWGCB-01-003-0029,TWGCB-01-003-0030
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/modprobe.d/gcb-blacklist
+      src: "{{ gcb_blacklist }}"
+
+
+#################### execute in RedHat older 8 ####################
+
+- name: execute in RedHat older 8
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version | int >= 8
+  block:
+
+  - name: upload blacklist /etc/modprobe.d/cramfs.conf
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/modprobe.d/cramfs.conf
+      src: "{{cramfs_conf}}"
+
+  - name: upload blacklist /etc/modprobe.d/squashfs.conf
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/modprobe.d/squashfs.conf
+      src: "{{squashfs_conf}}"
+
+  - name: upload blacklist /etc/modprobe.d/udf.conf
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/modprobe.d/udf.conf
+      src: "{{udf_conf}}"
+
+  - name: /etc/modprobe.d/usb-storage.conf
+    template:
+        owner: root
+        group: root
+        mode: 0644
+        dest: /etc/modprobe.d/usb-storage.conf
+        src: "{{usb_storage_conf}}"
+
+  - name: execute black command
+    command: "{{item}}"
+    with_items:
+      - rmmod cramfs # TWGCB-01-008-0001
+      - rmmod squashfs # TWGCB-01-008-0002
+      - rmmod udf # TWGCB-01-008-0003
+      - rmmod usb-storage # TWGCB-01-008-0031

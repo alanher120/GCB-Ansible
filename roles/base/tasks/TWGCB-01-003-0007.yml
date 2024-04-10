@@ -1,3 +1,0 @@
-
-- name: TWGCB-01-003-0007
-  command: chkconfig rhnsd off
