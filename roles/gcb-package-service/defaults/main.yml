@@ -1,3 +1,5 @@
 ntp_ip: 127.0.0.1
 
+chrony_conf: chrony.conf
 dnf_redhat_8_conf: dnf-redhat-8.conf
+
