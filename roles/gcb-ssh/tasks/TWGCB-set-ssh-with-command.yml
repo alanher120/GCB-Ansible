@@ -1,6 +1,5 @@
 # 排程處理項目
 - name: TWGCB-01-008-0267 TWGCB-01-008-0270,TWGCB-01-008-0292
-  become: true
   command: "{{ item }}"
   with_items: 
     - find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chown root:root {} \; # TWGCB-01-008-0267

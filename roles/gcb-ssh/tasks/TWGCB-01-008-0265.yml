@@ -1,6 +1,5 @@
 
 - name: TWGCB-01-008-0266
-  become: true
   file:
     path: /etc/ssh/sshd_config
     state: file
