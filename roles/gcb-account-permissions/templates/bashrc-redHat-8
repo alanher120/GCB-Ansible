@@ -65,8 +65,16 @@ if [ -z "$BASHRCSOURCED" ]; then
         esac
     }
 
-    # Set default umask for non-login shell only if it is set to 0
-    [ `umask` -eq 0 ] && umask 022
+    # By default, we want umask to get set. This sets it for non-login shell.
+    # Current threshold for system reserved uid/gids is 200
+    # You could check uidgid reservation validity in
+    # /usr/share/doc/setup-*/uidgid file
+    if [ $UID -gt 199 ] && [ "`/usr/bin/id -gn`" = "`/usr/bin/id -un`" ]; then
+       umask 002
+    else
+      #  所有使用者帳號的預設umask: TWGCB-01-008-0241
+       umask 027
+    fi
 
     SHELL=/bin/bash
     # Only display echos from profile.d scripts if we are no login shell
@@ -86,6 +94,7 @@ if [ -z "$BASHRCSOURCED" ]; then
   fi
 
 fi
-# TWGCB-01-003-0090
-umask 077
 # vim:ts=4:sw=4
+
+# Bash shell閒置時登出時間: TWGCB-01-008-0238
+readonly TMOUT=900 ; export TMOUT

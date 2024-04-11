@@ -183,14 +183,140 @@ authselect create-profile <profile名稱> -b sssd --symlink-meta
 authselect select custom/<profile名稱> with-sudo with-faillock without-nullok
 ```
 
-* 開啟終端機，執行以下腳本，更新system-auth與password-auth檔案：
+### 強制執行密碼歷程記錄
+
+* TWGCB-01-008-0222
+
+* 開啟終端機，執行以下指令，建立客製化profile：
 
 ```bash
-#!/bin/bash
-CP=$(authselect current | awk 'NR == 1 {print $3}' | grep custom/)
-for FN in system-auth password-auth; do
-    [[ -n $CP ]] && PTF=/etc/authselect/$CP/$FN || PTF=/etc/authselect/$FN
-    [[ -z $(grep -E '^\s*password\s+requisite\s+pam_pwquality.so\s+.*enforce_for_root\s*.*$' $PTF) ]] && sed -ri 's/^\s*(password\s+requisite\s+pam_pwquality.so\s+)(.*)$/\1\2 enforce_for_root/' $PTF
-done
-authselect apply-changes
+authselect create-profile <profile名稱> -b sssd --symlink-meta
+authselect select custom/<profile名稱> with-sudo with-faillock without-nullok
+```
+
+### 密碼雜湊演算法
+
+* TWGCB-01-008-0224
+
+* 開啟終端機，執行以下指令，建立客製化profile：
+
+```bash
+authselect create-profile <profile名稱> -b sssd --symlink-meta
+authselect select custom/<profile名稱> with-sudo with-faillock without-nullok
+```
+
+### 密碼最短使用期限
+
+* TWGCB-01-008-0226
+
+* 針對進行上述設定前就已存在之使用者帳號，須再執行下列指令，才能使密碼到期前14天提醒使用者變更密碼：
+
+```bash
+#chage --warndays 14 (使用者帳號名稱)
+```
+
+### 密碼最長使用期限
+
+* TWGCB-01-008-0227
+
+* 針對進行上述設定前就已存在之使用者帳號，須再執行下列指令，才能使密碼最長使用期限變更為90天：
+
+```bash
+#chage --maxdays 90 (使用者帳號名稱)
+```
+
+### 密碼到期後，帳號停用前的天數
+
+* TWGCB-01-008-0228
+
+▪  針對進行上述設定前就已存在之使用者帳號，須再執行下列指令，才能使密碼到期後，超過30天就進行帳號停用：
+#chage --inactive 30 (使用者帳號名稱)
+
+### 要求使用者必須經過身分驗證才能提升權限
+
+* TWGCB-01-008-0231
+
+* 開啟終端機，執行以下指令，尋找「NOPASSWD」或「!authenticate」：
+
+```bash
+#egrep -i '(nopasswd|!authenticate)' /etc/sudoers /etc/sudoers.d/*
+```
+
+* 執行「visudo -f」指令編輯/etc/sudoers檔案或 /etc/sudoers.d/目錄下的檔案，針對包含「NOPASSWD」或「!authenticate」的指令行，予以註解(#)或刪除
+
+### 系統帳號登入方式
+
+* TWGCB-01-008-0237
+
+開啟終端機，執行以下指令，設定系統帳號(sync、shutdown及halt帳號除外)不可使用殼層(Shell)登入：
+
+```bash
+awk -F: '($1!="root" && $1!="sync" && $1!="shutdown" && $1!="halt" && $1!~/^\+/ && $3<'"$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)"' && $7!="'"$(which nologin)"'" && $7!="/bin/false") {print $1}' /etc/passwd | while read user; do usermod -s $(which nologin) $user; done
+```
+
+### 可使用su指令之群組
+
+* TWGCB-01-008-0243
+
+* 編輯/etc/group檔案之wheel群組設定，建立允許使用su指令的使用者帳號清單，如下所示：
+
+```bash
+wheel:x:GID:root,(使用者帳號清單)
+```
+
+* 範例：如欲在wheel群組(GID為10)建立允許root、user1及user2帳號使用su指令，內容如下：
+
+```bash
+wheel:x:10:root,user1,user2
+```
+
+### GNOME 桌面相關
+
+* 使用者會談鎖定
+  * TWGCB-01-008-0234
+* GNOME使用者會談逾時時間
+  * TWGCB-01-008-0235
+* 禁止GNOME使用者自動登入
+  * TWGCB-01-008-0236
+* 防止修改圖形使用者介面(GUI)設定
+  * TWGCB-01-008-0239
+
+開啟終端機，執行以下指令，建立或編輯資料庫，設定螢幕保護裝置：
+
+* /etc/dconf/db/local.d/00-screensaver
+
+```bash
+## 使用者會談鎖定: TWGCB-01-008-0234
+[org/gnome/desktop/screensaver]
+##Set this to true to lock the screen when the screensaver activates
+lock-enabled=true
+
+## GNOME使用者會談逾時時間: TWGCB-01-008-0235
+[org/gnome/desktop/session]
+##Set the lock time out to 900 seconds before the session is considered idle
+idle-delay=uint32 900
+```
+
+* /etc/gdm/custom.conf
+
+```conf
+## 禁止GNOME使用者自動登入: TWGCB-01-008-0236
+[daemon]
+AutomaticLoginEnable=false
+```
+
+* /etc/dconf/db/local.d/locks/session
+
+```conf
+# 防止修改圖形使用者介面(GUI)設定: TWGCB-01-008-0239
+/org/gnome/desktop/session/idle-delay
+/org/gnome/desktop/screensaver/lock-enabled
+/org/gnome/desktop/screensaver/lock-delay
+/org/gnome/desktop/lockdown/disable-lock-screen
+```
+
+* 執行以下指令更新系統資料庫：
+
+```bash
+dconf update
 ```

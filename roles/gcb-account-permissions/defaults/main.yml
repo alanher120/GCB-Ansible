@@ -1,11 +1,15 @@
 TWGCB_003_securetty_RedHat6: TWGCB-003-securetty-RedHat6
 TWGCB_003_securetty_RedHat7: TWGCB-003-securetty-RedHat7
 su: su
+su_redHat_8: su-redHat-8
 login_defs: login.defs
 system_auth: system-auth
 libuser_conf: libuser.conf
-profile: profile
+profile_redHat_6: profile-redHat-6
+profile_redHat_7: profile-redHat-7
+profile_redHat_8: profile-redHat-8
 bashrc: bashrc
+bashrc_redHat_8: bashrc-redHat-8
 csh_cshrc: csh.cshrc
 sysconfig_init: sysconfig-init
 TWGCB_003_issue_OracleLinux7: TWGCB-003-issue-OracleLinux7
@@ -15,3 +19,5 @@ TWGCB_003_sudoers: TWGCB-003-sudoers
 TWGCB_003_autologout_csh: TWGCB-003-autologout.csh
 tmout_sh: tmout.sh
 pwquality_redhat_8_conf: pwquality-redhat-8.conf
+faillock_redhat_8_conf: faillock-redhat-8.conf
+postlogin_redhat_8: postlogin-redhat-8

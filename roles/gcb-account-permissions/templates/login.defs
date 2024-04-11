@@ -6,7 +6,7 @@
 # /etc/pam.d/system-auth for more information.
 #
 
-# TWGCB-01-008-0229
+# 登入嘗試失敗之延遲時間: TWGCB-01-008-0229
 FAIL_DELAY             4
 
 # *REQUIRED*
@@ -25,13 +25,13 @@ MAIL_DIR        /var/spool/mail
 #       PASS_MIN_LEN    Minimum acceptable password length.
 #       PASS_WARN_AGE   Number of days warning given before a password expires.
 #
-# TWGCB-01-008-0227,TWGCB-01-003-0071
+# 密碼最長使用期限: TWGCB-01-008-0227,TWGCB-01-003-0071
 PASS_MAX_DAYS   90
-# TWGCB-01-008-0225,TWGCB-01-003-0069
+# 密碼最短使用期限: TWGCB-01-008-0225,TWGCB-01-003-0069
 PASS_MIN_DAYS   1
 # TWGCB-01-003-0072,TWGCB-01-008-0210
 PASS_MIN_LEN    12
-# TWGCB-01-008-0226,TWGCB-01-003-0070
+# 密碼到期前提醒使用者變更密碼: TWGCB-01-008-0226,TWGCB-01-003-0070
 PASS_WARN_AGE   14
 
 #
@@ -64,21 +64,21 @@ SYS_GID_MAX               999
 # On RH systems, we do. This option is overridden with the -m flag on
 # useradd command line.
 #
-# TWGCB-01-008-0230
+# 新使用者帳號預設建立使用者家目錄: TWGCB-01-008-0230
 CREATE_HOME     yes
 
 # The permission mask is initialized to this value. If not specified, 
 # the permission mask will be initialized to 022.
 
-# TWGCB-01-008-0242, TWGCB-01-003-0088(是建議077)
-UMASK           077
+# 在/etc/login.defs設定所有使用者的預設umask: TWGCB-01-008-0242, TWGCB-01-003-0088(是建議077)
+UMASK           027
 
 # This enables userdel to remove user groups if no members exist.
 #
 USERGROUPS_ENAB yes
 
 # Use SHA512 to encrypt password.
-# TWGCB-01-008-0224,TWGCB-01-003-0083
+# 密碼雜湊演算法: TWGCB-01-008-0224,TWGCB-01-003-0083
 ENCRYPT_METHOD SHA512
 
 # TWGCB-01-003-0083

@@ -7,15 +7,6 @@
     dest: /etc/profile.d/tmout.sh
     src: tmout.sh
 
-
-- name: /etc/bashrc
-  template:
-    owner: root
-    group: root
-    mode: 0644
-    dest: /etc/bashrc
-    src: bashrc
-
 - name: /etc/csh.cshrc
   template:
     owner: root
@@ -72,7 +63,7 @@
       group: root
       mode: 0644
       dest: /etc/profile
-      src: profile-RedHat7
+      src: "{{profile_redHat_7}}"
   - name: /etc/issue in RedHat 7
     template:
       owner: root
@@ -99,7 +90,7 @@
       group: root
       mode: 0644
       dest: /etc/profile
-      src: profile-RedHat6
+      src: "{{profile_redHat_6}}"
   - name: /etc/sudoers in RedHat 5,6
     template:
       owner: root
@@ -120,6 +111,14 @@
 - name: execute in RedHat 5,6,7
   when: ansible_os_family == "RedHat" and ansible_distribution_major_version in ["5","6","7"]
   block:
+
+  - name: /etc/bashrc
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/bashrc
+      src: "{{bashrc}}"
 
   - name: /etc/pam.d/system-auth
     template:
@@ -174,3 +173,41 @@
       mode: 0644
       dest: /etc/security/pwquality.conf
       src: "{{pwquality_redhat_8_conf}}"
+
+  - name: /etc/security/faillock.conf
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/security/faillock.conf
+      src: "{{faillock_redhat_8_conf}}"
+  - name: /etc/pam.d/postlogin
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/pam.d/postlogin
+      src: "{{postlogin_redhat_8}}"
+  - name: /etc/profile
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/profile
+      src: "{{profile_redHat_8}}"
+  - name: /etc/bashrc
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/bashrc
+      src: "{{bashrc_redHat_8}}"
+  - name: /etc/pam.d/su
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/pam.d/su
+      src: "{{su_redHat_8}}"
+
+
