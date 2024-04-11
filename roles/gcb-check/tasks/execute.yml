@@ -18,6 +18,8 @@
     - grep '^\+:' /etc/group # TWGCB-01-008-0077
     - "awk -F: '($3 == 0) { print $1 }' /etc/passwd" # TWGCB-01-008-0078
     - ip link | grep -i promisc # 網路介面混雜模式: TWGCB-01-008-0131
+    - grep -iw log_file /etc/audit/auditd.conf # TWGCB-01-008-0137,TWGCB-01-008-0138,TWGCB-01-008-0139,TWGCB-01-008-0140
+    - stat -c "%a %n" /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace /sbin/auditd /sbin/audisp-remote /sbin/audisp-syslog /sbin/augenrules /sbin/rsyslogd 2>/dev/null | grep 755 # TWGCB-01-008-0143
   
   - name: TWGCB-01-008-0079
     shell: |

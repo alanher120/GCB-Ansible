@@ -1,0 +1,63 @@
+#################### execute in RedHat older 8 ####################
+
+- name: execute in RedHat older 8
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version | int >= 8
+  block:
+  - name: /etc/aliases
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/aliases
+      src: "{{aliases_redhat_8}}"
+  - name: /etc/audit/rules.d/audit.rules
+    template:
+      owner: root
+      group: root
+      mode: 0600 # TWGCB-01-008-0141
+      dest: /etc/audit/rules.d/audit.rules
+      src: "{{audit_rules_redhat_8}}"
+  - name: /etc/audit/rules.d/actions.rules
+    template:
+      owner: root
+      group: root
+      mode: 0600 # TWGCB-01-008-0141
+      dest: /etc/audit/rules.d/actions.rules
+      src: "{{actions_rules_redhat_8}}"
+
+  - name: /etc/audit/auditd.conf
+    template:
+      owner: root
+      group: root
+      mode: 0600 # TWGCB-01-008-0142
+      dest: /etc/audit/auditd.conf
+      src: "{{auditd_redhat_8_conf}}"
+  - name: /etc/aide.conf
+    template:
+      owner: root
+      group: root
+      mode: 0600
+      dest: /etc/aide.conf
+      src: "{{aide_redhat_8_conf}}"
+  - name: /etc/rsyslog.conf
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/rsyslog.conf
+      src: "{{rsyslog_redhat_8_conf}}"
+    notify: restart rsyslog
+  - name: /etc/systemd/journald.conf
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/systemd/journald.conf
+      src: "{{journald_redhat_8_conf}}"
+    notify: restart systemd-journald
+
+
+
+
+
+      

@@ -105,6 +105,6 @@
     when: "'nmcli' in ansible_facts.packages"
     block:
       - name: 無線網路介面
-        command: nmcli radio all off
+        command: "{{ item }}"
         with_items: 
         - nmcli radio all off # TWGCB-01-008-0129,TWGCB-01-008-0130

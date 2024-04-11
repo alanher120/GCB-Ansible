@@ -1,1 +1,7 @@
 syslog: syslog
+aliases_redhat_8: aliases-redhat-8
+audit_rules_redhat_8: audit-rules-redhat-8
+auditd_redhat_8_conf: auditd-redhat-8.conf
+aide_redhat_8_conf: aide-redhat-8.conf
+rsyslog_redhat_8_conf: rsyslog-redhat-8.conf
+journald_redhat_8_conf: journald-redhat-8.conf

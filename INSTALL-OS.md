@@ -134,20 +134,7 @@ find (partition) -xdev -nogroup
 find (partition) -xdev -type d -perm -0002 -uid +999 -print
 ```
 
-## TWGCB-01-008-0134,TWGCB-01-008-0135,TWGCB-01-008-0186
 
-* /etc/default/grub
-
-1. 新增「,audit=1, audit_backlog_limit=8192」
-2. 移除所有「selinux=0」與「enforcing=0」內容
-
-```bash
-GRUB_CMDLINE_LINUX="audit=1 audit_backlog_limit=8192"
-```
-
-```bash
-grub2-mkconfig -o /boot/grub2/grub.cfg
-```
 
 ### 全系統GPG簽章驗證
 

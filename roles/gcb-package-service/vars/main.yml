@@ -34,7 +34,7 @@ install_package_TWGCB_01_008:
   - sudo # TWGCB-01-008-0033
   - audit # TWGCB-01-008-0132
   - audit-libs # TWGCB-01-008-0132
-  - rsyslog # TWGCB-01-008-0185
+  - rsyslog # TWGCB-01-008-0174
   - libselinux # TWGCB-01-008-0185
   - kbd.x86_64 # TWGCB-01-008-0233
 
