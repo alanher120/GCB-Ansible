@@ -371,4 +371,121 @@ passwd -l (帳號名稱)
 * 依下列 TWGCB-ID 要求設定
   * TWGCB-01-008-0073
 
+* 開啟終端機，執行以下指令，顯示PATH變數內容：
+
+```bash
+echo $PATH
+```
+
+* 如出現「.」、「..」、路徑開頭不是「/」及空元素等內容，請編輯/etc/profile檔案進行修改
+
+### root帳號的路徑變數不包含world-writable或group-writable目錄
+
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-008-0074
+
+* 開啟終端機，執行以下指令，顯示PATH變數內容：
+
+```bash
+echo $PATH
+```
+
+* 如出現具有world-writable權限或group-writable權限之目錄，請編輯/etc/profile檔案進行修改，或執行下列指令變更目錄權限：
+
+```bash
+chmod o-w (目錄名稱)
+```
+
+或
+
+```bash
+chmod g-w (目錄名稱)
+```
+
+### /etc/passwd檔案行首的「+」符號
+
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-008-0075
+
+* 開啟終端機，執行以下指令，確認/etc/passwd檔案行首是否存在「+」符號：
+
+```bash
+grep '^\+:' /etc/passwd
+```
+
+* 如果有，則編輯/etc/passwd檔案，將行首為「+」符號之列移除
+
+### /etc/shadow檔案行首的「+」符號
+
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-008-0076
+
+* 開啟終端機，執行以下指令，確認/etc/shadow檔案行首是否存在「+」符號：
+
+```bash
+grep '^\+:' /etc/shadow
+```
+
+* 如果有，則編輯/etc/shadow檔案，將行首為「+」符號之列移除
+
+### /etc/group檔案行首的「+」符號
+
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-008-0077
+
+* 開啟終端機，執行以下指令，確認/etc/group檔案行首是否存在「+」符號：
+
+```bash
+grep '^\+:' /etc/group
+```
+
+* 如果有，則編輯/etc/group檔案，將行首為「+」符號之列移除
+
+### UID=0之帳號
+
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-008-0078
+
+* 開啟終端機，執行以下指令，列出UID=0之帳號：
+
+```bash
+awk -F: '($3 == 0) { print $1 }' /etc/passwd
+```
+
+* 若存在非root帳號，則執行以下指令，移除帳號或重新設定UID：
+
+```bash
+userdel (帳號名稱)
+```
+
+或
+
+```bash
+usermod -u (UID) (帳號名稱)
+```
+
+### shadow群組成員
+
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-008-0091
+
+* 開啟終端機，執行以下指令，列舉shadow群組中的使用者帳號：
+
+```bash
+awk -F: '($1=="shadow") {print $NF}' /etc/group
+```
+
+* 如shadow群組有使用者帳號，請針對每個帳號執行下列步驟：
+
+1. 執行以下指令，從shadow群組移除使用者帳號：
+
+```bash
+sed -ri 's/(^shadow:[^:]*:[^:]*:)([^:]+$)/\1/' /etc/group
+```
+
+2. 執行以下指令，將使用者帳號之主要群組，從shadow修改為預設群組：
+
+```bash
+usermod -g (預設群組名稱) (帳號名稱)
+```
 

@@ -1,0 +1,12 @@
+  #################### execute in RedHat older 8 ####################
+
+- name: execute in RedHat older 8
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version | int >= 8
+  block:
+  - name: /etc/dnf/dnf.conf
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/dnf/dnf.conf
+      src: "{{dnf_redhat_8_conf}}"

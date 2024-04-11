@@ -1,0 +1,33 @@
+# 系統校時
+
+- name: ntp case chrony
+  when: "'chrony' in ansible_facts.packages"
+  block:
+
+  - name: check RC5905
+    command: chronyc sources
+    ignore_errors: true
+    register: command_output
+  - debug:
+      var: command_output.stdout_lines
+
+
+- name: ntp case systemd-timesyncd
+  when: "'systemd-timesyncd' in ansible_facts.packages"
+  block:
+  - name: check RC5905
+    command: timedatectl
+    ignore_errors: true
+    register: command_output
+  - debug:
+      var: command_output.stdout_lines
+
+- name: ntp case systemd-timesyncd
+  when: "'ntp' in ansible_facts.packages"
+  block:
+  - name: check RC5905
+    command: ntpq -p
+    ignore_errors: true
+    register: command_output
+  - debug:
+      var: command_output.stdout_lines
