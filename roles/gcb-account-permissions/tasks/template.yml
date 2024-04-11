@@ -22,20 +22,16 @@
     group: root
     mode: 0644
     dest: /etc/csh.cshrc
-    src: csh.cshrc
+    src: "{{csh_cshrc}}"
+- name: /etc/login.defs
+  template:
+    owner: root
+    group: root
+    mode: 0644
+    dest: /etc/login.defs
+    src: "{{login_defs}}"
 
-#################### execute in RedHat 6 ####################
 
-- name: execute in RedHat 6
-  when: ansible_os_family == "RedHat" and ansible_distribution_major_version in ["6"]
-  block:
-  - name: TWGCB-01-003-0092 /boot/grub/grub.conf
-    become: true
-    file:
-      path: /boot/grub/grub.conf
-      mode: '0600' # TWGCB-01-003-0092
-      owner: root # TWGCB-01-003-0094
-      group: root # TWGCB-01-003-0093
 
 #################### execute in RedHat 7 ####################
 
@@ -55,7 +51,7 @@
       group: root
       mode: 0644
       dest: /etc/pam.d/su
-      src: su
+      src: "{{su}}"
   - name: /etc/sudoers in RedHat 7
     template:
       owner: root
@@ -69,7 +65,7 @@
       group: root
       mode: 0644
       dest: /etc/sysconfig/init
-      src: init-RedHat7
+      src: "{{init_RedHat7}}"
   - name: /etc/profile in RedHat 7
     template:
       owner: root
@@ -119,6 +115,8 @@
       dest: /etc/issue
       src: issue-RedHat6
 
+#################### execute in RedHat 5 6 7 ####################
+
 - name: execute in RedHat 5,6,7
   when: ansible_os_family == "RedHat" and ansible_distribution_major_version in ["5","6","7"]
   block:
@@ -161,3 +159,18 @@
       mode: 0644
       dest: /etc/libuser.conf
       src: libuser.conf
+
+
+#################### execute in RedHat older 8 ####################
+
+- name: execute in RedHat older 8
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version | int >= 8
+  block:
+
+  - name: /etc/security/pwquality.conf
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/security/pwquality.conf
+      src: "{{pwquality_redhat_8_conf}}"

@@ -171,3 +171,26 @@ password --md5 (雜湊密碼)
 ```
 ~:S:wait:/sbin/sulogin
 ```
+
+### 強制root密碼須符合密碼規則
+
+* TWGCB-01-008-0209
+
+* 開啟終端機，執行以下指令，建立客製化profile：
+
+```bash
+authselect create-profile <profile名稱> -b sssd --symlink-meta
+authselect select custom/<profile名稱> with-sudo with-faillock without-nullok
+```
+
+* 開啟終端機，執行以下腳本，更新system-auth與password-auth檔案：
+
+```bash
+#!/bin/bash
+CP=$(authselect current | awk 'NR == 1 {print $3}' | grep custom/)
+for FN in system-auth password-auth; do
+    [[ -n $CP ]] && PTF=/etc/authselect/$CP/$FN || PTF=/etc/authselect/$FN
+    [[ -z $(grep -E '^\s*password\s+requisite\s+pam_pwquality.so\s+.*enforce_for_root\s*.*$' $PTF) ]] && sed -ri 's/^\s*(password\s+requisite\s+pam_pwquality.so\s+)(.*)$/\1\2 enforce_for_root/' $PTF
+done
+authselect apply-changes
+```

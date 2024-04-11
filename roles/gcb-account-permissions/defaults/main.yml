@@ -14,3 +14,4 @@ TWGCB_003_useradd: TWGCB-003-useradd
 TWGCB_003_sudoers: TWGCB-003-sudoers
 TWGCB_003_autologout_csh: TWGCB-003-autologout.csh
 tmout_sh: tmout.sh
+pwquality_redhat_8_conf: pwquality-redhat-8.conf

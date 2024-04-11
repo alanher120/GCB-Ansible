@@ -1,0 +1,27 @@
+#################### execute in RedHat 6 ####################
+
+- name: execute in RedHat 6
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version in ["6"]
+  block:
+  - name: TWGCB-01-003-0092 /boot/grub/grub.conf
+    become: true
+    file:
+      path: /boot/grub/grub.conf
+      mode: '0600' # TWGCB-01-003-0092
+      owner: root # TWGCB-01-003-0094
+      group: root # TWGCB-01-003-0093
+
+#################### execute in RedHat older 8 ####################
+
+- name: execute in RedHat older 8
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version | int >= 8
+  block:
+  - name: TWGCB-01-008-0209
+    shell: |
+      #!/bin/bash
+      CP=$(authselect current | awk 'NR == 1 {print $3}' | grep custom/)
+      for FN in system-auth password-auth; do
+          [[ -n $CP ]] && PTF=/etc/authselect/$CP/$FN || PTF=/etc/authselect/$FN
+          [[ -z $(grep -E '^\s*password\s+requisite\s+pam_pwquality.so\s+.*enforce_for_root\s*.*$' $PTF) ]] && sed -ri 's/^\s*(password\s+requisite\s+pam_pwquality.so\s+)(.*)$/\1\2 enforce_for_root/' $PTF
+      done
+      authselect apply-changes
