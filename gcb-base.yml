@@ -2,9 +2,10 @@
 ---
 - hosts: all
   roles:
-      - { role: gcb-package }
+      - { role: gcb-package-service }
       - { role: gcb-account-permissions }
       - { role: gcb-file-system }
       - { role: gcb-SELinux }
       - { role: gcb-logs }
       - { role: gcb-base }
+      - { role: gcb-ssm }

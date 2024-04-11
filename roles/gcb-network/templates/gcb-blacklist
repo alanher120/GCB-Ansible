@@ -5,7 +5,8 @@ install hfsplus /bin/true
 install jffs2 /bin/true
 install squashfs /bin/true
 install udf /bin/true
-install dccp /bin/true
 install sctp /bin/true
 install rds /bin/true
 install tipc /bin/true
+# TWGCB-01-003-0139
+install dccp /bin/true

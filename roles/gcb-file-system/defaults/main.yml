@@ -1,4 +1,3 @@
-gcb_blacklist: gcb-blacklist
 sysconfig_init: sysconfig-init
 etc_sysctl_redhat6_conf: etc-sysctl-redhat6.conf
 etc_sysctl_redhat7_conf: etc-sysctl-redhat7.conf

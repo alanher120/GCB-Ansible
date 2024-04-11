@@ -1,0 +1,64 @@
+
+
+
+
+#################### execute in RedHat 5 6 7 ####################
+
+- name: execute in RedHat 5 6
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version in ["5","6"]
+  block:
+
+  - name: TWGCB-01-003-0024,TWGCB-01-003-0025,TWGCB-01-003-0026,TWGCB-01-003-0027,TWGCB-01-003-0028,TWGCB-01-003-0029,TWGCB-01-003-0030
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/modprobe.d/gcb-blacklist
+      src: "{{ gcb_blacklist }}"
+
+#################### execute in RedHat older 8 ####################
+
+- name: execute in RedHat older 8
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version | int >= 8
+  block:
+
+  - name: /etc/sysctl.d/gcb-net.conf
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/sysctl.d/gcb-net.conf
+      src: "{{sysctl_gcb_net_conf}}"
+
+  - name: /etc/modprobe.d/dccp.conf
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/modprobe.d/dccp.conf
+      src: "{{ dccp_conf_redhat8 }}"
+  - name: /etc/modprobe.d/sctp.conf
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/modprobe.d/sctp.conf
+      src: "{{ sctp_redhat_8_conf }}"
+  - name: /etc/modprobe.d/rds.conf
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/modprobe.d/rds.conf
+      src: "{{ rds_conf_redhat_8_conf }}"
+  - name: /etc/modprobe.d/tipc.conf
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/modprobe.d/tipc.conf
+      src: "{{ tipc_conf_redhat_8_conf }}"
+
+
+
+

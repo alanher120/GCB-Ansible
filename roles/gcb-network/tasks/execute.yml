@@ -1,0 +1,110 @@
+#################### execute in RedHat older 8 ####################
+- name: RedHat Base version 8
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version | int >= 8
+  block:
+  - name: execute command
+    command: "{{ item }}"
+    with_items: 
+    - sysctl -w net.ipv4.conf.all.send_redirects=0 # TWGCB-01-008-0109
+    - sysctl -w net.ipv4.route.flush=1 # TWGCB-01-008-0109
+    - sysctl -w net.ipv4.conf.default.send_redirects=0 # TWGCB-01-008-0110
+    - sysctl -w net.ipv4.route.flush=1 # TWGCB-01-008-0110
+    - sysctl -w net.ipv4.conf.all.accept_source_route=0 # TWGCB-01-008-0111
+    - sysctl -w net.ipv6.conf.all.accept_source_route=0 # TWGCB-01-008-0111
+    - sysctl -w net.ipv4.route.flush=1 # TWGCB-01-008-0111
+    - sysctl -w net.ipv6.route.flush=1 # TWGCB-01-008-0111
+    - sysctl -w net.ipv4.conf.default.accept_source_route=0 # TWGCB-01-008-0112
+    - sysctl -w net.ipv6.conf.default.accept_source_route=0 # TWGCB-01-008-0112
+    - sysctl -w net.ipv4.route.flush=1 # TWGCB-01-008-0112
+    - sysctl -w net.ipv6.route.flush=1 # TWGCB-01-008-0112
+    - sysctl -w net.ipv4.conf.all.accept_redirects=0 # TWGCB-01-008-0113
+    - sysctl -w net.ipv6.conf.all.accept_redirects=0 # TWGCB-01-008-0113
+    - sysctl -w net.ipv4.route.flush=1 # TWGCB-01-008-0113
+    - sysctl -w net.ipv6.route.flush=1 # TWGCB-01-008-0113
+    - sysctl -w net.ipv4.conf.default.accept_redirects=0 # TWGCB-01-008-0114
+    - sysctl -w net.ipv6.conf.default.accept_redirects=0 # TWGCB-01-008-0114
+    - sysctl -w net.ipv4.route.flush=1 # TWGCB-01-008-0114
+    - sysctl -w net.ipv6.route.flush=1 # TWGCB-01-008-0114
+    - sysctl -w net.ipv4.conf.all.secure_redirects=0 # TWGCB-01-008-0115
+    - sysctl -w net.ipv4.route.flush=1 # TWGCB-01-008-0115
+    - sysctl -w net.ipv4.conf.default.secure_redirects=0 # TWGCB-01-008-0116
+    - sysctl -w net.ipv4.route.flush=1 # TWGCB-01-008-0116
+    - sysctl -w net.ipv4.conf.all.log_martians=1 # TWGCB-01-008-0117
+    - sysctl -w net.ipv4.route.flush=1 # TWGCB-01-008-0117
+    - sysctl -w net.ipv4.conf.default.log_martians=1 # TWGCB-01-008-0118
+    - sysctl -w net.ipv4.route.flush=1 # TWGCB-01-008-0118
+    - sysctl -w net.ipv4.conf.default.rp_filter=1 # TWGCB-01-008-0122
+    - sysctl -w net.ipv4.route.flush=1 # TWGCB-01-008-0122
+    - sysctl -w net.ipv6.conf.all.accept_ra=0 # TWGCB-01-008-0124
+    - sysctl -w net.ipv6.route.flush=1 # TWGCB-01-008-0124
+    - sysctl -w net.ipv6.conf.default.accept_ra=0 # TWGCB-01-008-0125
+    - sysctl -w net.ipv6.route.flush=1 # TWGCB-01-008-0125
+
+  - name: TWGCB-01-008-0108
+    shell: |
+      #!/bin/bash
+      grep -Els "^\s*net\.ipv4\.ip_forward\s*=\s*1" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf | while read filename; do sed -ri "s/^\s*(net\.ipv4\.ip_forward\s*)(=)(\s*\S+\b).*$/# *REMOVED* \1/" $filename; done; sysctl -w net.ipv4.ip_forward=0; sysctl -w net.ipv4.route.flush=1; printf "\nnet.ipv4.ip_forward = 0\n" >> /etc/sysctl.d/60-netipv4_sysctl.conf
+      grep -Els "^\s*net\.ipv6\.conf\.all\.forwarding\s*=\s*1" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf | while read filename; do sed -ri "s/^\s*(net\.ipv6\.conf\.all\.forwarding\s*)(=)(\s*\S+\b).*$/# *REMOVED* \1/" $filename; done; sysctl -w net.ipv6.conf.all.forwarding=0; sysctl -w net.ipv6.route.flush=1; printf "\nnet.ipv6.conf.all.forwarding = 0\n" >> /etc/sysctl.d/60-netipv6_sysctl.conf
+  - name: TWGCB-01-008-0119
+    shell: |
+      #!/bin/bash
+      #grep -Els "^\s*net\.ipv4\.icmp_echo_ignore_broadcasts\s*=\s*0" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf | while read filename; do sed -ri "s/^\s*(net\.ipv4\.icmp_echo_ignore_broadcasts\s*)(=)(\s*\S+\b).*$/# *REMOVED* \1/" $filename; done; sysctl -w net.ipv4.icmp_echo_ignore_broadcasts=1; sysctl -w net.ipv4.route.flush=1; printf "\nnet.ipv4.icmp_echo_ignore_broadcasts = 1\n" >> /etc/sysctl.d/60-netipv4_sysctl.conf
+  - name: TWGCB-01-008-0120
+    shell: |
+      #!/bin/bash
+      grep -Els "^\s*net\.ipv4\.icmp_ignore_bogus_error_responses\s*=\s*0" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf | while read filename; do sed -ri "s/^\s*(net\.ipv4\.icmp_ignore_bogus_error_responses\s*)(=)(\s*\S+\b).*$/# *REMOVED* \1/" $filename; done; sysctl -w net.ipv4.icmp_ignore_bogus_error_responses=1; sysctl -w net.ipv4.route.flush=1; printf "\nnet.ipv4.icmp_ignore_bogus_error_responses = 1\n" >> /etc/sysctl.d/60-netipv4_sysctl.conf
+  - name: TWGCB-01-008-0121
+    shell: |
+      #!/bin/bash
+      grep -Els "^\s*net\.ipv4\.conf\.all\.rp_filter\s*=\s*0" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf | while read filename; do sed -ri "s/^\s*(net\.ipv4\.net.ipv4.conf\.all\.rp_filter\s*)(=)(\s*\S+\b).*$/# *REMOVED* \1/" $filename; done; sysctl -w net.ipv4.conf.all.rp_filter=1; sysctl -w net.ipv4.route.flush=1; printf "\nnet.ipv4.conf.all.rp_filter = 1\n" >> /etc/sysctl.d/60-netipv4_sysctl.conf
+  - name: TWGCB-01-008-0123
+    shell: |
+      #!/bin/bash
+      grep -Els "^\s*net\.ipv4\.tcp_syncookies\s*=\s*[02]*" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf | while read filename; do sed -ri "s/^\s*(net\.ipv4\.tcp_syncookies\s*)(=)(\s*\S+\b).*$/# *REMOVED* \1/" $filename; done; sysctl -w net.ipv4.tcp_syncookies=1; sysctl -w net.ipv4.route.flush=1; printf "\nnet.ipv4.tcp_syncookies = 1\n" >> /etc/sysctl.d/60-netipv4_sysctl.conf
+  - name: TWGCB-01-008-0119
+    shell: |
+      #!/bin/bash
+  - name: TWGCB-01-008-0119
+    shell: |
+      #!/bin/bash
+  - name: TWGCB-01-008-0119
+    shell: |
+      #!/bin/bash
+
+  - name: Gather the package facts
+    ansible.builtin.package_facts:
+      manager: auto
+  - name: 未安裝nmcli
+    when: "'nmcli' not in ansible_facts.packages"
+    block:
+      - name: TWGCB-01-008-0129
+        shell: |
+          #!/bin/bash
+          if [ -n "$(find /sys/class/net/*/ -type d -name wireless)" ]; 
+          then
+            mname=$(for driverdir in $(find /sys/class/net/*/ -type d -name wireless | xargs -0 dirname); do basename "$(readlink -f "$driverdir"/device/driver/module)";done | sort -u) 
+            for dm in $mname; 
+            do 
+              echo "install $dm /bin/true" >> /etc/modprobe.d/disable_wireless.conf
+              echo "blacklist $dm" >> /etc/modprobe.d/disable_wireless.conf 
+            done 
+          fi
+      - name: TWGCB-01-008-0130
+        shell: |
+          #!/bin/bash
+          if [ -n "$(find /sys/class/net/*/ -type d -name wireless)" ]; 
+          then
+            mname=$(for driverdir in $(find /sys/class/net/*/ -type d -name wireless | xargs -0 dirname); do basename "$(readlink -f "$driverdir"/device/driver/module)";done | sort -u) 
+            for dm in $mname; 
+            do 
+              echo "install $dm /bin/true" >> /etc/modprobe.d/disable_wireless.conf
+              echo "blacklist $dm" >> /etc/modprobe.d/disable_wireless.conf 
+            done 
+          fi
+  - name: 安裝nmcli
+    when: "'nmcli' in ansible_facts.packages"
+    block:
+      - name: 無線網路介面
+        command: nmcli radio all off
+        with_items: 
+        - nmcli radio all off # TWGCB-01-008-0129,TWGCB-01-008-0130

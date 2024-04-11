@@ -1,5 +1,9 @@
 # 系統校時
 
+- name: Gather the package facts
+  ansible.builtin.package_facts:
+    manager: auto
+
 - name: ntp case chrony
   when: "'chrony' in ansible_facts.packages"
   block:

@@ -17,6 +17,7 @@
     - grep '^\+:' /etc/shadow # TWGCB-01-008-0076
     - grep '^\+:' /etc/group # TWGCB-01-008-0077
     - "awk -F: '($3 == 0) { print $1 }' /etc/passwd" # TWGCB-01-008-0078
+    - ip link | grep -i promisc # 網路介面混雜模式: TWGCB-01-008-0131
   
   - name: TWGCB-01-008-0079
     shell: |

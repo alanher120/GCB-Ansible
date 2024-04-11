@@ -1,20 +1,5 @@
 
 
-#################### execute in RedHat 5 6 7 ####################
-
-- name: execute in RedHat 5 6
-  when: ansible_os_family == "RedHat" and ansible_distribution_major_version in ["5","6"]
-  block:
-
-  - name: TWGCB-01-003-0024,TWGCB-01-003-0025,TWGCB-01-003-0026,TWGCB-01-003-0027,TWGCB-01-003-0028,TWGCB-01-003-0029,TWGCB-01-003-0030
-    template:
-      owner: root
-      group: root
-      mode: 0644
-      dest: /etc/modprobe.d/gcb-blacklist
-      src: "{{ gcb_blacklist }}"
-
-
 #################### execute in RedHat older 8 ####################
 
 - name: execute in RedHat older 8
