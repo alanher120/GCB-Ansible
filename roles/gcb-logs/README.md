@@ -46,7 +46,7 @@ find PART -xdev \( -perm -4000 -o -perm -2000 \) -type f | awk '{print \ "-a alw
 -a always,exit -F arch=ARCH -S init_module -S delete_module -k modules
 ```
 
-### 日誌與稽核 TWGCB-01-008-0186
+### 日誌與稽核
 
 * 稽核auditd服務啟動前之程序
   * TWGCB-01-008-0134

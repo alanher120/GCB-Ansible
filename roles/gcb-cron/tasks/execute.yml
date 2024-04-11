@@ -1,0 +1,64 @@
+#################### execute in RedHat older 8 ####################
+- name: RedHat Base version 8
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version | int >= 8
+  block:
+  - name: execute command
+    command: "{{ item }}"
+    with_items:
+    
+  - name: /etc/crontab
+    file:
+      path: /etc/crontab
+      owner: root  # TWGCB-01-008-0193
+      group: root  # TWGCB-01-008-0193
+      mode: '0600' # TWGCB-01-008-0194
+  - name: /etc/cron.hourly
+    file:
+      path: /etc/cron.hourly
+      owner: root  # TWGCB-01-008-0195
+      group: root  # TWGCB-01-008-0195
+      mode: '0700' # TWGCB-01-008-0196
+  - name: /etc/cron.daily
+    file:
+      path: /etc/cron.daily
+      owner: root  # TWGCB-01-008-0197
+      group: root  # TWGCB-01-008-0197
+      mode: '0700' # TWGCB-01-008-0198
+  - name: /etc/cron.weekly
+    file:
+      path: /etc/cron.weekly
+      owner: root  # TWGCB-01-008-0199
+      group: root  # TWGCB-01-008-0199
+      mode: '0700' # TWGCB-01-008-0200
+  - name: /etc/cron.monthly
+    file:
+      path: /etc/cron.monthly
+      owner: root  # TWGCB-01-008-0201
+      group: root  # TWGCB-01-008-0201
+      mode: '0700' # TWGCB-01-008-0202
+  - name: /etc/cron.d
+    file:
+      path: /etc/cron.d
+      state: directory
+      owner: root  # TWGCB-01-008-0203
+      group: root  # TWGCB-01-008-0203
+      mode: '0700' # TWGCB-01-008-0204
+  - name: at.allow與cron.allow檔案所有權(TWGCB-01-008-0205,TWGCB-01-008-0206)
+    command: "{{ item }}"
+    with_items:
+    - rm /etc/cron.deny
+    - rm /etc/at.deny
+    - touch /etc/cron.allow
+    - touch /etc/at.allow
+  - name: /etc/cron.allow
+    file:
+      path: /etc/cron.allow
+      owner: root  # TWGCB-01-008-0205
+      group: root  # TWGCB-01-008-0205
+      mode: '0600' # TWGCB-01-008-0206
+  - name: /etc/at.allow
+    file:
+      path: /etc/at.allow
+      owner: root  # TWGCB-01-008-0205
+      group: root  # TWGCB-01-008-0205
+      mode: '0600' # TWGCB-01-008-0206
