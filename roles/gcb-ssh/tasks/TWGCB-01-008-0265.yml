@@ -1,6 +1,0 @@
-
-- name: TWGCB-01-008-0266
-  file:
-    path: /etc/ssh/sshd_config
-    state: file
-    mode: '0600'

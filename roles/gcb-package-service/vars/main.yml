@@ -37,6 +37,7 @@ install_package_TWGCB_01_008:
   - rsyslog # TWGCB-01-008-0174
   - libselinux # TWGCB-01-008-0185
   - kbd.x86_64 # TWGCB-01-008-0233
+  - openssh-server.x86_64 # TWGCB-01-008-0262
 
 enable_packages:
   - auditd # TWGCB-01-008-0133,TWGCB-01-003-0146
@@ -56,6 +57,7 @@ enable_packages_TWGCB_01_008:
   - kdump # TWGCB-01-008-0101
   - rsyslog # TWGCB-01-008-0175
   - crond # TWGCB-01-008-0192
+  - sshd # TWGCB-01-008-0262
 
 # 停用服務
 

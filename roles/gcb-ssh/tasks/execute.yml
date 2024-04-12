@@ -1,0 +1,14 @@
+#################### execute in RedHat older 8 ####################
+
+- name: execute in RedHat older 8
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version | int >= 8
+  block:
+
+  - name: execute
+    command: "{{ item }}"
+    with_items: 
+      - find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chown root:root {} \; # TWGCB-01-008-0267
+      - find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chmod 600 {} \; # TWGCB-01-008-0268
+      - find /etc/ssh -xdev -type f -name 'ssh_host_*_key.pub' -exec chown root:root {} \; # TWGCB-01-008-0269
+      - find /etc/ssh -xdev -type f -name 'ssh_host_*_key.pub' -exec chmod 644 {} \; # TWGCB-01-008-0270
+      - sed -ri "s/^\s*(CRYPTO_POLICY\s*=.*)$/# \1/" /etc/sysconfig/sshd # TWGCB-01-008-0292

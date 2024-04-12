@@ -22,6 +22,8 @@
     - stat -c "%a %n" /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace /sbin/auditd /sbin/audisp-remote /sbin/audisp-syslog /sbin/augenrules /sbin/rsyslogd 2>/dev/null | grep 755 # TWGCB-01-008-0143
     - ps -eZf | grep unconfined_service_t | grep -v grep # TWGCB-01-008-0189
     - grep cron /etc/rsyslog.conf /etc/rsyslog.d/*.conf # TWGCB-01-008-0207
+    - find / -name shosts.equiv # TWGCB-01-008-0290
+    - find / -name '*.shosts' # TWGCB-01-008-0291
     
   
   - name: TWGCB-01-008-0079

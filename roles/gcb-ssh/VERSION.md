@@ -4,6 +4,7 @@
 
 * date:
 - fix(all): ansible_distribution 改為 ansible_os_family
+- feat(TWGCB-01-008): 重寫
 
 ## 1.0
 
