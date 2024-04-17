@@ -1,19 +1,9 @@
-- name: /etc/logrotate.d/syslog
-  when: ansible_os_family == "RedHat" and ansible_distribution_major_version in ["5","6","7"]
-  become: true
-  template:
-    owner: root
-    group: root
-    mode: 0644
-    dest: /etc/logrotate.d/syslog
-    src: "{{ syslog }}"
+- include_tasks: 
+    file: template.yml
+    apply:
+      become: true
 
-- name: TWGCB-01-003-0145
-  when: ansible_os_family == "RedHat" and ansible_distribution_major_version in ["5"]
-  become: true
-  file:
-    owner: root
-    group: root
-    src: /usr/share/logwatch/scripts/logwatch.pl
-    dest: /etc/cron.daily/0logwatch
-    state: link
+- include_tasks: 
+    file: execute.yml
+    apply:
+      become: true

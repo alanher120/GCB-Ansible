@@ -1,9 +1,6 @@
-- name: /etc/sysconfig/network
-  when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "6"
-  become: true
-  template:
-    owner: root
-    group: root
-    mode: 0644
-    dest: /etc/sysconfig/network
-    src: "{{ RedHat6_sysconfig_network }}"
+
+
+- include_tasks: 
+    file: template.yml
+    apply:
+      become: true

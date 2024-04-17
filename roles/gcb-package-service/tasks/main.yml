@@ -21,8 +21,3 @@
     apply:
       become: true
       ignore_errors: true
-
-- include_tasks: 
-    file: chrony.yml
-    apply:
-      become: true

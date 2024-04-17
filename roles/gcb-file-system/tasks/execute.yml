@@ -1,3 +1,5 @@
+
+
 - name: /etc/passwd
   file:
     path: /etc/passwd
@@ -25,6 +27,7 @@
     owner: root  # TWGCB-01-012-0051, TWGCB-01-008-0051, TWGCB-01-003-0032
     group: root  # TWGCB-01-012-0051, TWGCB-01-008-0051, TWGCB-01-003-0033
     mode: '0000' # TWGCB-01-012-0052, TWGCB-01-008-0052, TWGCB-01-003-0031
+
 
 #################### execute in RedHat 6 ####################
 
@@ -79,14 +82,48 @@
       dest: /etc/security/console.perms
       src: "{{ console_perms }}"
 
-
-
 #################### execute in RedHat older 8 ####################
 
 - name: execute in RedHat older 8
   when: ansible_os_family == "RedHat" and ansible_distribution_major_version | int >= 8
   block:
+  - name: Gather the package facts
+    ansible.builtin.package_facts:
+      manager: auto
 
+  - name: 已安裝coredump服務 才需要處理
+    when: "'coredump' in ansible_facts.packages"
+    block:
+    - name: /etc/systemd/coredump.conf
+      template:
+        owner: root
+        group: root
+        mode: 0644
+        dest: /etc/systemd/coredump.conf
+        src: "{{ coredump_conf }}"
+
+    - name: execute command
+      command: "{{ item }}"
+      with_items: 
+      - systemctl daemon-reload # TWGCB-01-008-0042
+      - systemctl mask systemd-coredump.socket # TWGCB-01-008-0042
+      - rmmod cramfs # TWGCB-01-008-0001
+      - rmmod squashfs # TWGCB-01-008-0002
+      - rmmod udf # TWGCB-01-008-0003
+      - rmmod usb-storage # TWGCB-01-008-0031
+      - sysctl -w fs.suid_dumpable=0 # TWGCB-01-008-0042
+      - sysctl -w kernel.core_pattern=|/bin/false # TWGCB-01-008-0042
+      - sysctl -w kernel.randomize_va_space=2 # TWGCB-01-008-0042
+
+
+  # 設定全域寫入權限目錄之粘滯位: TWGCB-01-008-0029, TWGCB-01-012-0029
+
+  - name: 設定全域寫入權限目錄之粘滯位
+    ignore_errors: true
+    shell: df --local -P | awk '{if (NR!=1) print $6}' | xargs -I '{}' find '{}' -xdev -type d \( -perm -0002 -a ! -perm -1000 \) 2>/dev/null | xargs -I '{}' chmod o+t '{}'
+    args:
+      executable: /bin/bash
+      
   - name: /etc/passwd-
     file:
       path: /etc/passwd-
@@ -114,56 +151,3 @@
       owner: root  # TWGCB-01-008-0059, TWGCB-01-012-0059
       group: root  # TWGCB-01-008-0059, TWGCB-01-012-0059
       mode: '0000' # TWGCB-01-008-0060, TWGCB-01-012-0060
-
-  - name: /etc/security/limits.conf TWGCB_008
-    template:
-      owner: root
-      group: root
-      mode: 0644
-      dest: /etc/security/limits.d/gcb.conf
-      src: "{{ TWGCB_008_limits_gcb_conf }}"
-
-  - name: /etc/sysctl.d/gcb.conf
-    template:
-      owner: root
-      group: root
-      mode: 0644
-      dest: /etc/sysctl.d/gcb.conf
-      src: "{{ etc_sysctl_redhat8_1 }}"
-
-  - name: /etc/sysctl.d/50-coredump.conf
-    template:
-      owner: root
-      group: root
-      mode: 0644
-      dest: /etc/sysctl.d/50-coredump.conf
-      src: "{{ etc_sysctl_redhat8_2 }}"
-
-  - name: execute command
-    command: "{{ item }}"
-    with_items: 
-    - sysctl -w fs.suid_dumpable=0 # TWGCB-01-008-0042
-    - sysctl -w kernel.core_pattern=|/bin/false # TWGCB-01-008-0042
-    - sysctl -w kernel.randomize_va_space=2 # TWGCB-01-008-0042
-
-  - name: Gather the package facts
-    ansible.builtin.package_facts:
-      manager: auto
-
-  - name: 已安裝coredump服務 才需要處理
-    when: "'coredump' in ansible_facts.packages"
-    block:
-    - name: /etc/systemd/coredump.conf
-      template:
-        owner: root
-        group: root
-        mode: 0644
-        dest: /etc/systemd/coredump.conf
-        src: "{{ coredump_conf }}"
-
-    - name: execute command
-      command: "{{ item }}"
-      with_items: 
-      - systemctl daemon-reload # TWGCB-01-008-0042
-      - systemctl mask systemd-coredump.socket # TWGCB-01-008-0042
-    

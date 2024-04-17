@@ -1,20 +1,4 @@
-- name: /etc/selinux/config
-  become: true
-  template:
-    owner: root
-    group: root
-    mode: 0644
-    dest: /etc/selinux/config
-    src: "{{ selinux_config }}"
-
-- name: /etc/grub.conf
-  when: ansible_os_family == "RedHat" and ansible_distribution_major_version in ["6"]
-  become: true
-  template:
-    owner: root
-    group: root
-    mode: 0644
-    dest: /etc/grub.conf
-    src: "{{ TWGCB_003_grub_RedHat6_conf }}"
-
-    
+- include_tasks: 
+    file: execute.yml
+    apply:
+      become: true

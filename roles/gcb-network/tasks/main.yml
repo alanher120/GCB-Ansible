@@ -2,6 +2,7 @@
     file: template.yml
     apply:
       become: true
+
 - include_tasks: 
     file: execute.yml
     apply:

@@ -1,5 +1,3 @@
-
-
 #################### execute in RedHat older 8 ####################
 
 - name: execute in RedHat older 8
@@ -38,10 +36,26 @@
         dest: /etc/modprobe.d/usb-storage.conf
         src: "{{usb_storage_conf}}"
 
-  - name: execute black command
-    command: "{{item}}"
-    with_items:
-      - rmmod cramfs # TWGCB-01-008-0001
-      - rmmod squashfs # TWGCB-01-008-0002
-      - rmmod udf # TWGCB-01-008-0003
-      - rmmod usb-storage # TWGCB-01-008-0031
+  - name: /etc/security/limits.conf TWGCB_008
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/security/limits.d/gcb.conf
+      src: "{{ TWGCB_008_limits_gcb_conf }}"
+
+  - name: /etc/sysctl.d/gcb.conf
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/sysctl.d/gcb.conf
+      src: "{{ etc_sysctl_redhat8_1 }}"
+
+  - name: /etc/sysctl.d/50-coredump.conf
+    template:
+      owner: root
+      group: root
+      mode: 0644
+      dest: /etc/sysctl.d/50-coredump.conf
+      src: "{{ etc_sysctl_redhat8_2 }}"

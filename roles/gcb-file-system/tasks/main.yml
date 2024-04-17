@@ -1,28 +1,9 @@
-
 - include_tasks: 
-    file: TWGCB-gcb-blacklist.yml
-    apply:
-      become: true
-- include_tasks: 
-    file: TWGCB-permissions.yml
-    apply:
-      become: true
-- include_tasks: 
-    file: TWGCB-01-008-0029.yml
+    file: template.yml
     apply:
       become: true
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+- include_tasks: 
+    file: execute.yml
+    apply:
+      become: true

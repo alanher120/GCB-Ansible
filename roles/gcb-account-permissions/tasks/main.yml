@@ -1,4 +1,9 @@
 - include_tasks: 
-    file: TWGCB-permissions.yml
+    file: template.yml
+    apply:
+      become: true
+
+- include_tasks: 
+    file: execute.yml
     apply:
       become: true
