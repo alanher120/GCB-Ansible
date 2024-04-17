@@ -9,10 +9,11 @@
 * /var : 依下列 TWGCB-ID 要求
   * TWGCB-01-003-0002
   * TWGCB-01-008-0008
-  * TWGCB-01-012-0009
+  * TWGCB-01-012-0008
 * /var/tmp : 依下列 TWGCB-ID 要求
   * TWGCB-01-003-0001
   * TWGCB-01-008-0009
+  * TWGCB-01-012-0009
 * /var/log : 依下列 TWGCB-ID 要求
   * TWGCB-01-003-0003
   * TWGCB-01-008-0013
@@ -80,49 +81,3 @@ net-snmp-create-v3-user -ro -A snmp@PWD1 -a SHA -X snmp@PWD1 -x AES snmpAdmin
 #access  notConfigGroup  ""      any       noauth    exact  systemview none none
 ```
 
-
-### 安裝 GUI 設定
-
-* 依下列 TWGCB-ID 要求設定
-  * TWGCB-01-012-0234
-* 依下列 TWGCB-ID 要求設定
-  * TWGCB-01-008-0235
-* 依下列 TWGCB-ID 要求設定
-  * TWGCB-01-008-0236
-* 依下列 TWGCB-ID 要求設定
-  * TWGCB-01-008-0239
-
-### 磁碟檢查項目
-
-* TWGCB-01-008-0064
-* TWGCB-01-008-0065
-
-```bash
-find (partition) -xdev -type f -perm -0002
-find (partition) -xdev -nouser
-find (partition) -xdev -nogroup
-find (partition) -xdev -type d -perm -0002 -uid +999 -print
-```
-
-
-
-### 全系統GPG簽章驗證
-
-依據下列規範檢查，如果大於零需要寫特殊原因
-
-* TWGCB-01-003-0009
-* TWGCB-01-003-0010
-
-```bash
-grep gpgcheck=0 /etc/yum.conf /etc/yum.repos.d/* | wc -l
-```
-
-### 使用RPM驗證套件完整性
-
-依據下列規範檢查，如果有列出需要特別注意
-
-* TWGCB-01-003-0012
-
-```bash
-rpm -qVa | awk '$2!="c" {print $0}'
-```

@@ -19,7 +19,7 @@ Before=shutdown.target
 Environment=HOME=/root
 WorkingDirectory=-/root
 ExecStartPre=-/bin/plymouth --wait quit
-# TWGCB-01-008-0041, TWGCB-01-012-0041
+# 單一使用者模式身分鑑別: TWGCB-01-008-0041, TWGCB-01-012-0041
 ExecStart=-/usr/lib/systemd/systemd-sulogin-shell rescue
 Type=idle
 StandardInput=tty-force

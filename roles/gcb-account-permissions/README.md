@@ -231,13 +231,15 @@ authselect select custom/<profile名稱> with-sudo with-faillock without-nullok
 * 針對進行上述設定前就已存在之使用者帳號，須再執行下列指令，才能使密碼到期前14天提醒使用者變更密碼：
 
 ```bash
-#chage --warndays 14 (使用者帳號名稱)
+chage --warndays 14 (使用者帳號名稱)
 ```
 
 ### 密碼最長使用期限
 
 * 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-003-0071
   * TWGCB-01-008-0227
+  * TWGCB-01-012-0225
 
 * 針對進行上述設定前就已存在之使用者帳號，須再執行下列指令，才能使密碼最長使用期限變更為90天：
 
@@ -249,9 +251,13 @@ chage --maxdays 90 (使用者帳號名稱)
 
 * 依下列 TWGCB-ID 要求設定
   * TWGCB-01-008-0228
+  * TWGCB-01-012-0226
 
-▪  針對進行上述設定前就已存在之使用者帳號，須再執行下列指令，才能使密碼到期後，超過30天就進行帳號停用：
-#chage --inactive 30 (使用者帳號名稱)
+* 針對進行上述設定前就已存在之使用者帳號，須再執行下列指令，才能使密碼到期後，超過30天就進行帳號停用：
+
+```bash
+chage --inactive 30 (使用者帳號名稱)
+```
 
 ### 要求使用者必須經過身分驗證才能提升權限
 
@@ -271,6 +277,7 @@ grep -i '(nopasswd|!authenticate)' /etc/sudoers /etc/sudoers.d/*
 
 * 依下列 TWGCB-ID 要求設定
   * TWGCB-01-008-0243
+  * TWGCB-01-012-0241
 
 * 編輯/etc/group檔案之wheel群組設定，建立允許使用su指令的使用者帳號清單，如下所示：
 

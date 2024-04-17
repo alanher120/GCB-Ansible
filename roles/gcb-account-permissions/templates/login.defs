@@ -25,13 +25,13 @@ MAIL_DIR        /var/spool/mail
 #       PASS_MIN_LEN    Minimum acceptable password length.
 #       PASS_WARN_AGE   Number of days warning given before a password expires.
 #
-# 密碼最長使用期限: TWGCB-01-008-0227, TWGCB-01-003-0071, TWGCB-01-012-0225
+# 密碼最長使用期限: TWGCB-01-003-0071, TWGCB-01-008-0227, TWGCB-01-012-0225
 PASS_MAX_DAYS   90
-# 密碼最短使用期限: TWGCB-01-008-0225, TWGCB-01-003-0069, TWGCB-01-012-0223
+# 密碼最短使用期限: TWGCB-01-003-0069, TWGCB-01-008-0225, TWGCB-01-012-0223
 PASS_MIN_DAYS   1
 # 通行碼最小長度: TWGCB-01-003-0072, TWGCB-01-008-0210, TWGCB-01-012-0208
 PASS_MIN_LEN    12
-# 密碼到期前提醒使用者變更密碼: TWGCB-01-008-0226, TWGCB-01-003-0070, TWGCB-01-012-0224
+# 密碼到期前提醒使用者變更密碼: TWGCB-01-003-0070, TWGCB-01-008-0226, TWGCB-01-012-0224
 PASS_WARN_AGE   14
 
 #

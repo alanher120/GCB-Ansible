@@ -7,16 +7,16 @@
   - name: execute command
     command: "{{ item }}"
     with_items: 
-    - find -L /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin -perm /0022 -exec ls -l {}\; # TWGCB-01-008-0066
-    - find -L /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin ! -user root -exec ls -l {}\; # TWGCB-01-008-0067
-    - find -L /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin ! -group root ! -group tty ! -group slocate ! -group lock -exec ls -l {}\; # TWGCB-01-008-0068
-    - find -L /lib /lib64 /usr/lib /usr/lib64 -perm /0022 -type f -exec ls -l {}\; # TWGCB-01-008-0069
-    - find -L /lib /lib64 /usr/lib /usr/lib64 ! -user root -exec ls -l {}\; # TWGCB-01-008-0070
-    - find -L /lib /lib64 /usr/lib /usr/lib64 ! -group root -exec ls -l {}\; # TWGCB-01-008-0071
-    - grep '^\+:' /etc/passwd # TWGCB-01-008-0075
-    - grep '^\+:' /etc/shadow # TWGCB-01-008-0076
-    - grep '^\+:' /etc/group # TWGCB-01-008-0077
-    - "awk -F: '($3 == 0) { print $1 }' /etc/passwd" # TWGCB-01-008-0078
+    - find -L /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin -perm /0022 -exec ls -l {}\; # 系統命令檔案權限: TWGCB-01-008-0066, TWGCB-01-012-0066
+    - find -L /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin ! -user root -exec ls -l {}\; # 系統命令檔案擁有者: TWGCB-01-008-0067, TWGCB-01-012-0067
+    - find -L /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin ! -group root ! -group tty ! -group slocate ! -group lock -exec ls -l {}\; # 系統命令檔案擁有群組: TWGCB-01-008-0068, TWGCB-01-012-0068
+    - find -L /lib /lib64 /usr/lib /usr/lib64 -perm /0022 -type f -exec ls -l {}\; # 程式庫檔案權限: TWGCB-01-008-0069, TWGCB-01-012-0069
+    - find -L /lib /lib64 /usr/lib /usr/lib64 ! -user root -exec ls -l {}\; # 程式庫檔案擁有者: TWGCB-01-008-0070, TWGCB-01-012-0070
+    - find -L /lib /lib64 /usr/lib /usr/lib64 ! -group root -exec ls -l {}\; # 程式庫檔案擁有群組: TWGCB-01-008-0071, TWGCB-01-012-0071
+    - grep '^\+:' /etc/passwd # /etc/passwd檔案行首之「+」符號: TWGCB-01-008-0075, TWGCB-01-012-0075
+    - grep '^\+:' /etc/shadow # /etc/shadow檔案行首之「+」符號: TWGCB-01-008-0076, TWGCB-01-012-0076
+    - grep '^\+:' /etc/group # /etc/group檔案行首之「+」符號: TWGCB-01-008-0077, TWGCB-01-012-0077
+    - "awk -F: '($3 == 0) { print $1 }' /etc/passwd" # UID=0之帳號: TWGCB-01-008-0078, TWGCB-01-012-0078
     - ip link | grep -i promisc # 網路介面混雜模式: TWGCB-01-008-0131, TWGCB-01-012-0131
     - grep -iw log_file /etc/audit/auditd.conf # 尋找稽核日誌目錄: TWGCB-01-008-0137,TWGCB-01-008-0138,TWGCB-01-008-0139,TWGCB-01-008-0140, TWGCB-01-012-0137, TWGCB-01-012-0138, TWGCB-01-012-0139
     - stat -c "%a %n" /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace /sbin/auditd /sbin/audisp-remote /sbin/audisp-syslog /sbin/augenrules /sbin/rsyslogd 2>/dev/null | grep 755 # 稽核工具權限: TWGCB-01-008-0143, TWGCB-01-012-0143, TWGCB-01-008-0144, TWGCB-01-012-0144

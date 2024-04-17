@@ -1,6 +1,10 @@
 # GCB-Ansible
 
-GCB-Ansible-2.0是依據「政府組態基準(GCB) - 國家資通安全研究院」 作業系統說明文件： TWGCB-01-008_Red Hat Enterprise Linux 8政府組態基準說明文件v1.0_1100924.pdf 撰寫 。
+GCB-Ansible-2.0是依據「政府組態基準(GCB) - 國家資通安全研究院」 作業系統說明文件撰寫 ： 
+
+* TWGCB-01-003_Red Hat Enterprise Linux 5政府組態基準說明文件v1.1_1081224
+* TWGCB-01-008_Red Hat Enterprise Linux 8政府組態基準說明文件v1.2_1121228
+* TWGCB-01-012_Red Hat Enterprise Linux 9政府組態基準說明文件(伺服器)v1.0_1121207 
 
 ## 執行環境
 

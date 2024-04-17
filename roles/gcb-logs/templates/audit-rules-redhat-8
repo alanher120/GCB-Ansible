@@ -19,7 +19,7 @@
 -w /var/run/faillock/ -p wa -k logins
 -w /var/log/lastlog -p wa -k logins
 
-## 記錄會談啟始資訊: TWGCB-01-008-0150
+## 記錄會談啟始資訊: TWGCB-01-008-0150, TWGCB-01-012-0150
 -w /var/run/utmp -p wa -k session
 -w /var/log/wtmp -p wa -k logins
 -w /var/log/btmp -p wa -k logins
