@@ -10,7 +10,7 @@
 # Basic system aliases -- these MUST be present.
 mailer-daemon:  postmaster
 
-# TWGCB-01-008-0136
+# 稽核處理失敗時通知系統管理者: TWGCB-01-008-0136, TWGCB-01-012-0136
 postmaster:     root
 
 # General redirections for pseudo accounts.

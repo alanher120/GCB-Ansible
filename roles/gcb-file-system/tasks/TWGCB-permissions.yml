@@ -1,30 +1,30 @@
 - name: /etc/passwd
   file:
     path: /etc/passwd
-    owner: root  # TWGCB-01-008-0045,TWGCB-01-003-0041
-    group: root  # TWGCB-01-008-0045,TWGCB-01-003-0042
-    mode: '0644' # TWGCB-01-008-0046,TWGCB-01-003-0040
+    owner: root  # TWGCB-01-012-0045, TWGCB-01-008-0045, TWGCB-01-003-0041
+    group: root  # TWGCB-01-012-0045, TWGCB-01-008-0045, TWGCB-01-003-0042
+    mode: '0644' # TWGCB-01-012-0046, TWGCB-01-008-0046, TWGCB-01-003-0040
 
 - name: /etc/shadow
   file:
     path: /etc/shadow
-    owner: root  # TWGCB-01-008-0047,TWGCB-01-003-0035
-    group: root  # TWGCB-01-008-0047,TWGCB-01-003-0036
-    mode: '0000' # TWGCB-01-008-0048,TWGCB-01-003-0034
+    owner: root  # TWGCB-01-012-0047, TWGCB-01-008-0047, TWGCB-01-003-0035
+    group: root  # TWGCB-01-012-0047, TWGCB-01-008-0047, TWGCB-01-003-0036
+    mode: '0000' # TWGCB-01-012-0048, TWGCB-01-008-0048, TWGCB-01-003-0034
 
 - name: /etc/group
   file:
     path: /etc/group
-    owner: root  # TWGCB-01-008-0049,TWGCB-01-003-0038
-    group: root  # TWGCB-01-008-0049,TWGCB-01-003-0039
-    mode: '0644' # TWGCB-01-008-0050,TWGCB-01-003-0037
+    owner: root  # TWGCB-01-012-0049, TWGCB-01-008-0049, TWGCB-01-003-0038
+    group: root  # TWGCB-01-012-0049, TWGCB-01-008-0049, TWGCB-01-003-0039
+    mode: '0644' # TWGCB-01-012-0050, TWGCB-01-008-0050, TWGCB-01-003-0037
 
 - name: /etc/gshadow
   file:
     path: /etc/gshadow
-    owner: root  # TWGCB-01-008-0051,TWGCB-01-003-0032
-    group: root  # TWGCB-01-008-0051,TWGCB-01-003-0033
-    mode: '0000' # TWGCB-01-008-0052,TWGCB-01-003-0031
+    owner: root  # TWGCB-01-012-0051, TWGCB-01-008-0051, TWGCB-01-003-0032
+    group: root  # TWGCB-01-012-0051, TWGCB-01-008-0051, TWGCB-01-003-0033
+    mode: '0000' # TWGCB-01-012-0052, TWGCB-01-008-0052, TWGCB-01-003-0031
 
 #################### execute in RedHat 6 ####################
 
@@ -90,30 +90,30 @@
   - name: /etc/passwd-
     file:
       path: /etc/passwd-
-      owner: root  # TWGCB-01-008-0053
-      group: root  # TWGCB-01-008-0053
-      mode: '0000' # TWGCB-01-008-0054
+      owner: root  # TWGCB-01-008-0053, TWGCB-01-012-0053
+      group: root  # TWGCB-01-008-0053, TWGCB-01-012-0053
+      mode: '0000' # TWGCB-01-008-0054, TWGCB-01-012-0054
 
-  - name: TWGCB-01-008-0055,TWGCB-01-008-0056 /etc/shadow-
+  - name: /etc/shadow-
     file:
       path: /etc/shadow-
-      owner: root  # TWGCB-01-008-0055
-      group: root  # TWGCB-01-008-0055
-      mode: '0000' # TWGCB-01-008-0056
+      owner: root  # TWGCB-01-008-0055, TWGCB-01-012-0055
+      group: root  # TWGCB-01-008-0055, TWGCB-01-012-0055
+      mode: '0000' # TWGCB-01-008-0056, TWGCB-01-012-0056
 
   - name: /etc/group-
     file:
       path: /etc/group-
-      owner: root  # TWGCB-01-008-0057
-      group: root  # TWGCB-01-008-0057
-      mode: '0644' # TWGCB-01-008-0058
+      owner: root  # TWGCB-01-008-0057, TWGCB-01-012-0057
+      group: root  # TWGCB-01-008-0057, TWGCB-01-012-0057
+      mode: '0644' # TWGCB-01-008-0058, TWGCB-01-012-0058
 
   - name: /etc/gshadow-
     file:
       path: /etc/gshadow-
-      owner: root  # TWGCB-01-008-0059
-      group: root  # TWGCB-01-008-0059
-      mode: '0000' # TWGCB-01-008-0060
+      owner: root  # TWGCB-01-008-0059, TWGCB-01-012-0059
+      group: root  # TWGCB-01-008-0059, TWGCB-01-012-0059
+      mode: '0000' # TWGCB-01-008-0060, TWGCB-01-012-0060
 
   - name: /etc/security/limits.conf TWGCB_008
     template:

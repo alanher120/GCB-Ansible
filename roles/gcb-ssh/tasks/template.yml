@@ -5,8 +5,8 @@
   block:
   - name: /etc/ssh/sshd_config
     template:
-      owner: root # TWGCB-01-008-0264
-      group: root # TWGCB-01-008-0264
-      mode: 0600 # TWGCB-01-008-0265
+      owner: root # /etc/ssh/sshd_config檔案所有權: TWGCB-01-008-0264, TWGCB-01-012-0256
+      group: root #  /etc/ssh/sshd_config檔案所有權: TWGCB-01-008-0264, TWGCB-01-012-0256
+      mode: 0600 # /etc/ssh/sshd_config檔案權限: TWGCB-01-008-0265, TWGCB-01-012-0257
       dest: /etc/ssh/sshd_config
       src: "{{sshd_config_redhat_8}}"

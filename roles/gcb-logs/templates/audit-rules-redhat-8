@@ -11,31 +11,31 @@
 ## Set failure mode to syslog
 -f 1
 
-## TWGCB-01-008-0148
+## 記錄系統管理者活動: TWGCB-01-008-0148, TWGCB-01-012-0148
 -w /etc/sudoers -p wa -k scope
 -w /etc/sudoers.d/ -p wa -k scope
 
-## TWGCB-01-008-0149
+## 記錄變更登入與登出資訊事件: TWGCB-01-008-0149, TWGCB-01-012-0149
 -w /var/run/faillock/ -p wa -k logins
 -w /var/log/lastlog -p wa -k logins
 
-## TWGCB-01-008-0150
+## 記錄會談啟始資訊: TWGCB-01-008-0150
 -w /var/run/utmp -p wa -k session
 -w /var/log/wtmp -p wa -k logins
 -w /var/log/btmp -p wa -k logins
 
-## TWGCB-01-008-0151
+## 記錄變更日期與時間事件: TWGCB-01-008-0151, TWGCB-01-012-0151
 -a always,exit -F arch=b64 -S adjtimex -S settimeofday -k time-change
 -a always,exit -F arch=b32 -S adjtimex -S settimeofday -S stime -k time-change
 -a always,exit -F arch=b64 -S clock_settime -k time-change
 -a always,exit -F arch=b32 -S clock_settime -k time-change
 -w /etc/localtime -p wa -k time-change
 
-## TWGCB-01-008-0152
+## 記錄變更系統強制存取控制事件: TWGCB-01-008-0152, TWGCB-01-012-0152
 -w /etc/selinux/ -p wa -k MAC-policy
 -w /usr/share/selinux/ -p wa -k MAC-policy
 
-## TWGCB-01-008-0153
+## 記錄變更系統網路環境事件: TWGCB-01-008-0153, TWGCB-01-012-0153
 -a always,exit -F arch=b64 -S sethostname -S setdomainname -k system-locale
 -a always,exit -F arch=b32 -S sethostname -S setdomainname -k system-locale
 -w /etc/issue -p wa -k system-locale
@@ -43,7 +43,7 @@
 -w /etc/hosts -p wa -k system-locale
 -w /etc/sysconfig/network-scripts/ -p wa -k system-locale
 
-## TWGCB-01-008-0154
+## 記錄變更自主存取控制權限事件: TWGCB-01-008-0154, TWGCB-01-012-0154
 -a always,exit -F arch=b64 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=4294967295 -k perm_mod
 -a always,exit -F arch=b32 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=4294967295 -k perm_mod
 -a always,exit -F arch=b64 -S chown -S fchown -S fchownat -S lchown -F auid>=1000 -F auid!=4294967295 -k perm_mod
@@ -51,75 +51,75 @@
 -a always,exit -F arch=b64 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod
 -a always,exit -F arch=b32 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod
 
-## TWGCB-01-008-0155
+## 記錄不成功之未經授權檔案存取: TWGCB-01-008-0155, TWGCB-01-012-0155
 -a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access
 -a always,exit -F arch=b32 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access
 -a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access
 -a always,exit -F arch=b32 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access
 
-## TWGCB-01-008-0156
+## 記錄變更使用者或群組資訊事件: TWGCB-01-008-0156, TWGCB-01-012-0156
 -w /etc/group -p wa -k identity
 -w /etc/passwd -p wa -k identity
 -w /etc/gshadow -p wa -k identity
 -w /etc/shadow -p wa -k identity
 -w /etc/security/opasswd -p wa -k identity
 
-## TWGCB-01-008-0157
+## 記錄變更檔案系統掛載事件: TWGCB-01-008-0157, TWGCB-01-012-0157
 -a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts
 -a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts
 
-## TWGCB-01-008-0159
+## 記錄檔案刪除事件: TWGCB-01-008-0159, TWGCB-01-012-0159
 -a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -S rmdir -F auid>=1000 -F auid!=4294967295 -k delete
 -a always,exit -F arch=b32 -S unlink -S unlinkat -S rename -S renameat -S rmdir -F auid>=1000 -F auid!=4294967295 -k delete
 
-## TWGCB-01-008-0160
+## 記錄核心模組掛載與卸載事件: TWGCB-01-008-0160, TWGCB-01-012-0160
 -w /sbin/insmod -p x -k modules
 -w /sbin/rmmod -p x -k modules
 -w /sbin/modprobe -p x -k modules
 -a always,exit -F arch=b64 -S init_module -S delete_module -k modules
 -a always,exit -F arch=b32 -S init_module -S delete_module -k modules
 
-## TWGCB-01-008-0162
+## 記錄chcon指令使用情形: TWGCB-01-008-0162, TWGCB-01-012-0162
 -a always,exit -F path=/usr/bin/chcon -F perm=x -F auid>=1000 -F auid!=4294967295 -k perm_chng
 
-## TWGCB-01-008-0163
+## 記錄ssh-agent程序使用情形: TWGCB-01-008-0163, TWGCB-01-012-0163
 -a always,exit -F path=/usr/bin/ssh-agent -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-ssh
 
 
-## TWGCB-01-008-0164
+## 記錄unix_update程序使用情形: TWGCB-01-008-0164, TWGCB-01-012-0164
 -a always,exit -F path=/sbin/unix_update -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-unix-update
 
-## TWGCB-01-008-0165
+## 記錄setfacl指令使用情形: TWGCB-01-008-0165, TWGCB-01-012-0165
 -a always,exit -F path=/usr/bin/setfacl -F perm=x -F auid>=1000 -F auid!=4294967295 -k perm_chng
 
-## TWGCB-01-008-0166
+## 記錄finit_module指令使用情形: TWGCB-01-008-0166, TWGCB-01-012-0166
 -a always,exit -F arch=b32 -S finit_module -F auid>=1000 -F auid!=4294967295 -k module_chng
 -a always,exit -F arch=b64 -S finit_module -F auid>=1000 -F auid!=4294967295 -k module_chng
 
-## TWGCB-01-008-0167
+## 記錄open_by_handle_at系統呼叫使用情形: TWGCB-01-008-0167, TWGCB-01-012-0167
 -a always,exit -F arch=b32 -S open_by_handle_at -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k perm_access
 -a always,exit -F arch=b64 -S open_by_handle_at -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k perm_access
 -a always,exit -F arch=b32 -S open_by_handle_at -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k perm_access
 -a always,exit -F arch=b64 -S open_by_handle_at -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k perm_access
 
-## TWGCB-01-008-0168
+## 記錄usermod指令使用情形: TWGCB-01-008-0168, TWGCB-01-012-0168
 -a always,exit -F path=/usr/sbin/usermod -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-usermod
 
-## TWGCB-01-008-0169
+## 記錄chacl指令使用情形: TWGCB-01-008-0169, TWGCB-01-012-0169
 -a always,exit -F path=/usr/bin/chacl -F perm=x -F auid>=1000 -F auid!=4294967295 -k perm_chng
 
-## TWGCB-01-008-0170
+## 記錄kmod指令使用情形: TWGCB-01-008-0170, TWGCB-01-012-0170
 -w /bin/kmod -p x -k modules
 
-## TWGCB-01-008-0171
+## 記錄Pam_Faillock日誌檔案: TWGCB-01-008-0171, TWGCB-01-012-0171
 -w /var/log/faillock -p wa -k logins
 
-## TWGCB-01-008-0172
+## 記錄execve系統呼叫使用情形: TWGCB-01-008-0172, TWGCB-01-012-0172
 -a always,exit -F arch=b32 -F auid!=unset -S execve -C uid!=euid -F key=execpriv 
 -a always,exit -F arch=b64 -F auid!=unset -S execve -C uid!=euid -F key=execpriv
 -a always,exit -F arch=b32 -F auid!=unset -S execve -C gid!=egid -F key=execpriv 
 -a always,exit -F arch=b64 -F auid!=unset -S execve -C gid!=egid -F key=execpriv
 
-## 照個一定要加在最後一行: TWGCB-01-008-0173
+## auditd設定不變模式: TWGCB-01-008-0173, TWGCB-01-012-0173
 -e 2
 --loginuid-immutable

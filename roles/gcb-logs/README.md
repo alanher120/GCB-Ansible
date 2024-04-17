@@ -4,15 +4,6 @@
 
 ## 手動處理項目
 
-### TWGCB-01-003-0154: 記錄特權指令使用情形
-
-1. 執行下列指令，針對每個磁區(PART)的特權指令產生稽核規則：
-
-```bash
-find PART -xdev \( -perm -4000 -o -perm -2000 \) -type f | awk '{print \ "-a always,exit -F path=" $1 " -F perm=x -F auid>=500 -F auid!=4294967295 \ -k privileged" }'
-```
-
-2. 將上述指令所產出之規則內容新增至/etc/audit/audit.rules檔案中
 
 ### TWGCB-01-003-0155: 記錄資料匯出至媒體
 
@@ -48,10 +39,12 @@ find PART -xdev \( -perm -4000 -o -perm -2000 \) -type f | awk '{print \ "-a alw
 
 ### 日誌與稽核
 
-* 稽核auditd服務啟動前之程序
+* 稽核auditd服務啟動前之程序: 在GRUB_CMDLINE_LINUX參數設定加入「audit=1」
   * TWGCB-01-008-0134
-* 稽核待辦事項數量限制
+  * TWGCB-01-012-0134
+* 稽核待辦事項數量限制: 在GRUB_CMDLINE_LINUX參數設定加入「audit_backlog_limit=(BACKLOG SIZE)」，將BACKLOG SIZE設定為8,192以上
   * TWGCB-01-008-0135
+  * TWGCB-01-012-0135
 
 * /etc/default/grub
 
@@ -68,14 +61,18 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
 
 ### 稽核日誌檔案、目錄權限 
 
-* 稽核日誌檔案所有權
+* 稽核日誌檔案所有權，依下列 TWGCB-ID 要求設定
   * TWGCB-01-008-0137
-* 稽核日誌檔案權限
+  * TWGCB-01-012-0137
+* 稽核日誌檔案權限，依下列 TWGCB-ID 要求設定
   * TWGCB-01-008-0138
-* 稽核日誌目錄所有權
+  * TWGCB-01-012-0138
+* 稽核日誌目錄所有權，依下列 TWGCB-ID 要求設定
   * TWGCB-01-008-0139
-* 稽核日誌目錄權限
+  * TWGCB-01-012-0139
+* 稽核日誌目錄權限，依下列 TWGCB-ID 要求設定
   * TWGCB-01-008-0140
+  * TWGCB-01-012-0140
 
 ```bash
 chown root:root (稽核日誌檔案名稱) # ex: chown root:root /var/log/audit/audit.log
@@ -86,7 +83,9 @@ chmod 700 (稽核日誌目錄名稱) # ex: chmod 700 /var/log/audit
 
 ### 稽核工具權限
 
-* TWGCB-01-008-0143
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-008-0143
+  * TWGCB-01-008-0143
 
 * 開啟終端機，執行以下指令，檢查稽核工具權限：
 
@@ -102,12 +101,14 @@ chmod 750 (稽核工具名稱)
 
 ### 稽核工具所有權
 
-* TWGCB-01-008-0144
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-012-0144
+  * TWGCB-01-008-0144
 
 * 開啟終端機，執行以下指令，檢查稽核工具擁有者與群組：
 
 ```bash
-#ls -al /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace /sbin/auditd /sbin/audisp-remote /sbin/audisp-syslog /sbin/augenrules /sbin/rsyslogd 2>/dev/null
+ls -al /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace /sbin/auditd /sbin/audisp-remote /sbin/audisp-syslog /sbin/augenrules /sbin/rsyslogd 2>/dev/null
 ```
 
 * 若有稽核工具擁有者與群組非root，則執行以下指令，設定稽核工具擁有者與群組為root：
@@ -118,7 +119,9 @@ chown root:root (稽核工具名稱)
 
 ### 記錄特權指令使用情形
 
-* TWGCB-01-008-0158
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-008-0158
+  * TWGCB-01-012-0158
 
 * 開啟終端機，執行以下指令，在系統上所有磁區(partition)，逐一檢查磁區所掛載之檔案目錄(如根目錄)中的特權程式，並為每個特權程序的執行，建立稽核規則：
 
@@ -146,7 +149,9 @@ auditctl -s | grep enabled
 
 ### 記錄系統管理者活動日誌變更
 
-* TWGCB-01-008-0161
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-008-0161
+  * TWGCB-01-012-0161
 
 * 開啟終端機，執行指令如下，尋找sudo日誌檔案路徑
 
@@ -185,6 +190,9 @@ auditctl -s | grep enabled
 ```
 
 ### auditd設定不變模式
+
+依下列 TWGCB-ID 要求設定
+  * 
 
 * 在/etc/audit/rules.d/目錄，新增或編輯稽核規則中最後被執行的「.rules」檔案：
 * 在該檔案的最後一行加入以下內容：

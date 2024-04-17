@@ -1,3 +1,27 @@
+#################### execute in RedHat 8 ####################
+
+- name: execute in RedHat 8
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8"
+  block:
+
+  - name: execute
+    command: "{{ item }}"
+    with_items: 
+      - find /etc/ssh -xdev -type f -name 'ssh_host_*_key.pub' -exec chown root:root {} \; # SSH主機公鑰檔案所有權: TWGCB-01-008-0269
+      - find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chown root:root {} \; # SSH主機私鑰檔案所有權: TWGCB-01-008-0267
+      - find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chmod 600 {} \; # SSH主機私鑰檔案權限: TWGCB-01-008-0268
+
+#################### execute in RedHat older 9 ####################
+
+- name: execute in RedHat 9
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "9"
+  block:
+  - name: execute
+    command: "{{ item }}"
+    with_items: 
+      - find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chown root:ssh_keys {} \; # SSH主機私鑰檔案所有權: TWGCB-01-012-0259
+      - find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chmod 640 {} \; # SSH主機私鑰檔案權限: TWGCB-01-012-0260
+
 #################### execute in RedHat older 8 ####################
 
 - name: execute in RedHat older 8
@@ -7,8 +31,5 @@
   - name: execute
     command: "{{ item }}"
     with_items: 
-      - find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chown root:root {} \; # TWGCB-01-008-0267
-      - find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chmod 600 {} \; # TWGCB-01-008-0268
-      - find /etc/ssh -xdev -type f -name 'ssh_host_*_key.pub' -exec chown root:root {} \; # TWGCB-01-008-0269
-      - find /etc/ssh -xdev -type f -name 'ssh_host_*_key.pub' -exec chmod 644 {} \; # TWGCB-01-008-0270
-      - sed -ri "s/^\s*(CRYPTO_POLICY\s*=.*)$/# \1/" /etc/sysconfig/sshd # TWGCB-01-008-0292
+      - find /etc/ssh -xdev -type f -name 'ssh_host_*_key.pub' -exec chmod 644 {} \; # SSH主機公鑰檔案權限: TWGCB-01-008-0270, TWGCB-01-012-0262
+      - sed -ri "s/^\s*(CRYPTO_POLICY\s*=.*)$/# \1/" /etc/sysconfig/sshd # 覆寫全系統加密原則: TWGCB-01-008-0292, TWGCB-01-012-0284

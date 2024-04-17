@@ -17,16 +17,17 @@
     - grep '^\+:' /etc/shadow # TWGCB-01-008-0076
     - grep '^\+:' /etc/group # TWGCB-01-008-0077
     - "awk -F: '($3 == 0) { print $1 }' /etc/passwd" # TWGCB-01-008-0078
-    - ip link | grep -i promisc # 網路介面混雜模式: TWGCB-01-008-0131
-    - grep -iw log_file /etc/audit/auditd.conf # TWGCB-01-008-0137,TWGCB-01-008-0138,TWGCB-01-008-0139,TWGCB-01-008-0140
-    - stat -c "%a %n" /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace /sbin/auditd /sbin/audisp-remote /sbin/audisp-syslog /sbin/augenrules /sbin/rsyslogd 2>/dev/null | grep 755 # TWGCB-01-008-0143
-    - ps -eZf | grep unconfined_service_t | grep -v grep # TWGCB-01-008-0189
+    - ip link | grep -i promisc # 網路介面混雜模式: TWGCB-01-008-0131, TWGCB-01-012-0131
+    - grep -iw log_file /etc/audit/auditd.conf # 尋找稽核日誌目錄: TWGCB-01-008-0137,TWGCB-01-008-0138,TWGCB-01-008-0139,TWGCB-01-008-0140, TWGCB-01-012-0137, TWGCB-01-012-0138, TWGCB-01-012-0139
+    - stat -c "%a %n" /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace /sbin/auditd /sbin/audisp-remote /sbin/audisp-syslog /sbin/augenrules /sbin/rsyslogd 2>/dev/null | grep 755 # 稽核工具權限: TWGCB-01-008-0143, TWGCB-01-012-0143, TWGCB-01-008-0144, TWGCB-01-012-0144
+    - ps -eZf | grep unconfined_service_t | grep -v grep # 未受限程序: TWGCB-01-008-0189, TWGCB-01-012-0187
     - grep cron /etc/rsyslog.conf /etc/rsyslog.d/*.conf # TWGCB-01-008-0207
-    - find / -name shosts.equiv # TWGCB-01-008-0290
-    - find / -name '*.shosts' # TWGCB-01-008-0291
+    - find / -name shosts.equiv # shosts.equiv檔案: TWGCB-01-008-0290, TWGCB-01-012-0282
+    - find / -name '*.shosts' # .shosts檔案: TWGCB-01-008-0291, TWGCB-01-012-0283
+    - grep -i '(nopasswd|!authenticate)' /etc/sudoers /etc/sudoers.d/* # 要求使用者必須經過身分驗證才能提升權限: TWGCB-01-008-0231, TWGCB-01-012-0229
     
   
-  - name: TWGCB-01-008-0079
+  - name: 使用者家目錄權限(TWGCB-01-008-0079, TWGCB-01-012-0079)
     shell: |
       #!/bin/bash
       grep -E -v '^(halt|sync|shutdown)' /etc/passwd | awk -F: '($7 != "/sbin/nologin" && $7 != "/bin/false") { print $1 " " $6 }' | while read user dir; do
@@ -55,7 +56,7 @@
         fi
       done
   
-  - name: TWGCB-01-008-0080
+  - name: 使用者家目錄擁有者(TWGCB-01-008-0080, TWGCB-01-012-0080)
     shell: |
       #!/bin/bash
       grep -E -v '^(halt|sync|shutdown)' /etc/passwd | awk -F: '($7 != "/sbin/nologin" && $7 != "/bin/false") { print $1 " " $6 }' | while read user dir; do
@@ -69,7 +70,7 @@
       fi
       done
 
-  - name: TWGCB-01-008-0081
+  - name: 使用者家目錄擁有群組(TWGCB-01-008-0081, TWGCB-01-012-0081)
     shell: |
       #!/bin/bash
       grep -E -v '^(halt|sync|shutdown)' /etc/passwd | awk -F: '($7 != "/sbin/nologin" && $7 != "/bin/false") { print $1 " " $4 " " $6 }' | while read user gid dir; do
@@ -83,7 +84,7 @@
       fi
       done
 
-  - name: TWGCB-01-008-0082
+  - name: 使用者家目錄之「.」檔案權限(TWGCB-01-008-0082, TWGCB-01-012-0082)
     shell: |
       #!/bin/bash
       grep -E -v '^(halt|sync|shutdown)' /etc/passwd | awk -F: '($7 != "/sbin/nologin" && $7 != "/bin/false") { print $1 " " $6 }' | while read user dir; do
@@ -104,7 +105,7 @@
         fi
       done
   
-  - name: TWGCB-01-008-0083
+  - name: 使用者家目錄之「.forward」檔案(TWGCB-01-008-0083, TWGCB-01-012-0083)
     shell: |
       #!/bin/bash
       grep -E -v '^(root|halt|sync|shutdown)' /etc/passwd | awk -F: '($7 != "/sbin/nologin" && $7 != "/bin/false") { print $1 " " $6 }' | while read user dir; do
@@ -117,7 +118,7 @@
         fi
       done
 
-  - name: TWGCB-01-008-0084
+  - name: 使用者家目錄之「.netrc」檔案(TWGCB-01-008-0084, TWGCB-01-012-0084)
     shell: |
       #!/bin/bash
       grep -E -v '^(root|halt|sync|shutdown)' /etc/passwd | awk -F: '($7 != "/sbin/nologin" && $7 != "/bin/false") { print $1 " " $6 }' | while read user dir; do
@@ -130,7 +131,7 @@
         fi
       done
 
-  - name: TWGCB-01-008-0085
+  - name: 使用者家目錄之「.rhosts」檔案(TWGCB-01-008-0085, TWGCB-01-012-0085)
     shell: |
       #!/bin/bash
       grep -E -v '^(root|halt|sync|shutdown)' /etc/passwd | awk -F: '($7 != "/sbin/nologin" && $7 != "/bin/false") { print $1 " " $6 }' | while read user dir; do
@@ -144,7 +145,7 @@
           done
         fi
       done
-  - name: TWGCB-01-008-0086
+  - name: 檢查/etc/passwd檔案設定之群組(TWGCB-01-008-0086, TWGCB-01-012-0086)
     shell: |
       #!/bin/bash
       for i in $(cut -s -d: -f4 /etc/passwd | sort -u ); do
@@ -153,7 +154,7 @@
           echo "Group $i is referenced by /etc/passwd but does not exist in /etc/group"
         fi
       done
-  - name: TWGCB-01-008-0087
+  - name: 唯一之UID(TWGCB-01-008-0087, TWGCB-01-012-0087)
     shell: |
       #!/bin/bash
       cut -f3 -d":" /etc/passwd | sort -n | uniq -c | while read x ; do
@@ -164,19 +165,19 @@
           echo "Duplicate UID ($2): $users"
         fi
       done
-  - name: TWGCB-01-008-0088
+  - name: 唯一之GID(TWGCB-01-008-0088, TWGCB-01-012-0088)
     shell: |
       #!/bin/bash
       cut -d: -f3 /etc/group | sort | uniq -d | while read x ; do
         echo "Duplicate GID ($x) in /etc/group"
       done
-  - name: TWGCB-01-008-0089
+  - name: 唯一之使用者帳號名稱(TWGCB-01-008-0089, TWGCB-01-012-0089)
     shell: |
       #!/bin/bash
       cut -d: -f1 /etc/passwd | sort | uniq -d | while read x
       do echo "Duplicate login name ${x} in /etc/passwd"
       done
-  - name: TWGCB-01-008-0090
+  - name: 唯一之群組名稱(TWGCB-01-008-0090, TWGCB-01-012-0090)
     shell: |
       #!/bin/bash
       cut -d: -f1 /etc/group | sort | uniq -d | while read x

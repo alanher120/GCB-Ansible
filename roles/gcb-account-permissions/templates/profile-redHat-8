@@ -59,7 +59,7 @@ export PATH USER LOGNAME MAIL HOSTNAME HISTSIZE HISTCONTROL
 if [ $UID -gt 199 ] && [ "`/usr/bin/id -gn`" = "`/usr/bin/id -un`" ]; then
     umask 002
 else
-    # 所有使用者帳號的預設umask: TWGCB-01-008-0241
+    # 所有使用者帳號之預設umask: TWGCB-01-008-0241, TWGCB-01-012-0239
     umask 027
 fi
 
@@ -85,5 +85,5 @@ if [ -n "${BASH_VERSION-}" ] ; then
        fi
 fi
 
-# Bash shell閒置時登出時間: TWGCB-01-008-0238
+# Bash shell閒置時登出時間: TWGCB-01-008-0238, TWGCB-01-012-0236
 readonly TMOUT=900 ; export TMOUT

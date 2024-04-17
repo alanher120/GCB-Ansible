@@ -5,15 +5,15 @@
   - name: execute command
     command: "{{ item }}"
     with_items: 
-    - grub2-mkconfig -o "$(dirname "$(find /boot -type f \( -name 'grubenv' -o -name 'grub.conf' -o -name 'grub.cfg' \) -exec grep -Pl '^\h*(kernelopts=|linux|kernel)' {} \;)")/grub.cfg" # TWGCB-01-008-0134,TWGCB-01-008-0135
-  - name: /etc/messages
+    - grub2-mkconfig -o "$(dirname "$(find /boot -type f \( -name 'grubenv' -o -name 'grub.conf' -o -name 'grub.cfg' \) -exec grep -Pl '^\h*(kernelopts=|linux|kernel)' {} \;)")/grub.cfg" # TWGCB-01-008-0134, TWGCB-01-008-0135, TWGCB-01-012-0134, TWGCB-01-012-0135
+  - name: /var/log/messages
     file:
-      path: /etc/messages
-      owner: root  # TWGCB-01-008-0178
-      group: root  # TWGCB-01-008-0178
+      path: /var/log/messages
+      owner: root  # /var/log/messages檔案所有權: TWGCB-01-008-0178, TWGCB-01-012-0178
+      group: root  # /var/log/messages檔案所有權: TWGCB-01-008-0178, TWGCB-01-012-0178
   - name: /var/log
     file:
       path: /var/log
       state: directory
-      owner: root  # TWGCB-01-008-0179
-      group: root  # TWGCB-01-008-0179
+      owner: root  # /var/log目錄所有權: TWGCB-01-008-0179, TWGCB-01-012-0179
+      group: root  # /var/log目錄所有權: TWGCB-01-008-0179, TWGCB-01-012-0179

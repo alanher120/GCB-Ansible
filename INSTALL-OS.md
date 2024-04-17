@@ -9,18 +9,22 @@
 * /var : 依下列 TWGCB-ID 要求
   * TWGCB-01-003-0002
   * TWGCB-01-008-0008
+  * TWGCB-01-012-0009
 * /var/tmp : 依下列 TWGCB-ID 要求
   * TWGCB-01-003-0001
   * TWGCB-01-008-0009
 * /var/log : 依下列 TWGCB-ID 要求
   * TWGCB-01-003-0003
   * TWGCB-01-008-0013
+  * TWGCB-01-012-0013
 * /var/log/audit : 依下列 TWGCB-ID 要求
   * TWGCB-01-003-0004
   * TWGCB-01-008-0014
+  * TWGCB-01-012-0014
 * /home : 依下列 TWGCB-ID 要求
   * TWGCB-01-003-0005
   * TWGCB-01-008-0015
+  * TWGCB-01-012-0015
 
 ## 手動設定項目
 
@@ -49,26 +53,11 @@ grep -E "ttyS0|ttyS1" /etc/securetty
 
 ## 依需求設定
 
-### TWGCB-01-008-0266
+### SNMP服務
 
-啟用限制存取SSH功能，有助於確保只有授權使用者才能透過SSH遠端存取系統
-
-* `/etc/ssh/sshd_config`檔案可設定以下參數，以限制可透過SSH存取系統的使用者與群組：
-
-1. AllowUsers：由空格分隔的使用者名稱組成，設定允許登入的使用者
-2. AllowGroups：由空格分隔的群組名稱組成，設定允許登入的群組
-3. DenyUsers：由空格分隔的使用者名稱組成，設定拒絕登入的使用者
-4. DenyGroups：由空格分隔的群組名稱組成，設定拒絕登入的群組
-
-設定完成後執行以下指令，重新啟動SSH服務使其生效
-
-```bash
-systemctl restart sshd
-```
-
-### TWGCB-01-008-0093: chrony校時設定
-
-### TWGCB-01-008-0096: SNMP服務
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-008-0096
+  * TWGCB-01-012-0096
 
 ```bash
 dnf install net-snmp net-snmp-utils net-snmp-libs net-snmp-devel
@@ -91,30 +80,17 @@ net-snmp-create-v3-user -ro -A snmp@PWD1 -a SHA -X snmp@PWD1 -x AES snmpAdmin
 #access  notConfigGroup  ""      any       noauth    exact  systemview none none
 ```
 
-### TWGCB-01-008-0137,TWGCB-01-008-0138: 稽核日誌檔案所有權
-
-1.  開啟終端機，執行以下指令，尋找稽核日誌檔案
-
-```bash
-grep -iw log_file /etc/audit/auditd.conf
-```
-
-2. 執行以下指令，設定稽核日誌檔案擁有者與群組, 設定稽核日誌檔案權限為600或更低權限
-
-```bash
-chown root:root (稽核日誌檔案名稱)
-chmod 600 (稽核日誌檔案名稱)
-```
-
-### TWGCB-01-008-0205,TWGCB-01-008-0206: at.allow與cron.allow檔案
-
 
 ### 安裝 GUI 設定
 
-* TWGCB-01-012-0234
-* TWGCB-01-008-0235
-* TWGCB-01-008-0236
-* TWGCB-01-008-0239
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-012-0234
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-008-0235
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-008-0236
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-008-0239
 
 ### 磁碟檢查項目
 

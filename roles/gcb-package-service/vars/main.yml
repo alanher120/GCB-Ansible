@@ -1,12 +1,12 @@
 
 
 removed_packages:
-  - mcstrans # TWGCB-01-008-0191,TWGCB-01-003-0116
-  - setroubleshoot # TWGCB-01-008-0190,TWGCB-01-003-0119
-  - xinetd # TWGCB-01-008-0092,TWGCB-01-003-0163
-  - telnet-server # TWGCB-01-008-0104,TWGCB-01-003-0164
-  - rsh-server # TWGCB-01-008-0105,TWGCB-01-003-0165
-  - tftp-server # TWGCB-01-008-0106,TWGCB-01-003-0168
+  - mcstrans # TWGCB-01-008-0191,TWGCB-01-003-0116, TWGCB-01-012-0189
+  - setroubleshoot # TWGCB-01-008-0190,TWGCB-01-003-0119, TWGCB-01-012-0188
+  - xinetd # TWGCB-01-008-0092,TWGCB-01-003-0163, TWGCB-01-012-0092
+  - telnet-server # TWGCB-01-003-0164, TWGCB-01-008-0104, TWGCB-01-012-0104
+  - rsh-server # TWGCB-01-008-0105,TWGCB-01-003-0165, TWGCB-01-012-0105
+  - tftp-server # TWGCB-01-008-0106,TWGCB-01-003-0168, TWGCB-01-012-0106
 
 removed_packages_TWGCB_01_003:
   - ypserv # TWGCB-01-003-0167
@@ -17,11 +17,11 @@ removed_packages_TWGCB_01_003:
 
 removed_packages_TWGCB_01_008:
   - inetd # TWGCB-01-003-0162
-  - ypbind # TWGCB-01-008-0102
-  - telnet # TWGCB-01-008-0103
+  - ypbind # TWGCB-01-008-0102, TWGCB-01-012-0102
+  - telnet # TWGCB-01-008-0103, TWGCB-01-012-0103
 
 install_package:
-  - aide # TWGCB-01-008-0036,TWGCB-01-003-0011
+  - aide # TWGCB-01-008-0036, TWGCB-01-003-0011, TWGCB-01-012-0036
 
 install_package_TWGCB_01_003_RedHat5:
   - ipsec-tools # TWGCB-01-003-0143，The vpn package ipsec-tools was available on RHEL5, but is no longer available for RHEL6
@@ -31,16 +31,16 @@ install_package_TWGCB_01_003:
   - vlock # TWGCB-01-003-0102
 
 install_package_TWGCB_01_008:
-  - sudo # TWGCB-01-008-0033
+  - sudo # TWGCB-01-008-0033, TWGCB-01-012-0033
   - audit # TWGCB-01-008-0132
-  - audit-libs # TWGCB-01-008-0132
-  - rsyslog # TWGCB-01-008-0174
-  - libselinux # TWGCB-01-008-0185
-  - kbd.x86_64 # TWGCB-01-008-0233
-  - openssh-server.x86_64 # TWGCB-01-008-0262
+  - audit-libs # TWGCB-01-008-0132, TWGCB-01-012-0132
+  - rsyslog # TWGCB-01-008-0174, TWGCB-01-012-0174
+  - libselinux # TWGCB-01-008-0185, TWGCB-01-012-0183
+  - kbd.x86_64 # TWGCB-01-008-0233, TWGCB-01-012-0231
+  - openssh-server.x86_64 # TWGCB-01-008-0262, TWGCB-01-012-0254
 
 enable_packages:
-  - auditd # TWGCB-01-008-0133,TWGCB-01-003-0146
+  - auditd # TWGCB-01-008-0133,TWGCB-01-003-0146, TWGCB-01-012-0133
 
 enable_packages_RedHat6:
   - iptables # TWGCB-01-003-0137
@@ -54,15 +54,15 @@ enable_packages_TWGCB_01_003:
   - cpuspeed # TWGCB-01-003-0189
 
 enable_packages_TWGCB_01_008:
-  - kdump # TWGCB-01-008-0101
-  - rsyslog # TWGCB-01-008-0175
-  - crond # TWGCB-01-008-0192
+  - kdump # TWGCB-01-008-0101, TWGCB-01-012-0101
+  - rsyslog # TWGCB-01-008-0175, TWGCB-01-012-0175
+  - crond # TWGCB-01-008-0192, TWGCB-01-012-0190
   - sshd # TWGCB-01-008-0262
 
 # 停用服務
 
 disable_packages:
-  - autofs # TWGCB-01-008-0030,TWGCB-01-003-0056
+  - autofs # TWGCB-01-008-0030, TWGCB-01-003-0056, TWGCB-01-012-0030
   - setroubleshoot # TWGCB-01-003-0118
 
 disable_packages_TWGCB_01_003:
@@ -86,9 +86,9 @@ disable_packages_TWGCB_01_003:
   - kudzu # TWGCB-01-003-0190
 
 disable_packages_TWGCB_01_008:
-  - rsyncd # TWGCB-01-008-0094
-  - avahi-daemon # TWGCB-01-008-0095
-  - squid # TWGCB-01-008-0097
-  - smb # TWGCB-01-008-0098
-  - vsftpd # TWGCB-01-008-0099
-  - ypserv # TWGCB-01-008-0100
+  - rsyncd # TWGCB-01-008-0094, TWGCB-01-012-0094
+  - avahi-daemon # TWGCB-01-008-0095, TWGCB-01-012-0095
+  - squid # TWGCB-01-008-0097, TWGCB-01-012-0097
+  - smb # TWGCB-01-008-0098, TWGCB-01-012-0098
+  - vsftpd # TWGCB-01-008-0099, TWGCB-01-012-0099
+  - ypserv # TWGCB-01-008-0100, TWGCB-01-012-0100

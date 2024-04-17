@@ -107,7 +107,10 @@ grep "^+:" /etc/shadow
 
 * 如果有，請編輯/etc/shadow 檔案，將行首為「+」符號之列移除
 
-### TWGCB-01-003-0085: root帳號的路徑變數
+### root帳號的路徑變數
+
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-003-0085
 
 * 執行下列指令以顯示 PATH變數內容：
 
@@ -133,7 +136,10 @@ chmod g-w (目錄)
 chmod o-w (目錄)
 ```
 
-### TWGCB-01-003-0087: 使用者家目錄權限
+### 使用者家目錄權限
+
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-003-0087
 
 * 針對每個使用者的家目錄執行下列指令：
 
@@ -148,7 +154,10 @@ chmod g-w /home/(使用者帳號)
 chmod o-rwx /home/(使用者帳號)
 ```
 
-### TWGCB-01-003-0095: 以密碼保護GRUB開機載入程式
+### 以密碼保護GRUB開機載入程式
+
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-003-0095
 
 * 請先選擇一組密碼，執行下列指令產生雜湊密碼：
 
@@ -164,7 +173,10 @@ Retype Password：(再次輸入密碼)
 password --md5 (雜湊密碼)
 ```
 
-### TWGCB-01-003-0096: 以密碼保護單一使用者模式
+### 以密碼保護單一使用者模式
+
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-003-0096
 
 * 編輯/etc/inittab檔案，新增或修改成以下內容：
 
@@ -174,7 +186,9 @@ password --md5 (雜湊密碼)
 
 ### 強制root密碼須符合密碼規則
 
-* TWGCB-01-008-0209
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-008-0209
+  * TWGCB-01-012-0207
 
 * 開啟終端機，執行以下指令，建立客製化profile：
 
@@ -185,7 +199,9 @@ authselect select custom/<profile名稱> with-sudo with-faillock without-nullok
 
 ### 強制執行密碼歷程記錄
 
-* TWGCB-01-008-0222
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-008-0222
+  * TWGCB-01-012-0220
 
 * 開啟終端機，執行以下指令，建立客製化profile：
 
@@ -196,7 +212,9 @@ authselect select custom/<profile名稱> with-sudo with-faillock without-nullok
 
 ### 密碼雜湊演算法
 
-* TWGCB-01-008-0224
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-008-0224
+  * TWGCB-01-012-0222
 
 * 開啟終端機，執行以下指令，建立客製化profile：
 
@@ -207,7 +225,8 @@ authselect select custom/<profile名稱> with-sudo with-faillock without-nullok
 
 ### 密碼最短使用期限
 
-* TWGCB-01-008-0226
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-008-0226
 
 * 針對進行上述設定前就已存在之使用者帳號，須再執行下列指令，才能使密碼到期前14天提醒使用者變更密碼：
 
@@ -217,46 +236,41 @@ authselect select custom/<profile名稱> with-sudo with-faillock without-nullok
 
 ### 密碼最長使用期限
 
-* TWGCB-01-008-0227
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-008-0227
 
 * 針對進行上述設定前就已存在之使用者帳號，須再執行下列指令，才能使密碼最長使用期限變更為90天：
 
 ```bash
-#chage --maxdays 90 (使用者帳號名稱)
+chage --maxdays 90 (使用者帳號名稱)
 ```
 
 ### 密碼到期後，帳號停用前的天數
 
-* TWGCB-01-008-0228
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-008-0228
 
 ▪  針對進行上述設定前就已存在之使用者帳號，須再執行下列指令，才能使密碼到期後，超過30天就進行帳號停用：
 #chage --inactive 30 (使用者帳號名稱)
 
 ### 要求使用者必須經過身分驗證才能提升權限
 
-* TWGCB-01-008-0231
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-008-0231
+  * TWGCB-01-012-0229
 
 * 開啟終端機，執行以下指令，尋找「NOPASSWD」或「!authenticate」：
 
 ```bash
-#egrep -i '(nopasswd|!authenticate)' /etc/sudoers /etc/sudoers.d/*
+grep -i '(nopasswd|!authenticate)' /etc/sudoers /etc/sudoers.d/*
 ```
 
 * 執行「visudo -f」指令編輯/etc/sudoers檔案或 /etc/sudoers.d/目錄下的檔案，針對包含「NOPASSWD」或「!authenticate」的指令行，予以註解(#)或刪除
 
-### 系統帳號登入方式
-
-* TWGCB-01-008-0237
-
-開啟終端機，執行以下指令，設定系統帳號(sync、shutdown及halt帳號除外)不可使用殼層(Shell)登入：
-
-```bash
-awk -F: '($1!="root" && $1!="sync" && $1!="shutdown" && $1!="halt" && $1!~/^\+/ && $3<'"$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)"' && $7!="'"$(which nologin)"'" && $7!="/bin/false") {print $1}' /etc/passwd | while read user; do usermod -s $(which nologin) $user; done
-```
-
 ### 可使用su指令之群組
 
-* TWGCB-01-008-0243
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-008-0243
 
 * 編輯/etc/group檔案之wheel群組設定，建立允許使用su指令的使用者帳號清單，如下所示：
 
@@ -274,24 +288,28 @@ wheel:x:10:root,user1,user2
 
 * 使用者會談鎖定
   * TWGCB-01-008-0234
+  * TWGCB-01-012-0232
 * GNOME使用者會談逾時時間
   * TWGCB-01-008-0235
+  * TWGCB-01-012-0233
 * 禁止GNOME使用者自動登入
   * TWGCB-01-008-0236
+  * TWGCB-01-012-0234
 * 防止修改圖形使用者介面(GUI)設定
   * TWGCB-01-008-0239
+  * TWGCB-01-012-0237
 
 開啟終端機，執行以下指令，建立或編輯資料庫，設定螢幕保護裝置：
 
 * /etc/dconf/db/local.d/00-screensaver
 
 ```bash
-## 使用者會談鎖定: TWGCB-01-008-0234
+## 使用者會談鎖定: TWGCB-01-008-0234, TWGCB-01-012-0232
 [org/gnome/desktop/screensaver]
 ##Set this to true to lock the screen when the screensaver activates
 lock-enabled=true
 
-## GNOME使用者會談逾時時間: TWGCB-01-008-0235
+## GNOME使用者會談逾時時間: TWGCB-01-008-0235, TWGCB-01-012-0233
 [org/gnome/desktop/session]
 ##Set the lock time out to 900 seconds before the session is considered idle
 idle-delay=uint32 900
@@ -300,7 +318,7 @@ idle-delay=uint32 900
 * /etc/gdm/custom.conf
 
 ```conf
-## 禁止GNOME使用者自動登入: TWGCB-01-008-0236
+## 禁止GNOME使用者自動登入: TWGCB-01-008-0236, TWGCB-01-012-0234
 [daemon]
 AutomaticLoginEnable=false
 ```
@@ -308,7 +326,7 @@ AutomaticLoginEnable=false
 * /etc/dconf/db/local.d/locks/session
 
 ```conf
-# 防止修改圖形使用者介面(GUI)設定: TWGCB-01-008-0239
+# 防止修改圖形使用者介面(GUI)設定: TWGCB-01-008-0239, TWGCB-01-012-0237
 /org/gnome/desktop/session/idle-delay
 /org/gnome/desktop/screensaver/lock-enabled
 /org/gnome/desktop/screensaver/lock-delay

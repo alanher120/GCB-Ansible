@@ -19,10 +19,15 @@
   - name: execute command
     command: "{{ item }}"
     with_items:
-    - useradd -D -f 30 # TWGCB-01-008-0228
-    - usermod -g 0 root # root帳號所屬群組: TWGCB-01-008-0240
+    - useradd -D -f 30 # 通行碼到期後，帳號停用前之天數: TWGCB-01-008-0228, TWGCB-01-012-0226
+    - usermod -g 0 root # root帳號所屬群組: TWGCB-01-008-0240, TWGCB-01-012-0238
 
-  - name: 更新system-auth與password-auth檔案 TWGCB-01-008-0209
+  - name: 系統帳號登入方(TWGCB-01-008-0237, TWGCB-01-012-0235)
+    shell: |
+      #!/bin/bash
+      awk -F: '($1!="root" && $1!="sync" && $1!="shutdown" && $1!="halt" && $1!~/^\+/ && $3<'"$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)"' && $7!="'"$(which nologin)"'" && $7!="/bin/false") {print $1}' /etc/passwd | while read user; do usermod -s $(which nologin) $user; done
+
+  - name: 強制root通行碼須符合通行碼規則 更新system-auth與password-auth檔案(TWGCB-01-008-0209, TWGCB-01-012-0207)
     shell: |
       #!/bin/bash
       CP=$(authselect current | awk 'NR == 1 {print $3}' | grep custom/)
@@ -31,7 +36,7 @@
           [[ -z $(grep -E '^\s*password\s+requisite\s+pam_pwquality.so\s+.*enforce_for_root\s*.*$' $PTF) ]] && sed -ri 's/^\s*(password\s+requisite\s+pam_pwquality.so\s+)(.*)$/\1\2 enforce_for_root/' $PTF
       done
       authselect apply-changes
-  - name: 更新system-auth檔案 TWGCB-01-008-0222
+  - name: 強制執行通行碼歷程記錄 更新system-auth檔案 (TWGCB-01-008-0222, TWGCB-01-012-0220)
     shell: |
       #!/bin/bash
       CP=$(authselect current | awk 'NR == 1 {print $3}' | grep custom/)
@@ -39,7 +44,7 @@
           [[ -n $(grep -E '^\s*password\s+(sufficient\s+pam_unix|requi(red|site)\s+pam_pwhistory).so\s+([^#]+\s+)*remember=\S+\s*.*$' $PTF) ]] && sed -ri 's/^\s*(password\s+(requisite|sufficient)\s+(pam_pwquality\.so|pam_unix\.so)\s+)(.*)(remember=\S+\s*)(.*)$/\1\4 remember=3 \6/' $PTF || sed -ri 's/^\s*(password\s+(requisite|sufficient)\s+(pam_pwquality\.so|pam_unix\.so)\s+)(.*)$/\1\4 remember=3/' $PTF
       authselect apply-changes
 
-  - name: 更新system-auth與password-auth檔案 TWGCB-01-008-0224
+  - name: 通行碼雜湊演算法 更新system-auth與password-auth檔案 (TWGCB-01-008-0224, TWGCB-01-012-0222)
     shell: |
       #!/bin/bash
       CP=$(authselect current | awk 'NR == 1 {print $3}' | grep custom/)

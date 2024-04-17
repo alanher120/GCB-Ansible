@@ -4,7 +4,9 @@
 
 ### cron日誌記錄功能
 
-* TWGCB-01-008-0207
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-008-0207
+  * TWGCB-01-012-0205
 
 ▪  開啟終端機，執行以下指令，檢查cron日誌記錄功能設定：
 #grep cron /etc/rsyslog.conf /etc/rsyslog.d/*.conf

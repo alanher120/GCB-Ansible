@@ -14,14 +14,14 @@
     template:
       owner: root
       group: root
-      mode: 0600 # TWGCB-01-008-0141
+      mode: 0600 # 稽核規則檔案權限: TWGCB-01-008-0141, TWGCB-01-012-0141
       dest: /etc/audit/rules.d/audit.rules
       src: "{{audit_rules_redhat_8}}"
   - name: /etc/audit/rules.d/actions.rules
     template:
       owner: root
       group: root
-      mode: 0600 # TWGCB-01-008-0141
+      mode: 0600
       dest: /etc/audit/rules.d/actions.rules
       src: "{{actions_rules_redhat_8}}"
 
@@ -29,7 +29,7 @@
     template:
       owner: root
       group: root
-      mode: 0600 # TWGCB-01-008-0142
+      mode: 0640 # 稽核設定檔案權限: TWGCB-01-008-0142, TWGCB-01-012-0142
       dest: /etc/audit/auditd.conf
       src: "{{auditd_redhat_8_conf}}"
   - name: /etc/aide.conf

@@ -1,6 +1,7 @@
-- name: TWGCB-01-008-0029 command
+# 設定全域寫入權限目錄之粘滯位: TWGCB-01-008-0029, TWGCB-01-012-0029
+
+- name: 設定全域寫入權限目錄之粘滯位
   ignore_errors: true
-  become: true
   shell: df --local -P | awk '{if (NR!=1) print $6}' | xargs -I '{}' find '{}' -xdev -type d \( -perm -0002 -a ! -perm -1000 \) 2>/dev/null | xargs -I '{}' chmod o+t '{}'
   args:
     executable: /bin/bash

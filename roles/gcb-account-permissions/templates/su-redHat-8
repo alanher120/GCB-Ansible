@@ -1,7 +1,7 @@
 #%PAM-1.0
 auth            required        pam_env.so
 auth            sufficient      pam_rootok.so
-# 可使用su指令之群組: TWGCB-01-008-0243
+# 可使用su指令之群組: TWGCB-01-008-0243, TWGCB-01-012-0241
 auth            required        pam_wheel.so use_uid
 # Uncomment the following line to implicitly trust users in the "wheel" group.
 #auth           sufficient      pam_wheel.so trust use_uid

@@ -4,7 +4,10 @@
 
 ## 手動處理項目
 
-### TWGCB-01-003-0117: 標記為unlabeled_t的裝置檔案
+### 標記為unlabeled_t的裝置檔案
+
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-003-0117
 
 
 1. 執行下列指令，尋找是否存在被標記為unlabeled_t的裝置檔案：
@@ -28,7 +31,9 @@ reboot
 
 ### 開機載入程式啟用SELinux
 
-* TWGCB-01-008-0186
+* 依下列 TWGCB-ID 要求設定
+  * TWGCB-01-008-0186
+  * TWGCB-01-012-0184
 
 * 編輯/etc/default/grub檔案，檢查所有CMDLINE_LINUX參數設定，並移除所有「selinux=0」與「enforcing=0」內容，範例如下：
 

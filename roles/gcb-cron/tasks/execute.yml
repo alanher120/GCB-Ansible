@@ -9,41 +9,41 @@
   - name: /etc/crontab
     file:
       path: /etc/crontab
-      owner: root  # TWGCB-01-008-0193
-      group: root  # TWGCB-01-008-0193
-      mode: '0600' # TWGCB-01-008-0194
+      owner: root  # /etc/crontab檔案所有權: TWGCB-01-008-0193,TWGCB-01-012-0191
+      group: root  # /etc/crontab檔案所有權: TWGCB-01-008-0193,TWGCB-01-012-0191
+      mode: '0600' # /etc/crontab檔案權限: TWGCB-01-008-0194, TWGCB-01-012-0192
   - name: /etc/cron.hourly
     file:
       path: /etc/cron.hourly
-      owner: root  # TWGCB-01-008-0195
-      group: root  # TWGCB-01-008-0195
-      mode: '0700' # TWGCB-01-008-0196
+      owner: root  # /etc/cron.hourly目錄所有權: TWGCB-01-008-0195, TWGCB-01-012-0193
+      group: root  # /etc/cron.hourly目錄所有權: TWGCB-01-008-0195, TWGCB-01-012-0193
+      mode: '0700' # /etc/cron.hourly目錄權限: TWGCB-01-008-0196, TWGCB-01-012-0194
   - name: /etc/cron.daily
     file:
       path: /etc/cron.daily
-      owner: root  # TWGCB-01-008-0197
-      group: root  # TWGCB-01-008-0197
-      mode: '0700' # TWGCB-01-008-0198
+      owner: root  # /etc/cron.daily目錄所有權: TWGCB-01-008-0197, TWGCB-01-012-0195
+      group: root  # /etc/cron.daily目錄所有權: TWGCB-01-008-0197, TWGCB-01-012-0195
+      mode: '0700' # /etc/cron.daily目錄權限: TWGCB-01-008-0198, TWGCB-01-012-0196
   - name: /etc/cron.weekly
     file:
       path: /etc/cron.weekly
-      owner: root  # TWGCB-01-008-0199
-      group: root  # TWGCB-01-008-0199
-      mode: '0700' # TWGCB-01-008-0200
+      owner: root  # /etc/cron.weekly目錄所有權: TWGCB-01-008-0199, TWGCB-01-012-0197
+      group: root  # /etc/cron.weekly目錄所有權: TWGCB-01-008-0199, TWGCB-01-012-0197
+      mode: '0700' # /etc/cron.weekly目錄權限: TWGCB-01-008-0200, TWGCB-01-012-0198
   - name: /etc/cron.monthly
     file:
       path: /etc/cron.monthly
-      owner: root  # TWGCB-01-008-0201
-      group: root  # TWGCB-01-008-0201
-      mode: '0700' # TWGCB-01-008-0202
+      owner: root  # /etc/cron.monthly目錄所有權: TWGCB-01-008-0201, TWGCB-01-012-0199
+      group: root  # /etc/cron.monthly目錄所有權: TWGCB-01-008-0201, TWGCB-01-012-0199
+      mode: '0700' # /etc/cron.monthly目錄權限: TWGCB-01-008-0202, TWGCB-01-012-0200
   - name: /etc/cron.d
     file:
       path: /etc/cron.d
       state: directory
-      owner: root  # TWGCB-01-008-0203
-      group: root  # TWGCB-01-008-0203
-      mode: '0700' # TWGCB-01-008-0204
-  - name: at.allow與cron.allow檔案所有權(TWGCB-01-008-0205,TWGCB-01-008-0206)
+      owner: root  # /etc/cron.d目錄所有權: TWGCB-01-008-0203, TWGCB-01-012-0201
+      group: root  # /etc/cron.d目錄所有權: TWGCB-01-008-0203, TWGCB-01-012-0201
+      mode: '0700' # /etc/cron.d目錄權限: TWGCB-01-008-0204, TWGCB-01-012-0202
+  - name: 移除/etc/cron.deny與/etc/at.deny，並建立/etc/cron.allow與/etc/at.allow (TWGCB-01-008-0205,TWGCB-01-008-0206, TWGCB-01-012-0202)
     command: "{{ item }}"
     with_items:
     - rm /etc/cron.deny
@@ -53,12 +53,12 @@
   - name: /etc/cron.allow
     file:
       path: /etc/cron.allow
-      owner: root  # TWGCB-01-008-0205
-      group: root  # TWGCB-01-008-0205
-      mode: '0600' # TWGCB-01-008-0206
+      owner: root  # at.allow與cron.allow檔案所有權: TWGCB-01-008-0205, TWGCB-01-012-0202
+      group: root  # at.allow與cron.allow檔案所有權: TWGCB-01-008-0205, TWGCB-01-012-0202
+      mode: '0600' # at.allow與cron.allow檔案權限: TWGCB-01-008-0206, TWGCB-01-012-0204
   - name: /etc/at.allow
     file:
       path: /etc/at.allow
-      owner: root  # TWGCB-01-008-0205
-      group: root  # TWGCB-01-008-0205
-      mode: '0600' # TWGCB-01-008-0206
+      owner: root  # at.allow與cron.allow檔案所有權: TWGCB-01-008-0205, TWGCB-01-012-0202
+      group: root  # at.allow與cron.allow檔案所有權: TWGCB-01-008-0205, TWGCB-01-012-0202
+      mode: '0600' # at.allow與cron.allow檔案權限: TWGCB-01-008-0206, TWGCB-01-012-0204

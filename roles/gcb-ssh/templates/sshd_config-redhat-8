@@ -25,7 +25,7 @@ HostKey /etc/ssh/ssh_host_ed25519_key
 
 # Ciphers and keying
 #RekeyLimit default none
-# TWGCB-01-008-0271
+# SSH加密演算法: TWGCB-01-008-0271, TWGCB-01-012-0263
 Ciphers aes128-ctr,aes192-ctr,aes256-ctr
 
 
@@ -38,20 +38,20 @@ Ciphers aes128-ctr,aes192-ctr,aes256-ctr
 # Logging
 #SyslogFacility AUTH
 SyslogFacility AUTHPRIV
-# TWGCB-01-008-0272
+# SSH日誌記錄等級: TWGCB-01-008-0272, TWGCB-01-012-0264
 LogLevel VERBOSE
 
 # Authentication:
 
-# TWGCB-01-008-0281
+# SSH LoginGraceTime參數: TWGCB-01-008-0281, TWGCB-01-012-0273
 LoginGraceTime 60
-# TWGCB-01-008-0277
+# SSH PermitRootLogin參數: TWGCB-01-008-0277, TWGCB-01-012-0269
 PermitRootLogin no
-# TWGCB-01-008-0286
+# SSH StrictModes參數: TWGCB-01-008-0286, TWGCB-01-012-0278
 StrictModes yes
-# TWGCB-01-008-0274
+# SSH MaxAuthTries參數: TWGCB-01-008-0274, TWGCB-01-012-0266
 MaxAuthTries 4
-# TWGCB-01-008-0285
+# SSH MaxSessions參數: TWGCB-01-008-0285, TWGCB-01-012-0277
 MaxSessions 4
 
 #PubkeyAuthentication yes
@@ -66,19 +66,19 @@ AuthorizedKeysFile      .ssh/authorized_keys
 #AuthorizedKeysCommandUser nobody
 
 # For this to work you will also need host keys in /etc/ssh/ssh_known_hosts
-# TWGCB-01-008-0276
+# SSH HostbasedAuthentication參數: TWGCB-01-008-0276, TWGCB-01-012-0268
 HostbasedAuthentication no
 # Change to yes if you don't trust ~/.ssh/known_hosts for
 # HostbasedAuthentication
-# TWGCB-01-008-0288
+# SSH IgnoreUserKnownHosts參數: TWGCB-01-008-0288, TWGCB-01-012-0280
 IgnoreUserKnownHosts yes
 # Don't read the user's ~/.rhosts and ~/.shosts files
-# TWGCB-01-008-0275
+# SSH IgnoreRhosts參數: TWGCB-01-008-0275, TWGCB-01-012-0267
 IgnoreRhosts yes
 
 # To disable tunneled clear text passwords, change to no here!
 #PasswordAuthentication yes
-# TWGCB-01-008-0278
+# SSH PermitEmptyPasswords參數: TWGCB-01-008-0278, TWGCB-01-012-0270
 PermitEmptyPasswords no
 PasswordAuthentication yes
 
@@ -111,14 +111,14 @@ GSSAPICleanupCredentials no
 # and ChallengeResponseAuthentication to 'no'.
 # WARNING: 'UsePAM no' is not supported in RHEL and may cause several
 # problems.
-# TWGCB-01-008-0282
+# SSH UsePAM參數: TWGCB-01-008-0282, TWGCB-01-012-0274
 UsePAM yes
 
 #AllowAgentForwarding yes
-# TWGCB-01-008-0283
+# SSH AllowTcpForwarding參數: TWGCB-01-008-0283, TWGCB-01-012-0275
 AllowTcpForwarding no
 #GatewayPorts no
-# TWGCB-01-008-0273
+# SSH X11Forwarding功能: TWGCB-01-008-0273, TWGCB-01-012-0265
 X11Forwarding no
 #X11DisplayOffset 10
 #X11UseLocalhost yes
@@ -128,25 +128,25 @@ X11Forwarding no
 # as it is more configurable and versatile than the built-in version.
 PrintMotd no
 
-# TWGCB-01-008-0289
+# SSH PrintLastLog參數: TWGCB-01-008-0289, TWGCB-01-012-0281
 PrintLastLog yes
 #TCPKeepAlive yes
-# TWGCB-01-008-0279
+# SSH PermitUserEnvironment參數: TWGCB-01-008-0279, TWGCB-01-012-0271
 PermitUserEnvironment no
-# TWGCB-01-008-0287
+# SSH Compression參數: TWGCB-01-008-0287, TWGCB-01-012-0279
 Compression no
-# TWGCB-01-008-0280
+# SSH逾時時間: TWGCB-01-008-0280, TWGCB-01-012-0272
 ClientAliveInterval 600
-# TWGCB-01-008-0280
+# SSH逾時時間: TWGCB-01-008-0280, TWGCB-01-012-0272
 ClientAliveCountMax 0
 #UseDNS no
 #PidFile /var/run/sshd.pid
-# TWGCB-01-008-0284
+# SSH MaxStartups參數: TWGCB-01-008-0284, TWGCB-01-012-0276
 Maxstartups 10:30:60
 #PermitTunnel no
 #ChrootDirectory none
 #VersionAddendum none
-# TWGCB-01-008-0263
+# SSH協定版本: TWGCB-01-008-0263, TWGCB-01-012-0255
 Protocol 2
 
 # no default banner path

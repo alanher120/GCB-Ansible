@@ -5,59 +5,46 @@
   - name: execute command
     command: "{{ item }}"
     with_items: 
-    - sysctl -w net.ipv4.conf.all.send_redirects=0 # TWGCB-01-008-0109
-    - sysctl -w net.ipv4.route.flush=1 # TWGCB-01-008-0109
-    - sysctl -w net.ipv4.conf.default.send_redirects=0 # TWGCB-01-008-0110
-    - sysctl -w net.ipv4.route.flush=1 # TWGCB-01-008-0110
-    - sysctl -w net.ipv4.conf.all.accept_source_route=0 # TWGCB-01-008-0111
-    - sysctl -w net.ipv6.conf.all.accept_source_route=0 # TWGCB-01-008-0111
-    - sysctl -w net.ipv4.route.flush=1 # TWGCB-01-008-0111
-    - sysctl -w net.ipv6.route.flush=1 # TWGCB-01-008-0111
-    - sysctl -w net.ipv4.conf.default.accept_source_route=0 # TWGCB-01-008-0112
-    - sysctl -w net.ipv6.conf.default.accept_source_route=0 # TWGCB-01-008-0112
-    - sysctl -w net.ipv4.route.flush=1 # TWGCB-01-008-0112
-    - sysctl -w net.ipv6.route.flush=1 # TWGCB-01-008-0112
-    - sysctl -w net.ipv4.conf.all.accept_redirects=0 # TWGCB-01-008-0113
-    - sysctl -w net.ipv6.conf.all.accept_redirects=0 # TWGCB-01-008-0113
-    - sysctl -w net.ipv4.route.flush=1 # TWGCB-01-008-0113
-    - sysctl -w net.ipv6.route.flush=1 # TWGCB-01-008-0113
-    - sysctl -w net.ipv4.conf.default.accept_redirects=0 # TWGCB-01-008-0114
-    - sysctl -w net.ipv6.conf.default.accept_redirects=0 # TWGCB-01-008-0114
-    - sysctl -w net.ipv4.route.flush=1 # TWGCB-01-008-0114
-    - sysctl -w net.ipv6.route.flush=1 # TWGCB-01-008-0114
-    - sysctl -w net.ipv4.conf.all.secure_redirects=0 # TWGCB-01-008-0115
-    - sysctl -w net.ipv4.route.flush=1 # TWGCB-01-008-0115
-    - sysctl -w net.ipv4.conf.default.secure_redirects=0 # TWGCB-01-008-0116
-    - sysctl -w net.ipv4.route.flush=1 # TWGCB-01-008-0116
-    - sysctl -w net.ipv4.conf.all.log_martians=1 # TWGCB-01-008-0117
-    - sysctl -w net.ipv4.route.flush=1 # TWGCB-01-008-0117
-    - sysctl -w net.ipv4.conf.default.log_martians=1 # TWGCB-01-008-0118
-    - sysctl -w net.ipv4.route.flush=1 # TWGCB-01-008-0118
-    - sysctl -w net.ipv4.conf.default.rp_filter=1 # TWGCB-01-008-0122
-    - sysctl -w net.ipv4.route.flush=1 # TWGCB-01-008-0122
-    - sysctl -w net.ipv6.conf.all.accept_ra=0 # TWGCB-01-008-0124
-    - sysctl -w net.ipv6.route.flush=1 # TWGCB-01-008-0124
-    - sysctl -w net.ipv6.conf.default.accept_ra=0 # TWGCB-01-008-0125
-    - sysctl -w net.ipv6.route.flush=1 # TWGCB-01-008-0125
-
-  - name: TWGCB-01-008-0108
+    - sysctl -w net.ipv4.conf.all.send_redirects=0 # 所有網路介面禁止傳送ICMP重新導向封包: TWGCB-01-008-0109, TWGCB-01-012-0109
+    - sysctl -w net.ipv4.conf.default.send_redirects=0 # 預設網路介面禁止傳送ICMP重新導向封包: TWGCB-01-008-0110, TWGCB-01-012-0110
+    - sysctl -w net.ipv4.conf.all.accept_source_route=0 # 所有網路介面阻擋來源路由封包: TWGCB-01-008-0111, TWGCB-01-012-0111
+    - sysctl -w net.ipv6.conf.all.accept_source_route=0 # 所有網路介面阻擋來源路由封包: TWGCB-01-008-0111, TWGCB-01-012-0111
+    - sysctl -w net.ipv4.conf.default.accept_source_route=0 # 預設網路介面阻擋來源路由封包: TWGCB-01-008-0112, TWGCB-01-012-0112
+    - sysctl -w net.ipv6.conf.default.accept_source_route=0 # 預設網路介面阻擋來源路由封包: TWGCB-01-008-0112, TWGCB-01-012-0112
+    - sysctl -w net.ipv4.conf.all.accept_redirects=0 # 所有網路介面阻擋ICMP重新導向封包: TWGCB-01-008-0113, TWGCB-01-012-0113
+    - sysctl -w net.ipv6.conf.all.accept_redirects=0 # 所有網路介面阻擋ICMP重新導向封包: TWGCB-01-008-0113, TWGCB-01-012-0113
+    - sysctl -w net.ipv4.conf.default.accept_redirects=0 # 預設網路介面阻擋ICMP重新導向封包: TWGCB-01-008-0114, TWGCB-01-012-0114
+    - sysctl -w net.ipv6.conf.default.accept_redirects=0 # 預設網路介面阻擋ICMP重新導向封包: TWGCB-01-008-0114, TWGCB-01-012-0114
+    - sysctl -w net.ipv4.conf.all.secure_redirects=0 # 所有網路介面阻擋安全之ICMP重新導向封包: TWGCB-01-008-0115, TWGCB-01-012-0115
+    - sysctl -w net.ipv4.conf.default.secure_redirects=0 # 預設網路介面阻擋安全之ICMP重新導向封包: TWGCB-01-008-0116, TWGCB-01-012-0116
+    - sysctl -w net.ipv4.conf.all.log_martians=1 # 所有網路介面記錄可疑封包: TWGCB-01-008-0117, TWGCB-01-012-0117
+    - sysctl -w net.ipv4.conf.default.log_martians=1 # 預設網路介面記錄可疑封包: TWGCB-01-008-0118, TWGCB-01-012-0118
+    - sysctl -w net.ipv4.conf.default.rp_filter=1 # 預設網路介面啟用逆向路徑過濾功能: TWGCB-01-008-0122, TWGCB-01-012-0122
+    - sysctl -w net.ipv6.conf.all.accept_ra=0 # 所有網路介面阻擋IPv6路由器公告訊息: TWGCB-01-008-0124, TWGCB-01-012-0124
+    - sysctl -w net.ipv6.conf.default.accept_ra=0 # # 預設網路介面阻擋IPv6路由器公告訊息: TWGCB-01-008-0125, TWGCB-01-012-0125
+  - name: flush route
+    command: "{{ item }}"
+    with_items:
+    - sysctl -w net.ipv4.route.flush=1
+    - sysctl -w net.ipv6.route.flush=1
+  - name: IP轉送(TWGCB-01-008-0108, TWGCB-01-012-0108)
     shell: |
       #!/bin/bash
       grep -Els "^\s*net\.ipv4\.ip_forward\s*=\s*1" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf | while read filename; do sed -ri "s/^\s*(net\.ipv4\.ip_forward\s*)(=)(\s*\S+\b).*$/# *REMOVED* \1/" $filename; done; sysctl -w net.ipv4.ip_forward=0; sysctl -w net.ipv4.route.flush=1; printf "\nnet.ipv4.ip_forward = 0\n" >> /etc/sysctl.d/60-netipv4_sysctl.conf
       grep -Els "^\s*net\.ipv6\.conf\.all\.forwarding\s*=\s*1" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf | while read filename; do sed -ri "s/^\s*(net\.ipv6\.conf\.all\.forwarding\s*)(=)(\s*\S+\b).*$/# *REMOVED* \1/" $filename; done; sysctl -w net.ipv6.conf.all.forwarding=0; sysctl -w net.ipv6.route.flush=1; printf "\nnet.ipv6.conf.all.forwarding = 0\n" >> /etc/sysctl.d/60-netipv6_sysctl.conf
-  - name: TWGCB-01-008-0119
+  - name: 不回應ICMP廣播要求(TWGCB-01-008-0119, TWGCB-01-012-0119)
     shell: |
       #!/bin/bash
       #grep -Els "^\s*net\.ipv4\.icmp_echo_ignore_broadcasts\s*=\s*0" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf | while read filename; do sed -ri "s/^\s*(net\.ipv4\.icmp_echo_ignore_broadcasts\s*)(=)(\s*\S+\b).*$/# *REMOVED* \1/" $filename; done; sysctl -w net.ipv4.icmp_echo_ignore_broadcasts=1; sysctl -w net.ipv4.route.flush=1; printf "\nnet.ipv4.icmp_echo_ignore_broadcasts = 1\n" >> /etc/sysctl.d/60-netipv4_sysctl.conf
-  - name: TWGCB-01-008-0120
+  - name: 忽略偽造之ICMP錯誤訊息(TWGCB-01-008-0120, TWGCB-01-012-0120)
     shell: |
       #!/bin/bash
       grep -Els "^\s*net\.ipv4\.icmp_ignore_bogus_error_responses\s*=\s*0" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf | while read filename; do sed -ri "s/^\s*(net\.ipv4\.icmp_ignore_bogus_error_responses\s*)(=)(\s*\S+\b).*$/# *REMOVED* \1/" $filename; done; sysctl -w net.ipv4.icmp_ignore_bogus_error_responses=1; sysctl -w net.ipv4.route.flush=1; printf "\nnet.ipv4.icmp_ignore_bogus_error_responses = 1\n" >> /etc/sysctl.d/60-netipv4_sysctl.conf
-  - name: TWGCB-01-008-0121
+  - name: 所有網路介面啟用逆向路徑過濾功能(TWGCB-01-008-0121, TWGCB-01-012-0121)
     shell: |
       #!/bin/bash
       grep -Els "^\s*net\.ipv4\.conf\.all\.rp_filter\s*=\s*0" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf | while read filename; do sed -ri "s/^\s*(net\.ipv4\.net.ipv4.conf\.all\.rp_filter\s*)(=)(\s*\S+\b).*$/# *REMOVED* \1/" $filename; done; sysctl -w net.ipv4.conf.all.rp_filter=1; sysctl -w net.ipv4.route.flush=1; printf "\nnet.ipv4.conf.all.rp_filter = 1\n" >> /etc/sysctl.d/60-netipv4_sysctl.conf
-  - name: TWGCB-01-008-0123
+  - name: TCP SYN cookies(TWGCB-01-008-0123, TWGCB-01-012-0123)
     shell: |
       #!/bin/bash
       grep -Els "^\s*net\.ipv4\.tcp_syncookies\s*=\s*[02]*" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf | while read filename; do sed -ri "s/^\s*(net\.ipv4\.tcp_syncookies\s*)(=)(\s*\S+\b).*$/# *REMOVED* \1/" $filename; done; sysctl -w net.ipv4.tcp_syncookies=1; sysctl -w net.ipv4.route.flush=1; printf "\nnet.ipv4.tcp_syncookies = 1\n" >> /etc/sysctl.d/60-netipv4_sysctl.conf
@@ -74,22 +61,12 @@
   - name: Gather the package facts
     ansible.builtin.package_facts:
       manager: auto
+
+  # 無線網路介面
   - name: 未安裝nmcli
     when: "'nmcli' not in ansible_facts.packages"
     block:
-      - name: TWGCB-01-008-0129
-        shell: |
-          #!/bin/bash
-          if [ -n "$(find /sys/class/net/*/ -type d -name wireless)" ]; 
-          then
-            mname=$(for driverdir in $(find /sys/class/net/*/ -type d -name wireless | xargs -0 dirname); do basename "$(readlink -f "$driverdir"/device/driver/module)";done | sort -u) 
-            for dm in $mname; 
-            do 
-              echo "install $dm /bin/true" >> /etc/modprobe.d/disable_wireless.conf
-              echo "blacklist $dm" >> /etc/modprobe.d/disable_wireless.conf 
-            done 
-          fi
-      - name: TWGCB-01-008-0130
+      - name: 無線網路介面(TWGCB-01-008-0130, TWGCB-01-012-0130)
         shell: |
           #!/bin/bash
           if [ -n "$(find /sys/class/net/*/ -type d -name wireless)" ]; 
@@ -107,4 +84,4 @@
       - name: 無線網路介面
         command: "{{ item }}"
         with_items: 
-        - nmcli radio all off # TWGCB-01-008-0129,TWGCB-01-008-0130
+        - nmcli radio all off # 無線網路介面: TWGCB-01-008-0130, TWGCB-01-012-0130
