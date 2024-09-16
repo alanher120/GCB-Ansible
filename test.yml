@@ -2,7 +2,7 @@
 - hosts: 
     - all
   tasks:
-    # task 1
+    # task 1  
     - name: test connection
       ping:
       register: message
