@@ -48,6 +48,96 @@
   - include_tasks: TWGCB-01-008-0136.yml
     when: playbook_action in gcb_action
   - include_tasks: TWGCB-01-008-0145.yml
+
+  - include_tasks: TWGCB-01-008-0146.yml # 新增的部分
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0147.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0148.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0149.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0150.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0151.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0152.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0153.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0154.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0155.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0156.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0157.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0158.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0159.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0160.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0161.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0162.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0163.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0164.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0165.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0166.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0167.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0168.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0169.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0170.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0171.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0172.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0173.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0176.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0177.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0180.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0181.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0182.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0207.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0210.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0211.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0212.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0213.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0214.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0215.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0216.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0217.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0218.yml
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-01-008-0219.yml
+    when: playbook_action in gcb_action
+
     when: playbook_action in gcb_action
   - include_tasks: TWGCB-audit.yml
     when: playbook_action in gcb_action
