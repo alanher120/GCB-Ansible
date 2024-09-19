@@ -7,36 +7,6 @@
     group: root
     mode: 0644
 
-- name: TWGCB-account TWGCB-01-008-0223 push /etc/authselect/postlogin
-  become: true
-  copy:
-    src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/authselect/postlogin
-    dest: /etc/authselect
-    owner: root
-    group: root
-    mode: 0644
-  when: ansible_distribution == "OracleLinux" and ansible_distribution_major_version == "9"
-
-- name: TWGCB-account TWGCB-01-008-0223 push /etc/pam.d/postlogin
-  become: true
-  copy:
-    src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/pam.d/postlogin
-    dest: /etc/pam.d
-    owner: root
-    group: root
-    mode: 0644
-  when: ansible_distribution == "Rocky"
-
-- name: TWGCB-account TWGCB-01-008-0223 push /etc/pam.d/postlogin-ac
-  become: true
-  copy:
-    src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/pam.d/postlogin-ac
-    dest: /etc/pam.d
-    owner: root
-    group: root
-    mode: 0644
-  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == "7"
-
 - name: TWGCB-account push /etc/login.defs
   become: true
   copy:
@@ -166,12 +136,49 @@
   args:
     executable: /bin/bash
 
+- name: TWGCB-account TWGCB-01-008-0223 push /etc/authselect/postlogin
+  become: true
+  copy:
+    src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/authselect/postlogin
+    dest: /etc/authselect
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_distribution == "OracleLinux" and ansible_distribution_major_version == "9"
+
+- name: TWGCB-account TWGCB-01-008-0223 push /etc/pam.d/postlogin
+  become: true
+  copy:
+    src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/pam.d/postlogin
+    dest: /etc/pam.d
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_distribution == "Rocky"
+
+- name: TWGCB-account TWGCB-01-008-0223 push /etc/pam.d/postlogin-ac
+  become: true
+  copy:
+    src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/pam.d/postlogin-ac
+    dest: /etc/pam.d
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == "7"
 
 - name: TWGCB-01-008-0224
   become: true
   ignore_errors: true
   shell: |
     #!/bin/bash
+    [ -f /etc/libuser.conf ] && retval=0
+    [ $retval -eq 0 ] && grep -E "^\s*crypt_style\s*=\s*sha512" /etc/libuser.conf ; retval=$?
+    [ $retval -ne 0 ] && echo crypt_style = sha512 >> /etc/libuser.conf 
+    [ -f /etc/login.defs ] && retval=0
+    [ $retval -eq 0 ] && grep -E "^\s*ENCRYPT_METHOD\s*=\s*SHA512" /etc/login.defs ; retval=$?
+    [ $retval -ne 0 ] && echo ENCRYPT_METHOD = SHA512 >> /etc/login.defs 
+    authselect create-profile pwENCY -b sssd --symlink-meta
+    authselect select custom/pwENCY with-sudo with-faillock without-nullok
     CP=$(authselect current | awk 'NR == 1 {print $3}' | grep custom/)
     for FN in system-auth password-auth; do
     [[ -n $CP ]] && PTF=/etc/authselect/$CP/$FN || PTF=/etc/authselect/$FN
