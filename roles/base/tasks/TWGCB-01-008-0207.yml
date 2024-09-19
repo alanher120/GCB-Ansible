@@ -1,0 +1,12 @@
+---
+- name: TWGCB-01-008-0207
+  become: true
+  shell: |
+    [ ! -f /etc/rsyslog.conf ] && touch /etc/rsyslog.conf
+    grep '^\s*cron.*' /etc/rsyslog.conf ; retval=$?
+    grep '^\s*cron.*' /etc/rsyslog.d/*.conf ; retval2=$?
+    [ $retval -ne 0 -a $retval2 -ne 0 ] && echo cron.* /var/log/cron >> /etc/rsyslog.conf
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  

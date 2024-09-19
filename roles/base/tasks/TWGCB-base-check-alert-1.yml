@@ -2,7 +2,10 @@
 - name: TWGCB-01-008-0066
   become: true
   shell: |
-    find -L /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin -perm /0022 | xargs ls -al
+    echo "確認 /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin 檔案權限是 0022 時更改為 0755"
+    find -L /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin -type f -perm /0022
+    echo "更改為 0755"
+    find -L /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin -type f -perm /0022 | xargs -l chmod 0755
   ignore_errors: true
   register: command_output
 
@@ -12,7 +15,10 @@
 - name: TWGCB-01-008-0067
   become: true
   shell: |
-    find -L /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin ! -user root | xargs ls -al
+    echo "確認 /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin 檔案或目錄使用者不是 root 時更換為 root"
+    find -L /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin -type f ! -user root
+    echo "更改為 root"
+    find -L /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin -type f ! -user root | xargs -l chown -h root
   ignore_errors: true
   register: command_output
 
@@ -22,7 +28,10 @@
 - name: TWGCB-01-008-0068
   become: true
   shell: |
-    find -L /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin ! -group root | xargs ls -al
+    echo "確認 /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin 檔案或目錄群組不是 root 時更換為 root"
+    find -L /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin -type f ! -group root 
+    echo "更改為 root"
+    find -L /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin -type f ! -group root | xargs -l chgrp -h root
   ignore_errors: true
   register: command_output
 
@@ -32,7 +41,10 @@
 - name: TWGCB-01-008-0069
   become: true
   shell: |
-    find -L /lib /lib64 /usr/lib /usr/lib64 -perm /0022 -type f | xargs ls -al
+    echo "確認 /lib /lib64 /usr/lib /usr/lib64 檔案權限是 0022 時更改為 0755"
+    find -L /lib /lib64 /usr/lib /usr/lib64 -perm /0022 -type f
+    echo "更改為 0755"
+    find -L /lib /lib64 /usr/lib /usr/lib64 -perm /0022 -type f | xargs -l chmod 0755 
   ignore_errors: true
   register: command_output
 
@@ -42,7 +54,10 @@
 - name: TWGCB-01-008-0070
   become: true
   shell: |
-    find -L /lib /lib64 /usr/lib /usr/lib64 ! -user root | xargs ls -al
+    echo "確認 /lib /lib64 /usr/lib /usr/lib64 檔案或目錄使用者不是 root 更改群組為 root"
+    find -L /lib /lib64 /usr/lib /usr/lib64 -type f ! -user root 
+    echo "更改為 root"
+    find -L /lib /lib64 /usr/lib /usr/lib64 -type f ! -user root | xargs -l chown -h root
   ignore_errors: true
   register: command_output
 
@@ -52,7 +67,10 @@
 - name: TWGCB-01-008-0071
   become: true
   shell: |
-    find -L /lib /lib64 /usr/lib /usr/lib64 ! -group root | xargs ls -al
+    echo "確認 /lib /lib64 /usr/lib /usr/lib64 檔案或目錄群組不是 root 更改群組為 root"
+    find -L /lib /lib64 /usr/lib /usr/lib64 -type f ! -group root 
+    echo "更改為 root"
+    find -L /lib /lib64 /usr/lib /usr/lib64 -type f ! -group root | xargs -l chgrp -h root 
   ignore_errors: true
   register: command_output
 
@@ -62,7 +80,10 @@
 - name: TWGCB-01-008-0072
   become: true
   shell: |
-    awk -F: '($2 == "" ) { print $1 " does not have a password "}' /etc/shadow
+    echo "確認 /etc/shadow 密碼是空值的帳號將帳號鎖定"
+    cat /etc/shadow | awk -F: '($2 == "" ) { print $1 }'
+    echo "帳號鎖定"
+    cat /etc/shadow | awk -F: '($2 == "" ) { print "passwd -l  " $1 " "}' | bash 
   args:
     executable: /bin/bash
   ignore_errors: true
@@ -71,18 +92,37 @@
 - debug:
     var: command_output.stdout_lines
 
-- name: TWGCB-01-008-0073,TWGCB-01-008-0074
+- name: TWGCB-01-008-0073
   become: true
-  command: echo $PATH
+  shell: |
+    echo $PATH
+    echo "確認 PATH 路徑是否有 ./"
+    echo $PATH | grep '\./'
+    echo "確認 PATH 路徑是否有 ../"
+    echo $PATH | grep '\.\./'
   ignore_errors: true
   register: command_output
 
 - debug:
     var: command_output.stdout_lines
 
+- name: TWGCB-01-008-0074 # echo $PATH | xargs -d: -l -I REPL find REPL -maxdepth 1 -type d -perm /g+w,o+w 2>/dev/null
+  become: true
+  shell: |
+    echo "確認 PATH 路徑是否有 world-writable 或是 group-writable"
+    #echo $PATH|xargs -d: -l ls -ld 2>/dev/null|grep -v ^l
+    echo $PATH | xargs -d: -l -I REPL find REPL -maxdepth 1 -type d -perm /g+w,o+w 2>/dev/null
+  ignore_errors: true
+  register: command_output
+
+- debug:
+    var: command_output.stdout_lines
+
+
 - name: TWGCB-01-008-0075
   become: true
   shell: |
+    echo "確認/etc/passwd檔案行首是否存在「+」符號"
     grep '^\+:' /etc/passwd
   ignore_errors: true
   register: command_output
@@ -93,6 +133,7 @@
 - name: TWGCB-01-008-0076
   become: true
   shell: |
+    echo "確認/etc/shadow檔案行首是否存在「+」符號"
     grep '^\+:' /etc/shadow
   ignore_errors: true
   register: command_output
@@ -103,6 +144,7 @@
 - name: TWGCB-01-008-0077
   become: true
   shell: |
+    echo "確認/etc/group檔案行首是否存在「+」符號"
     grep '^\+:' /etc/group
   ignore_errors: true
   register: command_output
@@ -113,7 +155,8 @@
 - name: TWGCB-01-008-0078
   become: true
   shell: |
-    awk -F: '($3 == 0) { print $1 }' /etc/passwd 
+    echo "確認不可存在非root帳號"
+    awk -F: '($3 == 0) { print $1 }' /etc/passwd | grep -v root
   args:
     executable: /bin/bash
   ignore_errors: true
@@ -126,6 +169,7 @@
   become: true
   shell: |
     #!/bin/bash
+    echo "確認若出現群組具寫入權限，變更目錄權限為700或更低權限" 
     grep -E -v '^(halt|sync|shutdown)' /etc/passwd | awk -F: '($7 != "'"$(which nologin)"'" && $7 != "/bin/false") { print $1 " " $6 }' | while read user dir; do
     if [ ! -d "$dir" ]; then
     echo "The home directory ($dir) of user $user does not exist."
@@ -157,10 +201,36 @@
 - debug:
     var: command_output.stdout_lines
 
+- name: TWGCB-01-008-0080
+  become: true
+  shell: |
+    #!/bin/bash
+    echo "確認若出現使用者的家目錄非使用者擁有，變更家目錄擁有者為使用者" 
+    echo "確認若出現使用者的家不存在，建立家目錄擁有者為使用者" 
+    grep -E -v '^(halt|sync|shutdown)' /etc/passwd | awk -F: '($7 != "/sbin/nologin" && $7 != "/bin/false") { print $1 " " $6 }' | while read user dir; do
+    if [ ! -d "$dir" ]; then
+    echo "The home directory ($dir) of user $user does not exist."
+    else
+    owner=$(stat -L -c "%U" "$dir")
+    if [ "$owner" != "$user" ]; then
+    echo "The home directory ($dir) of user $user is owned by $owner."
+    fi
+    fi
+    done
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  register: command_output
+
+- debug:
+    var: command_output.stdout_lines
+
 - name: TWGCB-01-008-0081
   become: true
   shell: |
     #!/bin/bash
+    echo "確認若出現使用者的家目錄非使用者群組擁有，變更家目錄群組擁有者為使用者群組" 
+    echo "確認若出現使用者的家不存在，建立家目錄群組擁有為使用者群組" 
     grep -E -v '^(halt|sync|shutdown)' /etc/passwd | awk -F: '($7 != "'"$(which nologin)"'" && $7 != "/bin/false") { print $1 " " $4 " " $6 }' | while read user gid dir; do
     if [ ! -d "$dir" ]; then
     echo "The home directory ($dir) of user $user does not exist."
@@ -183,6 +253,7 @@
   become: true
   shell: |
     #!/bin/bash
+    echo "確認家目錄的權限群組及其他禁止寫入 go-w"
     grep -E -v '^(halt|sync|shutdown)' /etc/passwd | awk -F: '($7 != "'"$(which nologin)"'" && $7 != "/bin/false") { print $1 " " $6 }' | while read user dir; do
     if [ ! -d "$dir" ]; then
     echo "The home directory ($dir) of user $user does not exist."
@@ -212,6 +283,7 @@
   become: true
   shell: |
     #!/bin/bash
+    echo "確認家目錄不存在 .forward 檔案"
     grep -E -v '^(root|halt|sync|shutdown)' /etc/passwd | awk -F: '($7 != "'"$(which nologin)"'" && $7 != "/bin/false") { print $1 " " $6 }' | while read user dir; do
     if [ ! -d "$dir" ]; then
     echo "The home directory ($dir) of user $user does not exist."
@@ -233,6 +305,7 @@
   become: true
   shell: |
     #!/bin/bash
+    echo "確認家目錄不存在 .netrc 檔案"
     grep -E -v '^(root|halt|sync|shutdown)' /etc/passwd | awk -F: '($7 != "'"$(which nologin)"'" && $7 != "/bin/false") { print $1 " " $6 }' | while read user dir; do
     if [ ! -d "$dir" ]; then
     echo "The home directory ($dir) of user $user does not exist."
@@ -254,6 +327,7 @@
   become: true
   shell: |
     #!/bin/bash
+    echo "確認家目錄不存在 .rhosts 檔案"
     grep -E -v '^(root|halt|sync|shutdown)' /etc/passwd | awk -F: '($7 != "'"$(which nologin)"'" && $7 != "/bin/false") { print $1 " " $6 }' | while read user dir; do
     if [ ! -d "$dir" ]; then
     echo "The home directory ($dir) of user $user does not exist."
@@ -277,6 +351,7 @@
   become: true
   shell: |
     #!/bin/bash
+    echo "確認 /etc/passwd 中的群組資料必須存在於 /etc/group"
     for i in $(cut -s -d: -f4 /etc/passwd | sort -u ); do
     grep -q -P "^.*?:[^:]*:$i:" /etc/group
     if [ $? -ne 0 ]; then
@@ -295,6 +370,7 @@
   become: true
   shell: |
     #!/bin/bash
+    echo "確認 /etc/passwd 中不可以有不同帳號使用相同的 UID"
     cut -f3 -d":" /etc/passwd | sort -n | uniq -c | while read x ; do
     [ -z "$x" ] && break
     set - $x
@@ -315,6 +391,7 @@
   become: true
   shell: |
     #!/bin/bash
+    echo "確認 /etc/group 中不可以有不同帳號使用相同的 GID"
     cut -d: -f3 /etc/group | sort | uniq -d | while read x ; do
     echo "Duplicate GID ($x) in /etc/group"
     done
@@ -330,6 +407,7 @@
   become: true
   shell: |
     #!/bin/bash
+    echo "確認 /etc/passwd 中不可以有相同帳號名稱出現 (每個使用者帳號設定必須唯一的名稱)"
     cut -d: -f1 /etc/passwd | sort | uniq -d | while read x
     do echo "Duplicate login name ${x} in /etc/passwd"
     done
@@ -345,6 +423,7 @@
   become: true
   shell: |
     #!/bin/bash
+    echo "確認 /etc/passwd 中不可以有相同群組名稱出現 (每個群組帳號設定必須唯一的名稱)"
     cut -d: -f1 /etc/group | sort | uniq -d | while read x
     do echo "Duplicate group name ${x} in /etc/group"
     done
@@ -360,6 +439,7 @@
   become: true
   shell: |
     #!/bin/bash
+    echo "確認不可以有使用者存在於 shadow 群組中 (shadow群組不包含任何使用者)"
     awk -F: '($1=="shadow") {print $NF}' /etc/group
   args:
     executable: /bin/bash
@@ -368,12 +448,32 @@
 
 - debug:
     var: command_output.stdout_lines
+    
+- name: TWGCB-01-008-0096
+  become: true
+  shell: |
+    echo "確認不可以使用 v1 v2c 設定"
+    grep -E '^[com2sec|\s+com2sec].*default\s+public' /etc/snmp/snmpd.conf
+    grep -E '^[\s+group|group|^user|^\s+user].*v1' /etc/snmp/snmpd.conf
+    grep -E '^[\s+group|group|^user|^\s+user].*v2c' /etc/snmp/snmpd.conf
+    grep -E '^[access|\s+access].*noauth' /etc/snmp/snmpd.conf
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  register: command_output
 
+- debug:
+    var: command_output.stdout_lines
+    
 - name: TWGCB-01-008-0131
   become: true
   shell: |
     #!/bin/bash
+    echo "確認網路不可以使用混雜模式 (promiscuous mode)"
     ip link | grep -i promisc
+    echo "執行以下指令，關閉網路介面混雜模式"
+    echo "ip link set dev (網路介面裝置名稱) multicast off promisc off"
+    ip link | grep -i promisc|grep 'mtu '|awk -F: '{ print $2 }'|xargs -l -I REP  echo ip link set dev REP multicast off promisc off
   args:
     executable: /bin/bash
   ignore_errors: true
@@ -381,25 +481,13 @@
 
 - debug:
     var: command_output.stdout_lines
-
-- name: TWGCB-01-008-0143,TWGCB-01-008-0144
-  become: true
-  shell: |
-    #!/bin/bash
-    stat -c "%a %n" /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace /sbin/auditd /sbin/audisp-remote /sbin/audisp-syslog /sbin/augenrules
-  args:
-    executable: /bin/bash
-  ignore_errors: true
-  register: command_output
-
-- debug:
-    var: command_output.stdout_lines
-
+    
 - name: TWGCB-01-008-0189
   become: true
   shell: |
     #!/bin/bash
-    ps -eZf | grep unconfined_service_t
+    echo "確認沒有為受限的程序存在 (unconfined_service_t )"
+    ps -eZf | grep unconfined_service_t | grep -v grep 
   args:
     executable: /bin/bash
   ignore_errors: true
@@ -412,7 +500,9 @@
   become: true
   shell: |
     #!/bin/bash
-    egrep -i '(nopasswd|!authenticate)' /etc/sudoers /etc/sudoers.d/*
+    echo "確認 sudo 必須要求密碼輸入"
+    egrep -i '(nopasswd|!authenticate)' /etc/sudoers     | grep -v ^#
+    egrep -i '(nopasswd|!authenticate)' /etc/sudoers.d/* | grep -v ^#
   args:
     executable: /bin/bash
   ignore_errors: true
@@ -420,6 +510,4 @@
 
 - debug:
     var: command_output.stdout_lines
-
-
-
+    

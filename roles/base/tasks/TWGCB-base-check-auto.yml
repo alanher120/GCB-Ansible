@@ -12,7 +12,7 @@
   with_items: 
     - update-crypto-policies --set FUTURE
     - update-crypto-policies
-    - fips-mode-setup --enable
+    #- fips-mode-setup --enable
   when: result.stdout != ""
 
 - name: TWGCB-01-008-0091 check
@@ -35,7 +35,9 @@
   become: true
   ignore_errors: true
   shell: |
-    grep -Els "^\s*net\.ipv4\.ip_forward\s*=\s*1" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf | while read filename; do sed -ri "s/^\s*(net\.ipv4\.ip_forward\s*)(=)(\s*\S+\b).*$/# *REMOVED* \1/" $filename; done; sysctl -w net.ipv4.ip_forward=0; sysctl -w net.ipv4.route.flush=1
+    #grep -Els "^\s*net\.ipv4\.ip_forward\s*=\s*1" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf | while read filename; do sed -ri "s/^\s*(net\.ipv4\.ip_forward\s*)(=)(\s*\S+\b).*$/# *REMOVED* \1/" $filename; done; sysctl -w net.ipv4.ip_forward=0; sysctl -w net.ipv4.route.flush=1
+    sysctl -w net.ipv4.ip_forward=0;sysctl -w net.ipv4.route.flush=1
+    grep net.ipv4.ip_forward=0 /etc/sysctl.d/60-netip_sysctl.conf > /dev/null 2>&1 || echo net.ipv4.ip_forward=0 >> /etc/sysctl.d/60-netip_sysctl.conf
   args:
     executable: /bin/bash
 
@@ -43,10 +45,60 @@
   become: true
   ignore_errors: true
   shell: |
-    grep -Els "^\s*net\.ipv6\.conf\.all\.forwarding\s*=\s*1" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf | while read filename; do sed -ri "s/^\s*(net\.ipv6\.conf\.all\.forwarding\s*)(=)(\s*\S+\b).*$/# *REMOVED* \1/" $filename; done; sysctl -w net.ipv6.conf.all.forwarding=0; sysctl -w net.ipv6.route.flush=1
+    #grep -Els "^\s*net\.ipv6\.conf\.all\.forwarding\s*=\s*1" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf | while read filename; do sed -ri "s/^\s*(net\.ipv6\.conf\.all\.forwarding\s*)(=)(\s*\S+\b).*$/# *REMOVED* \1/" $filename; done; sysctl -w net.ipv6.conf.all.forwarding=0; sysctl -w net.ipv6.route.flush=1
+    sysctl -w net.ipv6.conf.all.forwarding=0;sysctl -w net.ipv6.route.flush=1
+    grep echo net.ipv6.conf.all.forwarding=0 /etc/sysctl.d/60-netip_sysctl.conf > /dev/null 2>&1 || echo net.ipv6.conf.all.forwarding=0 >> /etc/sysctl.d/60-netip_sysctl.conf
   args:
     executable: /bin/bash
+    
+- name: TWGCB-01-008-0136
+  become: true
+  shell: |
+    grep -E 'postmaster\:\s+root' /etc/aliases > /dev/null 2>&1;retval=$?;[ $retval -ne 0 ] && echo "postmaster:     root" >> /etc/aliases
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  
+- name: TWGCB-01-008-0137 TWGCB-01-008-0139
+  become: true
+  shell: |
+    grep -iw log_file /etc/audit/auditd.conf|awk  -F= '{ print $2 }'|xargs -l chown root:root
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  
+- name: TWGCB-01-008-0138 TWGCB-01-008-0140
+  become: true
+  shell: |
+    grep -iw log_file /etc/audit/auditd.conf|awk  -F= '{ print $2 }'|xargs -l chmod 600
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  
+- name: TWGCB-01-008-0143
+  become: true
+  shell: |
+    chmod 0750 /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace /sbin/auditd /sbin/audisp-remote /sbin/audisp-syslog /sbin/augenrules 
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  register: command_output
 
+- debug:
+    var: command_output.stdout_lines
+    
+- name: TWGCB-01-008-0144
+  become: true
+  shell: |
+    chown root:root /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace /sbin/auditd /sbin/audisp-remote /sbin/audisp-syslog /sbin/augenrules /sbin/rsyslogd 
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  register: command_output
+  
+- debug:
+    var: command_output.stdout_lines
+  
 - name: TWGCB-01-008-0183
   become: true
   ignore_errors: true
@@ -56,7 +108,4 @@
   become: true
   ignore_errors: true
   command: find /var/log -type d -exec chmod g-w,o-rwx "{}" +
-
-
-
-
+  

@@ -17,6 +17,16 @@
     mode: 0644
   when: ansible_distribution == "OracleLinux" and ansible_distribution_major_version == "9"
 
+- name: TWGCB-account TWGCB-01-008-0223 push /etc/pam.d/postlogin
+  become: true
+  copy:
+    src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/pam.d/postlogin
+    dest: /etc/pam.d
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_distribution == "Rocky"
+
 - name: TWGCB-account TWGCB-01-008-0223 push /etc/pam.d/postlogin-ac
   become: true
   copy:
@@ -68,12 +78,20 @@
   ignore_errors: true
   shell: |
     #!/bin/bash
+    source /etc/os-release
+    if [ "$VERSION_ID" == "8.3" -o "$VERSION_ID" == "8.2" -o "$VERSION_ID" == "8.1" -o "$VERSION_ID" == "8.0" -o "$VERSION_ID" == "8" ];then
     CP=$(authselect current | awk 'NR == 1 {print $3}' | grep custom/)
     for FN in system-auth password-auth; do
     [[ -n $CP ]] && PTF=/etc/authselect/$CP/$FN || PTF=/etc/authselect/$FN
     [[ -n $(grep -E '^\s*password\s+requisite\s+pam_pwquality.so\s+.*\s+retry=\S+\s*.*$' $PTF) ]] && sed -ri '/pwquality/s/retry=\S+/retry=3/' $PTF || sed -ri 's/^\s*(password\s+requisite\s+pam_pwquality.so\s+)(.*)$/\1\2 retry=3/' $PTF
     done
     authselect apply-changes
+    else
+    [ ! -f /etc/security/pwquality.conf ] && touch /etc/security/pwquality.conf
+    grep "^\s*retry\s*=" /etc/security/pwquality.conf ; retval=$?
+    [ $retval -ne 0 ] && echo retry = 3 >> /etc/security/pwquality.conf
+    [ $retval -eq 0 ] && sed -i /etc/security/pwquality.conf -e 's/^\s*retry\s*=.*/retry=3/'
+    fi
   args:
     executable: /bin/bash
 
@@ -90,12 +108,14 @@
     authselect apply-changes
   args:
     executable: /bin/bash
-
+    
 - name: TWGCB-01-008-0220
   become: true
   ignore_errors: true
   shell: |
     #!/bin/bash
+    source /etc/os-release
+    if [ "$VERSION_ID" == "8.2" -o "$VERSION_ID" == "8.1" -o "$VERSION_ID" == "8.0" -o "$VERSION_ID" == "8" ];then
     CP=$(authselect current | awk 'NR == 1 {print $3}' | grep custom/)
     for FN in system-auth password-auth; do
     [[ -n $CP ]] && PTF=/etc/authselect/$CP/$FN || PTF=/etc/authselect/$FN
@@ -103,6 +123,12 @@
     $PTF
     done
     authselect apply-changes
+    else
+    [ ! -f /etc/security/faillock.conf ] && touch /etc/security/faillock.conf
+    grep "^\s*deny\s*=" /etc/security/faillock.conf ; retval=$?
+    [ $retval -ne 0 ] && echo deny = 5 >> /etc/security/pwquality.conf
+    [ $retval -eq 0 ] && sed -i /etc/security/faillock.conf -e 's/^\s*deny\s*=.*/deny=5/'
+    fi
   args:
     executable: /bin/bash
 
@@ -111,12 +137,20 @@
   ignore_errors: true
   shell: |
     #!/bin/bash
+    source /etc/os-release
+    if [ "$VERSION_ID" == "8.2" -o "$VERSION_ID" == "8.1" -o "$VERSION_ID" == "8.0" -o "$VERSION_ID" == "8" ];then
     CP=$(authselect current | awk 'NR == 1 {print $3}' | grep custom/)
     for FN in system-auth password-auth; do
     [[ -n $CP ]] && PTF=/etc/authselect/$CP/$FN || PTF=/etc/authselect/$FN
     [[ -n $(grep -E '^\s*auth\s+required\s+pam_faillock.so\s+.*unlock_time=\S+\s*.*$' $PTF) ]] && sed -ri '/pam_faillock.so/s/unlock_time=\S+/unlock_time=900/g' $PTF || sed -ri 's/^\s*(auth\s+required\s+pam_faillock\.so\s+)(.*[^{}])(\{.*\}|)$/\1\2 unlock_time=900 \3/' $PTF
     done
     authselect apply-changes
+    else
+    [ ! -f /etc/security/faillock.conf ] && touch /etc/security/faillock.conf
+    grep "^\s*unlock_time\s*=" /etc/security/faillock.conf ; retval=$?
+    [ $retval -ne 0 ] && echo unlock_time = 900 >> /etc/security/pwquality.conf
+    [ $retval -eq 0 ] && sed -i /etc/security/faillock.conf -e 's/^\s*unlock_time\s*=.*/unlock_time=900/'
+    fi
   args:
     executable: /bin/bash
 

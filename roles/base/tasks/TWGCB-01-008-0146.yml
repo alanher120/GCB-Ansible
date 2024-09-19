@@ -1,0 +1,12 @@
+---
+- name: TWGCB-01-008-0146
+  become: true
+  shell: |
+    [ ! -f /etc/audit/auditd.conf ] && touch /etc/audit/auditd.conf
+    grep -E '^\s*[m]ax_log_file\s*[=]' /etc/audit/auditd.conf ; retval=$?
+    [ $retval -eq 0 ] && sed -E -i /etc/audit/auditd.conf -e 's/^\s*[m]ax_log_file\s*[=].*/max_log_file = 32/'
+    [ $retval -ne 0 ] && echo max_log_file = 32 >> /etc/audit/auditd.conf
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  

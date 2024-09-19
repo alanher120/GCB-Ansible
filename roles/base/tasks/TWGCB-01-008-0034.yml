@@ -1,0 +1,17 @@
+---
+- name: TWGCB-01-008-0034 add includedir /etc/sudoers.d in /etc/sudoers file
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers
+    regexp: '^#includedir'
+    line: 'includedir /etc/sudoers.d'
+  ignore_errors: yes
+
+- name: TWGCB-01-008-0034 /etc/sudoers/use_pty
+  become: true
+  copy:
+    src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/sudoers.d/use_pty
+    dest: /etc/sudoers.d
+    owner: root
+    group: root
+    mode: 0440

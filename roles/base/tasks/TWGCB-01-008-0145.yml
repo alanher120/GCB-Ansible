@@ -1,9 +1,19 @@
 ---
-- name: TWGCB-01-008-0145 push /etc/aide.conf
+    - name: TWGCB-01-008-0145
   become: true
-  copy:
-    src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/aide.conf
-    dest: /etc/default
-    owner: root
-    group: root
-    mode: 0644
+  shell: |
+    grep -E "{{item}}" /etc/aide.conf > /dev/null 2>&1;retval=$?;[ $retval -ne 0 ] && echo {{item}} >> /etc/aide.conf
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  when_item:
+    - #Audit Tools
+    - /usr/sbin/auditctl p+i+n+u+g+s+b+acl+xattrs+sha512
+    - /usr/sbin/auditd p+i+n+u+g+s+b+acl+xattrs+sha512
+    - /usr/sbin/ausearch p+i+n+u+g+s+b+acl+xattrs+sha512
+    - /usr/sbin/aureport p+i+n+u+g+s+b+acl+xattrs+sha512
+    - /usr/sbin/autrace p+i+n+u+g+s+b+acl+xattrs+sha512
+    - /usr/sbin/audisp-remote p+i+n+u+g+s+b+acl+xattrs+sha512
+    - /usr/sbin/audisp-syslog p+i+n+u+g+s+b+acl+xattrs+sha512
+    - /usr/sbin/augenrules p+i+n+u+g+s+b+acl+xattrs+sha512
+    

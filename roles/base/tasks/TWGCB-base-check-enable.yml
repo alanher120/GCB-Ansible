@@ -1,4 +1,48 @@
 ---
+- name: TWGCB-base-check-disable Rocky-6
+  ignore_errors: true
+  become: true
+  service:
+    enabled: yes
+    state: started
+    name: "{{ item }}"
+  with_items:
+    "{{ enable_packages }}"
+  when: ansible_distribution == "Rocky" and ansible_distribution_major_version == "6"
+
+- name: TWGCB-base-check-disable Rocky-7
+  ignore_errors: true
+  become: true
+  systemd:
+    enabled: yes
+    state: started
+    name: "{{ item }}"
+  with_items:
+    "{{ enable_packages }}"
+  when: ansible_distribution == "Rocky" and ansible_distribution_major_version == "7"
+
+- name: TWGCB-base-check-disable Rocky-8
+  ignore_errors: true
+  become: true
+  systemd:
+    enabled: yes
+    state: started
+    name: "{{ item }}"
+  with_items:
+    "{{ enable_packages }}"
+  when: ansible_distribution == "Rocky" and ansible_distribution_major_version == "8"
+
+- name: TWGCB-base-check-disable Rocky-9
+  ignore_errors: true
+  become: true
+  systemd:
+    enabled: yes
+    state: started
+    name: "{{ item }}"
+  with_items:
+    "{{ enable_packages }}"
+  when: ansible_distribution == "Rocky" and ansible_distribution_major_version == "9"
+
 - name: TWGCB-base-check-disable CentOS-6
   ignore_errors: true
   become: true
@@ -21,6 +65,61 @@
     "{{ enable_packages }}"
   when: ansible_distribution == "CentOS" and ansible_distribution_major_version == "7"
 
+- name: TWGCB-base-check-disable CentOS-8
+  ignore_errors: true
+  become: true
+  systemd:
+    enabled: yes
+    state: started
+    name: "{{ item }}"
+  with_items:
+    "{{ enable_packages }}"
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == "8"
+
+- name: TWGCB-base-check-disable CentOS-9
+  ignore_errors: true
+  become: true
+  systemd:
+    enabled: yes
+    state: started
+    name: "{{ item }}"
+  with_items:
+    "{{ enable_packages }}"
+  when: ansible_distribution == "CentOS" and ansible_distribution_major_version == "9"
+
+- name: TWGCB-base-check-disable OracleLinux-6
+  ignore_errors: true
+  become: true
+  systemd:
+    enabled: yes
+    state: started
+    name: "{{ item }}"
+  with_items:
+    "{{ enable_packages }}"
+  when: ansible_distribution == "OracleLinux" and ansible_distribution_major_version == "6"
+
+- name: TWGCB-base-check-disable OracleLinux-7
+  ignore_errors: true
+  become: true
+  service:
+    enabled: yes
+    state: started
+    name: "{{ item }}"
+  with_items:
+    "{{ enable_packages }}"
+  when: ansible_distribution == "OracleLinux" and ansible_distribution_major_version == "7"
+
+- name: TWGCB-base-check-disable OracleLinux-8
+  ignore_errors: true
+  become: true
+  systemd:
+    enabled: yes
+    state: started
+    name: "{{ item }}"
+  with_items:
+    "{{ enable_packages }}"
+  when: ansible_distribution == "OracleLinux" and ansible_distribution_major_version == "8"
+
 - name: TWGCB-base-check-disable OracleLinux-9
   ignore_errors: true
   become: true
@@ -31,4 +130,3 @@
   with_items:
     "{{ enable_packages }}"
   when: ansible_distribution == "OracleLinux" and ansible_distribution_major_version == "9"
-

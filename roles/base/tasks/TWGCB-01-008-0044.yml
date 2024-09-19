@@ -1,0 +1,9 @@
+---
+- name: TWGCB-01-008-0044 enable System-wide crypto-policies as FUTURE
+  become: true
+  shell: |
+    update-crypto-policies --set FUTURE
+    update-crypto-policies
+  args:
+    executable: /bin/bash
+  ignore_errors: yes

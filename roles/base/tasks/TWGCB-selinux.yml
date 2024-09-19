@@ -1,4 +1,4 @@
-- name: TWGCB-selinux push /etc/selinux/config
+- name: TWGCB-01-008-0187 TWGCB-01-008-0188 TWGCB-selinux push /etc/selinux/config
   become: true
   copy:
     src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/selinux/config
@@ -6,8 +6,4 @@
     owner: root
     group: root
     mode: 0640
-
-- name: TWGCB-01-008-0186
-  become: true
-  ignore_errors: true
-  command: grub2-mkconfig -o /boot/grub2/grub.cfg
+    

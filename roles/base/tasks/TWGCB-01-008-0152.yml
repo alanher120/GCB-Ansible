@@ -1,0 +1,14 @@
+---
+- name: TWGCB-01-008-0152
+  become: true
+  shell: |
+    [ ! -f /etc/audit/rules.d/audit.rules ] && touch /etc/audit/rules.d/audit.rules
+    grep -E '\-w /etc/selinux/ \-p wa \-k MAC-policy' /etc/audit/rules.d/audit.rules ; retval=$?
+    [ $retval -ne 0 ] && echo -w /etc/selinux/ -p wa -k MAC-policy >> /etc/audit/rules.d/audit.rules
+    grep -E '\-w /usr/share/selinux/ \-p wa \-k MAC-policy' /etc/audit/rules.d/audit.rules ; retval=$?
+    [ $retval -ne 0 ] && echo -w /usr/share/selinux/ -p wa -k MAC-policy >> /etc/audit/rules.d/audit.rules
+    augenrules --load > /dev/null 2>&1
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  

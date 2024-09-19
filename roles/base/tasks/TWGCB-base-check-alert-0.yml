@@ -1,8 +1,8 @@
-- name: TWGCB-01-008-0207
+---    
+- name: TWGCB-01-008-0093
   become: true
   shell: |
-    #!/bin/bash
-    grep cron /etc/rsyslog.conf /etc/rsyslog.d/*.conf
+    cat /etc/chrony.conf|grep -E '^\s+server|^server'
   args:
     executable: /bin/bash
   ignore_errors: true
@@ -10,4 +10,17 @@
 
 - debug:
     var: command_output.stdout_lines
+    
+- name: TWGCB-01-008-0107
+  become: true
+  shell: |
+    cat /etc/dnf/dnf.conf |grep clean_requirements_on_remove|grep -v ^#
+    cat /etc/yum.conf |grep clean_requirements_on_remove|grep -v ^#
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  register: command_output
 
+- debug:
+    var: command_output.stdout_lines
+        

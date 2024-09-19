@@ -1,0 +1,11 @@
+---
+- name: TWGCB-01-008-0177
+  become: true
+  shell: |
+    grep 'auth.\*,authpriv.\*,daemon.\*' /etc/rsyslog.conf ; retval=$?
+    [ $retval -ne 0 ] && echo auth.*,authpriv.*,daemon.* /var/log/secure >> /etc/rsyslog.conf
+    systemctl restart rsyslog
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  

@@ -1,11 +1,17 @@
 ---
-  - include_tasks: TWGCB-install-package.yml
+  - include_tasks: TWGCB-install-package.yml    # 安裝 packages
     when: playbook_action in gcb_action
-  - include_tasks: TWGCB-removed-package.yml
+  - include_tasks: TWGCB-removed-package.yml    # 移除 packages
     when: playbook_action in gcb_action
+    
+  - include_tasks: TWGCB-base-check-disable.yml    # disable 服務 
+    when: playbook_action in gcb_action
+  - include_tasks: TWGCB-base-check-enable.yml     # enable 服務 
+    when: playbook_action in gcb_action
+    
   - include_tasks: TWGCB-kernel-net.yml
     when: playbook_action in gcb_action
-  - include_tasks: TWGCB-01-008-0036.yml # 執行一次就好
+  - include_tasks: TWGCB-01-008-0036.yml    # 執行一次就好
     when: playbook_action in gcb_action
   - include_tasks: TWGCB-01-008-0001.yml
     when: playbook_action in gcb_action
@@ -53,17 +59,14 @@
     when: playbook_action in gcb_action
   - include_tasks: TWGCB-boot.yml
     when: playbook_action in gcb_action
-  - include_tasks: TWGCB-base-check-disable.yml
-    when: playbook_action in gcb_action
-  - include_tasks: TWGCB-base-check-enable.yml
-    when: playbook_action in gcb_action
-  - include_tasks: TWGCB-base-check-auto.yml
+    
+  - include_tasks: TWGCB-base-check-auto.yml       #查詢後自動執行相關指令
     when: playbook_action in gcb_action
   - include_tasks: TWGCB-base-crontab.yml
     when: playbook_action in gcb_action
-  - include_tasks: TWGCB-base-check-alert-1.yml # 有出現值要警告
+  - include_tasks: TWGCB-base-check-alert-1.yml    # 有出現值   要跳出警告
     when: playbook_action in gcb_action
-  - include_tasks: TWGCB-base-check-alert-0.yml # 沒有出現值要跳出警告
+  - include_tasks: TWGCB-base-check-alert-0.yml    # 沒有出現值 要跳出警告
     when: playbook_action in gcb_action
   - include_tasks: TWGCB-account.yml
     when: playbook_action in gcb_action

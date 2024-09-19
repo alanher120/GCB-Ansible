@@ -1,0 +1,7 @@
+---
+- name: TWGCB-01-008-0042 disable service systemd-coredump.socket
+  become: true
+  shell: systemctl mask systemd-coredump.socket
+  args:
+    executable: /bin/bash
+  ignore_errors: yes

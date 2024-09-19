@@ -1,0 +1,18 @@
+---
+- name: TWGCB-01-008-0155
+  become: true
+  shell: |
+    [ ! -f /etc/audit/rules.d/audit.rules ] && touch /etc/audit/rules.d/audit.rules
+    grep -E '\-a always,exit \-F arch=b64 \-S creat \-S open \-S openat \-S truncate \-S ftruncate \-F exit=\-EACCES \-F auid>=1000 \-F auid!=4294967295 \-k access' /etc/audit/rules.d/audit.rules ; retval=$?
+    [ $retval -ne 0 ] && echo \-a always,exit \-F arch=b64 \-S creat \-S open \-S openat \-S truncate \-S ftruncate \-F exit=\-EACCES \-F auid\>=1000 \-F auid!=4294967295 \-k access >> /etc/audit/rules.d/audit.rules
+    grep -E '\-a always,exit \-F arch=b32 \-S creat \-S open \-S openat \-S truncate \-S ftruncate \-F exit=\-EACCES \-F auid>=1000 \-F auid!=4294967295 \-k access' /etc/audit/rules.d/audit.rules ; retval=$?
+    [ $retval -ne 0 ] && echo \-a always,exit \-F arch=b32 \-S creat \-S open \-S openat \-S truncate \-S ftruncate \-F exit=\-EACCES \-F auid\>=1000 \-F auid!=4294967295 \-k access >> /etc/audit/rules.d/audit.rules
+    grep -E '\-a always,exit \-F arch=b64 \-S creat \-S open \-S openat \-S truncate \-S ftruncate \-F exit=\-EPERM \-F auid>=1000 \-F auid!=4294967295 \-k access' /etc/audit/rules.d/audit.rules ; retval=$?
+    [ $retval -ne 0 ] && echo \-a always,exit \-F arch=b64 \-S creat \-S open \-S openat \-S truncate \-S ftruncate \-F exit=\-EPERM \-F auid\>=1000 \-F auid!=4294967295 \-k access >> /etc/audit/rules.d/audit.rules
+    grep -E '\-a always,exit \-F arch=b32 \-S creat \-S open \-S openat \-S truncate \-S ftruncate \-F exit=\-EPERM \-F auid>=1000 \-F auid!=4294967295 \-k access' /etc/audit/rules.d/audit.rules ; retval=$?
+    [ $retval -ne 0 ] && echo \-a always,exit \-F arch=b32 \-S creat \-S open \-S openat \-S truncate \-S ftruncate \-F exit=\-EPERM \-F auid\>=1000 \-F auid!=4294967295 \-k access >> /etc/audit/rules.d/audit.rules
+    augenrules --load > /dev/null 2>&1
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  

@@ -1,0 +1,22 @@
+---
+- name: TWGCB-01-008-0153
+  become: true
+  shell: |
+    [ ! -f /etc/audit/rules.d/audit.rules ] && touch /etc/audit/rules.d/audit.rules
+    grep -E '\-a always,exit \-F arch=b64 \-S sethostname \-S setdomainname \-k system-locale' /etc/audit/rules.d/audit.rules ; retval=$?
+    [ $retval -ne 0 ] && echo -a always,exit -F arch=b64 -S sethostname -S setdomainname -k system-locale >> /etc/audit/rules.d/audit.rules
+    grep -E '\-a always,exit \-F arch=b32 \-S sethostname \-S setdomainname \-k system-locale' /etc/audit/rules.d/audit.rules ; retval=$?
+    [ $retval -ne 0 ] && echo -a always,exit -F arch=b32 -S sethostname -S setdomainname -k system-locale >> /etc/audit/rules.d/audit.rules
+    grep -E '\-w /etc/issue \-p wa \-k system-locale' /etc/audit/rules.d/audit.rules ; retval=$?
+    [ $retval -ne 0 ] && echo -w /etc/issue -p wa -k system-locale >> /etc/audit/rules.d/audit.rules
+    grep -E '\-w /etc/issue.net \-p wa \-k system-locale' /etc/audit/rules.d/audit.rules ; retval=$?
+    [ $retval -ne 0 ] && echo -w /etc/issue.net -p wa -k system-locale >> /etc/audit/rules.d/audit.rules
+    grep -E '\-w /etc/hosts \-p wa \-k system-locale' /etc/audit/rules.d/audit.rules ; retval=$?
+    [ $retval -ne 0 ] && echo -w /etc/hosts -p wa -k system-locale >> /etc/audit/rules.d/audit.rules
+    grep -E '\-w /etc/sysconfig/network-scripts/ \-p wa \-k system-locale' /etc/audit/rules.d/audit.rules ; retval=$?
+    [ $retval -ne 0 ] && echo -w /etc/sysconfig/network-scripts/ -p wa -k system-locale >> /etc/audit/rules.d/audit.rules
+    augenrules --load > /dev/null 2>&1
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  

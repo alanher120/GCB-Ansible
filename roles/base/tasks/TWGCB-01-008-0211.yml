@@ -1,0 +1,11 @@
+---
+- name: TWGCB-01-008-0211
+  become: true
+  shell: |
+    [ -f /etc/security/pwquality.conf ] && retval=0
+    [ $retval -eq 0 ] && grep -E "^\s*minclass\s*=\s*4" /etc/security/pwquality.conf ; retval=$?
+    [ $retval -ne 0 ] && echo minclass = 4 >> /etc/security/pwquality.conf 
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  

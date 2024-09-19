@@ -1,0 +1,11 @@
+---
+- name: TWGCB-01-008-0212
+  become: true
+  shell: |
+    [ -f /etc/security/pwquality.conf ] && retval=0
+    [ $retval -eq 0 ] && grep -E "^\s*dcredit\s*=\s*-1" /etc/security/pwquality.conf ; retval=$?
+    [ $retval -ne 0 ] && echo dcredit = -1 >> /etc/security/pwquality.conf 
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  

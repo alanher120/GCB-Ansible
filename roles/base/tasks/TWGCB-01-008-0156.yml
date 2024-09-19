@@ -1,0 +1,20 @@
+---
+- name: TWGCB-01-008-0156
+  become: true
+  shell: |
+    [ ! -f /etc/audit/rules.d/audit.rules ] && touch /etc/audit/rules.d/audit.rules
+    grep -E '\-w /etc/group \-p wa \-k identity' /etc/audit/rules.d/audit.rules ; retval=$?
+    [ $retval -ne 0 ] && echo \-w /etc/group \-p wa \-k identity >> /etc/audit/rules.d/audit.rules
+    grep -E '\-w /etc/passwd \-p wa \-k identity' /etc/audit/rules.d/audit.rules ; retval=$?
+    [ $retval -ne 0 ] && echo \-w /etc/passwd \-p wa \-k identity >> /etc/audit/rules.d/audit.rules
+    grep -E '\-w /etc/gshadow \-p wa \-k identity' /etc/audit/rules.d/audit.rules ; retval=$?
+    [ $retval -ne 0 ] && echo \-w /etc/gshadow \-p wa \-k identity >> /etc/audit/rules.d/audit.rules
+    grep -E '\-w /etc/shadow \-p wa \-k identity' /etc/audit/rules.d/audit.rules ; retval=$?
+    [ $retval -ne 0 ] && echo \-w /etc/shadow \-p wa \-k identity >> /etc/audit/rules.d/audit.rules
+    grep -E '\-w /etc/security/opasswd \-p wa \-k identity' /etc/audit/rules.d/audit.rules ; retval=$?
+    [ $retval -ne 0 ] && echo \-w /etc/security/opasswd \-p wa \-k identity >> /etc/audit/rules.d/audit.rules
+    augenrules --load > /dev/null 2>&1
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  

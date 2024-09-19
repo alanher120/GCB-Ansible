@@ -1,0 +1,20 @@
+---
+- name: TWGCB-01-008-0151
+  become: true
+  shell: |
+    [ ! -f /etc/audit/rules.d/audit.rules ] && touch /etc/audit/rules.d/audit.rules
+    grep -E '\-a always,exit \-F arch=b64 \-S adjtimex \-S settimeofday \-k time-change' /etc/audit/rules.d/audit.rules ; retval=$?
+    [ $retval -ne 0 ] && echo -a always,exit -F arch=b64 -S adjtimex -S settimeofday -k time-change >> /etc/audit/rules.d/audit.rules
+    grep -E '\-a always,exit \-F arch=b32 \-S adjtimex \-S settimeofday \-S stime \-k time-change' /etc/audit/rules.d/audit.rules ; retval=$?
+    [ $retval -ne 0 ] && echo -a always,exit -F arch=b32 -S adjtimex -S settimeofday -S stime -k time-change >> /etc/audit/rules.d/audit.rules
+    grep -E '\-a always,exit \-F arch=b64 \-S clock_settime \-k time-change' /etc/audit/rules.d/audit.rules ; retval=$?
+    [ $retval -ne 0 ] && -a always,exit -F arch=b64 -S clock_settime -k time-change >> /etc/audit/rules.d/audit.rules
+    grep -E '\-a always,exit \-F arch=b32 \-S clock_settime \-k time-change' /etc/audit/rules.d/audit.rules ; retval=$?
+    [ $retval -ne 0 ] && echo -a always,exit -F arch=b32 -S clock_settime -k time-change >> /etc/audit/rules.d/audit.rules
+    grep -E '\-w /etc/localtime \-p wa \-k time-change' /etc/audit/rules.d/audit.rules ; retval=$?
+    [ $retval -ne 0 ] && echo -w /etc/localtime -p wa -k time-change >> /etc/audit/rules.d/audit.rules
+    augenrules --load > /dev/null 2>&1
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  

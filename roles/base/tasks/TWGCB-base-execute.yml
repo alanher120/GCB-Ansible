@@ -4,4 +4,15 @@
   command: "{{ item }}"
   with_items:
     - nmcli radio all off # TWGCB-01-008-0130
-
+    - grubby --update-kernel ALL --args audit=1 # TWGCB-01-008-0134
+    - grubby --update-kernel ALL --args audit_backlog_limit=8192 # TWGCB-01-008-0135
+    - grubby --update-kernel ALL --args selinux=0 # TWGCB-01-008-0186
+    - grubby --update-kernel ALL --args enforcing=0 # TWGCB-01-008-0186
+    - rm -f /etc/cron.deny # TWGCB-01-008-0205
+    - rm -f /etc/at.deny # TWGCB-01-008-0205
+    - touch /etc/cron.allow # TWGCB-01-008-0205
+    - touch /etc/at.allow # TWGCB-01-008-0205
+    - chown root:root /etc/cron.allow # TWGCB-01-008-0205
+    - chown root:root /etc/at.allow # TWGCB-01-008-0205
+    - chmod 600 /etc/cron.allow # TWGCB-01-008-0206
+    - chmod 600 /etc/at.allow # TWGCB-01-008-0206

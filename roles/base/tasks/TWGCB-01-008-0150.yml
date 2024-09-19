@@ -1,0 +1,16 @@
+---
+- name: TWGCB-01-008-0150
+  become: true
+  shell: |
+    [ ! -f /etc/audit/rules.d/audit.rules ] && touch /etc/audit/rules.d/audit.rules
+    grep -E '\-w /var/run/utmp \-p wa \-k session' /etc/audit/rules.d/audit.rules ; retval=$?
+    [ $retval -ne 0 ] && echo -w /var/run/utmp -p wa -k session >> /etc/audit/rules.d/audit.rules
+    grep -E '\-w /var/log/wtmp \-p wa \-k logins' /etc/audit/rules.d/audit.rules ; retval=$?
+    [ $retval -ne 0 ] && echo -w /var/log/wtmp -p wa -k logins >> /etc/audit/rules.d/audit.rules
+    grep -E '\-w /var/log/btmp \-p wa \-k logins' /etc/audit/rules.d/audit.rules ; retval=$?
+    [ $retval -ne 0 ] && echo -w /var/log/btmp -p wa -k logins >> /etc/audit/rules.d/audit.rules
+    augenrules --load > /dev/null 2>&1
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  

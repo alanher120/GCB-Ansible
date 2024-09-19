@@ -1,0 +1,14 @@
+---
+- name: TWGCB-01-008-0210
+  become: true
+  shell: |
+    [ -f /etc/login.defs ] && retval=0
+    [ $retval -eq 0 ] && grep -E "^\s*PASS_MIN_LEN\s*12" /etc/login.defs ; retval=$?
+    [ $retval -ne 0 ] && echo PASS_MIN_LEN 12 >> /etc/login.defs 
+    [ -f /etc/security/pwquality.conf ] && retval=0
+    [ $retval -eq 0 ] && grep -E "^\s*minlen\s*=\s*12" /etc/security/pwquality.conf ; retval=$?
+    [ $retval -ne 0 ] && echo minlen = 12 >> /etc/security/pwquality.conf 
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  

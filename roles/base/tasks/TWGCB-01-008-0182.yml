@@ -1,0 +1,11 @@
+---
+- name: TWGCB-01-008-0182
+  become: true
+  shell: |
+    [ -f /etc/systemd/journald.conf ] && retval=0
+    [ $retval -eq 0 ] && grep -E "^\s*Storage\s*=\s*persistent" /etc/systemd/journald.conf ; retval=$?
+    [ $retval -ne 0 ] && echo Storage=persistent >> /etc/systemd/journald.conf ; systemctl restart systemd-journald
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  

@@ -1,0 +1,12 @@
+---
+- name: TWGCB-01-008-0170
+  become: true
+  shell: |
+    [ ! -f /etc/audit/rules.d/audit.rules ] && touch /etc/audit/rules.d/audit.rules
+    grep -E '\-w /bin/kmod \-p x \-k modules' /etc/audit/rules.d/audit.rules ; retval=$?
+    [ $retval -ne 0 ] && echo \-w /bin/kmod \-p x \-k modules >> /etc/audit/rules.d/audit.rules
+    augenrules --load > /dev/null 2>&1
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  

@@ -35,27 +35,33 @@
 
 - name: TWGCB-net command
   become: true
-  command: "{{ item }}"
+  ignore_errors: true
+  shell: |
+    sysctl -w {{ item }}
+    [ ! -f /etc/sysctl.d/60-netipv4_sysctl.conf ] && touch /etc/sysctl.d/60-netipv4_sysctl.conf
+    grep {{ item }} /etc/sysctl.d/60-netipv4_sysctl.conf > /dev/null 2>&1;retval=$?
+    grep {{item}} /etc/sysctl.d/60-netipv4_sysctl.conf > /dev/null 2>&1 || echo {{ item }} >> /etc/sysctl.d/60-netipv4_sysctl.conf
   with_items:
-    - sysctl -w net.ipv4.conf.all.send_redirects=0 # TWGCB-01-008-0109
-    - sysctl -w net.ipv4.conf.default.send_redirects=0 # TWGCB-01-008-0110
-    - sysctl -w net.ipv4.conf.all.accept_source_route=0 # TWGCB-01-008-0111
-    - sysctl -w net.ipv6.conf.all.accept_source_route=0 # TWGCB-01-008-0111
-    - sysctl -w net.ipv4.conf.default.accept_source_route=0 # TWGCB-01-008-0112
-    - sysctl -w net.ipv6.conf.default.accept_source_route=0 # TWGCB-01-008-0112
-    - sysctl -w net.ipv4.conf.all.accept_redirects=0 # TWGCB-01-008-0113
-    - sysctl -w net.ipv6.conf.all.accept_redirects=0 # TWGCB-01-008-0113
-    - sysctl -w net.ipv4.conf.default.accept_redirects=0 # TWGCB-01-008-0114
-    - sysctl -w net.ipv6.conf.default.accept_redirects=0 # TWGCB-01-008-0114
-    - sysctl -w net.ipv4.conf.all.secure_redirects=0 # TWGCB-01-008-0115
-    - sysctl -w net.ipv4.conf.default.secure_redirects=0 # TWGCB-01-008-0116
-    - sysctl -w net.ipv4.conf.all.log_martians=1 # TWGCB-01-008-0117
-    - sysctl -w net.ipv4.conf.default.log_martians=1 # TWGCB-01-008-0118
-    - sysctl -w net.ipv4.conf.default.rp_filter=1 # TWGCB-01-008-0122
-    - sysctl -w net.ipv6.conf.all.accept_ra=0 # TWGCB-01-008-0124
-    - sysctl -w net.ipv6.conf.default.accept_ra=0 # TWGCB-01-008-0125
+    - net.ipv4.ip_forward=0 # TWGCB-01-008-0108 1
+    - net.ipv6.conf.all.forwarding=0 # TWGCB-01-008-0108 2
+    - net.ipv4.conf.all.send_redirects=0 # TWGCB-01-008-0109
+    - net.ipv4.conf.default.send_redirects=0 # TWGCB-01-008-0110
+    - net.ipv4.conf.all.accept_source_route=0 # TWGCB-01-008-0111 1
+    - net.ipv6.conf.all.accept_source_route=0 # TWGCB-01-008-0111 2
+    - net.ipv4.conf.default.accept_source_route=0 # TWGCB-01-008-0112 1
+    - net.ipv6.conf.default.accept_source_route=0 # TWGCB-01-008-0112 2
+    - net.ipv4.conf.all.accept_redirects=0 # TWGCB-01-008-0113 1
+    - net.ipv6.conf.all.accept_redirects=0 # TWGCB-01-008-0113 2
+    - net.ipv4.conf.default.accept_redirects=0 # TWGCB-01-008-0114 1
+    - net.ipv6.conf.default.accept_redirects=0 # TWGCB-01-008-0114 2
+    - net.ipv4.conf.all.secure_redirects=0 # TWGCB-01-008-0115
+    - net.ipv4.conf.default.secure_redirects=0 # TWGCB-01-008-0116
+    - net.ipv4.conf.all.log_martians=1 # TWGCB-01-008-0117
+    - net.ipv4.conf.default.log_martians=1 # TWGCB-01-008-0118
+    - net.ipv4.conf.default.rp_filter=1 # TWGCB-01-008-0122
+    - net.ipv6.conf.all.accept_ra=0 # TWGCB-01-008-0124
+    - net.ipv6.conf.default.accept_ra=0 # TWGCB-01-008-0125
     
-
 - name: flush net
   become: true
   command: "{{ item }}"

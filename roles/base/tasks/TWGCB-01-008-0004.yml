@@ -1,0 +1,22 @@
+---
+- name: TWGCB-01-008-0004 ~ TWGCB-01-008-0007 Rocky-8 /tmp file system add options nosuid,nodev,noexec
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/systemd/system/local-fs.target.wants/tmp.mount
+    regexp: '^Options='
+    line: Options=mode=1777,strictatime,nosuid,nodev,noexec,size=50%%,nr_inodes=1m
+  ignore_errors: yes
+  
+- name: TWGCB-01-008-0004 ~ TWGCB-01-008-0007 Rocky-9 /tmp file system add options nosuid,nodev,noexec
+  become: true
+  ansible.builtin.lineinfile:
+    path: /usr/lib/systemd/system/tmp.mount
+    regexp: '^Options='
+    line: Options=mode=1777,strictatime,nosuid,nodev,noexec,size=50%%,nr_inodes=1m
+  ignore_errors: yes
+  
+- name: TWGCB-01-008-0004 ~ TWGCB-01-008-0007 /tmp file system systemd daemon-reload 
+  become: true
+  shell: systemctl daemon-reload
+  args:
+    executable: /bin/bash

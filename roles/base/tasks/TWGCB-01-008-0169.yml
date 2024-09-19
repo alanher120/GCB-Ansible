@@ -1,0 +1,12 @@
+---
+- name: TWGCB-01-008-0169
+  become: true
+  shell: |
+    [ ! -f /etc/audit/rules.d/audit.rules ] && touch /etc/audit/rules.d/audit.rules
+    grep -E '\-a always,exit \-F path=/usr/bin/chacl \-F perm=x \-F auid>=1000 \-F auid!=4294967295 \-k perm_chng' /etc/audit/rules.d/audit.rules ; retval=$?
+    [ $retval -ne 0 ] && echo \-a always,exit \-F path=/usr/bin/chacl \-F perm=x \-F auid\>=1000 \-F auid!=4294967295 \-k perm_chng >> /etc/audit/rules.d/audit.rules
+    augenrules --load > /dev/null 2>&1
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  

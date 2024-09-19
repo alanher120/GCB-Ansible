@@ -1,0 +1,15 @@
+---
+- name: TWGCB-01-008-0176
+  become: true
+  shell: |
+    grep -h -E "[\s*\$|\$]FileCreateMode" /etc/rsyslog.conf ; retval=$?
+    [ $retval -ne 0 ] && echo \$FileCreateMode 0640 >> /etc/rsyslog.conf
+    ls /etc/rsyslog.d/|while read x;do
+    grep -h -E "[\s*\$|\$]FileCreateMode" /etc/rsyslog.d/$x ; retval=$?
+    [ $retval -ne 0 ] && echo \$FileCreateMode 0640 >> /etc/rsyslog.d/$x
+    done
+    systemctl restart rsyslog
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  

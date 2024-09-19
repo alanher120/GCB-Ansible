@@ -5,7 +5,7 @@ install_package:
   - aide # TWGCB-01-008-0036
   - audit # TWGCB-01-008-0132
   - audit-libs # TWGCB-01-008-0132
-  - rsyslog # TWGCB-01-008-0185
+  - rsyslog # TWGCB-01-008-0185 TWGCB-01-008-0174  ISSUE
   - libselinux # TWGCB-01-008-0185
   - kbd.x86_64 # TWGCB-01-008-0233
 removed_package:
@@ -30,3 +30,6 @@ enable_packages:
   - auditd # TWGCB-01-008-0133
   - rsyslog # TWGCB-01-008-0175
   - crond # TWGCB-01-008-0192
+  - tmp.mount # TWGCB-01-008-0004
+partition_list:
+  - / # TWGCB-01-008-0061 TWGCB-01-008-0065
