@@ -387,6 +387,8 @@
   ignore_errors: true
   shell: |
     #!/bin/bash
+    #skip
+    #exit 0
     dir=/etc/sudoers.d
     str='NOPASSWD'
     for i in `ls $dir/*`;do

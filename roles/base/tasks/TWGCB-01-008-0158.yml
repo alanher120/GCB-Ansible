@@ -12,9 +12,8 @@
   block:
     - name: TWGCB-01-008-0158 check
       become: true
-      ignore_errors: true
-      shell: \
-        value=`find "{{ item }}" -xdev \( -perm -4000 -o -perm -2000 \) -type f | head -1 | awk '{print $1 }'`
+      shell: |
+        value=`find "/" -xdev \( -perm -4000 -o -perm -2000 \) -type f | head -1 | awk '{print $1 }'`
         grep $value /etc/audit/rules.d/privileged.rules
       register: command_output
       with_items:

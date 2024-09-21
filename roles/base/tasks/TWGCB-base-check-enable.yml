@@ -1,6 +1,5 @@
 ---
-- name: TWGCB-base-check-disable Rocky
-  ignore_errors: true
+- name: TWGCB-base-check-enable Rocky
   become: true
   service:
     enabled: yes
@@ -10,8 +9,7 @@
     "{{ enable_packages }}"
   when: ansible_distribution == "Rocky" 
 
-- name: TWGCB-base-check-disable CentOS-6
-  ignore_errors: true
+- name: TWGCB-base-check-enable CentOS-6
   become: true
   service:
     enabled: yes
@@ -21,8 +19,7 @@
     "{{ enable_packages }}"
   when: ansible_distribution == "CentOS" and ansible_distribution_major_version == "6"
 
-- name: TWGCB-base-check-disable CentOS-7
-  ignore_errors: true
+- name: TWGCB-base-check-enable CentOS-7
   become: true
   systemd:
     enabled: yes
@@ -32,8 +29,7 @@
     "{{ enable_packages }}"
   when: ansible_distribution == "CentOS" and ansible_distribution_major_version == "7"
 
-- name: TWGCB-base-check-disable CentOS-8
-  ignore_errors: true
+- name: TWGCB-base-check-enable CentOS-8
   become: true
   systemd:
     enabled: yes
@@ -43,8 +39,7 @@
     "{{ enable_packages }}"
   when: ansible_distribution == "CentOS" and ansible_distribution_major_version == "8"
 
-- name: TWGCB-base-check-disable CentOS-9
-  ignore_errors: true
+- name: TWGCB-base-check-enable CentOS-9
   become: true
   systemd:
     enabled: yes
@@ -54,8 +49,7 @@
     "{{ enable_packages }}"
   when: ansible_distribution == "CentOS" and ansible_distribution_major_version == "9"
 
-- name: TWGCB-base-check-disable OracleLinux-6
-  ignore_errors: true
+- name: TWGCB-base-check-enable OracleLinux-6
   become: true
   systemd:
     enabled: yes
@@ -65,8 +59,7 @@
     "{{ enable_packages }}"
   when: ansible_distribution == "OracleLinux" and ansible_distribution_major_version == "6"
 
-- name: TWGCB-base-check-disable OracleLinux-7
-  ignore_errors: true
+- name: TWGCB-base-check-enable OracleLinux-7
   become: true
   service:
     enabled: yes
@@ -76,8 +69,7 @@
     "{{ enable_packages }}"
   when: ansible_distribution == "OracleLinux" and ansible_distribution_major_version == "7"
 
-- name: TWGCB-base-check-disable OracleLinux-8
-  ignore_errors: true
+- name: TWGCB-base-check-enable OracleLinux-8
   become: true
   systemd:
     enabled: yes
@@ -87,8 +79,7 @@
     "{{ enable_packages }}"
   when: ansible_distribution == "OracleLinux" and ansible_distribution_major_version == "8"
 
-- name: TWGCB-base-check-disable OracleLinux-9
-  ignore_errors: true
+- name: TWGCB-base-check-enable OracleLinux-9
   become: true
   systemd:
     enabled: yes

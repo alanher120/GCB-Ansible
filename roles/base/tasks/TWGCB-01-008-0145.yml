@@ -1,12 +1,15 @@
 ---
-    - name: TWGCB-01-008-0145
+- name: TWGCB-01-008-0145
   become: true
   shell: |
-    grep -E "{{item}}" /etc/aide.conf > /dev/null 2>&1;retval=$?;[ $retval -ne 0 ] && echo {{item}} >> /etc/aide.conf
+    [ -f /etc/aide.conf ] || touch /etc/aide.conf
+    str=`echo {{ item }} | awk '{print $1}'`
+    sed -i /etc/aide.conf -e "s|^\s*$str.*||"
+    echo {{item}} >> /etc/aide.conf
   args:
     executable: /bin/bash
   ignore_errors: true
-  when_item:
+  loop:
     - #Audit Tools
     - /usr/sbin/auditctl p+i+n+u+g+s+b+acl+xattrs+sha512
     - /usr/sbin/auditd p+i+n+u+g+s+b+acl+xattrs+sha512

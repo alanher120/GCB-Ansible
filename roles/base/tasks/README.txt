@@ -33,8 +33,10 @@ replace abc b or abc=b
     fi
     echo "Verify string"
     grep -E "$str" $file
-    
 
+===
+cat /etc/yum.repos.d/epel.repo | grep -A 20 "\[epel\]"|while read x;do echo $x | grep "\[";[ $? -eq 0 ] && count=`expr $count + 1`; [ $count -gt 1 ] && break; ;done
+===
 remove string all line 
     file=/etc/pam.d/su
     str='^\s*auth\s*required\s*pam_wheel.so\s*use_uid.*'
@@ -46,6 +48,62 @@ remove string all line
     fi
     echo "Verify string"
     grep -E "$str" $file
+    fi
+
+    # remove gpgcheck
+    dir=`ls /etc/yum.repos.d/*.repo`
+    str='^\s*gpgcheck\s*=.*'
+    for file in $dir;do
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -i $file -e "s|$str| |" $file ; retval=$?
+    fi
+    echo "Verify string"
+    grep -E "$str" $file
+    fi
+    done
+    
+    # add gpgcheck
+    dir=`ls /etc/yum.repos.d/*.repo`
+    str='\]'
+    for file in $dir;do
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -i $file -e "s|$str|\]\ngpgcheck=1|" ; retval=$?
+    fi
+    echo "Verify string"
+    grep -E -A1 "$str" $file
+    fi
+    done
+
+    # remove gpgcheck
+    file=/etc/yum.conf
+    str='^\s*gpgcheck\s*=.*'
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -i $file -e "s|$str| |" $file ; retval=$?
+    fi
+    echo "Verify string"
+    grep -E "$str" $file
+    fi
+     
+    # add gpgcheck
+    file=/etc/yum.conf
+    str='\]'
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -i $file -e "s|$str|\]\ngpgcheck=1|" ; retval=$?
+    fi
+    echo "Verify string"
+    grep -E -A1 "$str" $file
     fi
 
     file=/etc/ssh/sshd_config

@@ -30,7 +30,6 @@
   command: "{{ item }}"
   with_items: 
     - sysctl -w fs.suid_dumpable=0 # TWGCB-01-008-0042
-    - systemctl daemon-reload # TWGCB-01-008-0042
     - sysctl -w kernel.randomize_va_space=2 # TWGCB-01-008-0043
 
 - name: TWGCB-net command
@@ -39,8 +38,9 @@
   shell: |
     sysctl -w {{ item }}
     [ ! -f /etc/sysctl.d/60-netipv4_sysctl.conf ] && touch /etc/sysctl.d/60-netipv4_sysctl.conf
-    grep {{ item }} /etc/sysctl.d/60-netipv4_sysctl.conf > /dev/null 2>&1;retval=$?
-    grep {{item}} /etc/sysctl.d/60-netipv4_sysctl.conf > /dev/null 2>&1 || echo {{ item }} >> /etc/sysctl.d/60-netipv4_sysctl.conf
+    str=`echo {{ item }} |sed 's|=.*||'`
+    sed -i /etc/sysctl.d/60-netipv4_sysctl.conf -e "s|^\s*$str\s*=.*||"
+    echo {{ item }} >> /etc/sysctl.d/60-netipv4_sysctl.conf
   with_items:
     - net.ipv4.ip_forward=0 # TWGCB-01-008-0108 1
     - net.ipv6.conf.all.forwarding=0 # TWGCB-01-008-0108 2
@@ -68,3 +68,18 @@
   with_items:
     - sysctl -w net.ipv4.route.flush=1
     - sysctl -w net.ipv6.route.flush=1
+
+- name: TWGCB-kernel command
+  become: true
+  command: "{{ item }}"
+  with_items: 
+    - systemctl daemon-reload # TWGCB-01-008-0042
+    
+- name: TWGCB-01-008-0042 push /etc/systemd/coredump.conf
+  become: true
+  copy:
+    src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/systemd/coredump.conf
+    dest: /etc/systemd
+    owner: root
+    group: root
+    mode: 0644

@@ -12,8 +12,55 @@
 - name: TWGCB-01-008-0032 push /etc/yum.conf and /etc/yum.repos.d/*.repo
   become: true
   shell: |
-    sed -i /etc/yum.conf -e 's/^gpgcheck=.*/gpgcheck=1/'
-    sed -i /etc/yum.repos.d/*.repo -e 's/^gpgcheck=.*/gpgcheck=1/'
+    # remove gpgcheck
+    dir=`ls /etc/yum.repos.d/*.repo`
+    str='^\s*gpgcheck\s*=.*'
+    for file in $dir;do
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -i $file -e "s|$str| |" $file ; retval=$?
+    fi
+    echo "Verify string"
+    grep -E "$str" $file
+    fi
+    done
+    dir=`ls /etc/yum.repos.d/*.repo`
+    str='\]'
+    for file in $dir;do
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -i $file -e "s|$str|\]\ngpgcheck=1|" ; retval=$?
+    fi
+    echo "Verify string"
+    grep -E -A1 "$str" $file
+    fi
+    done
+    file=/etc/yum.conf
+    str='^\s*gpgcheck\s*=.*'
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -i $file -e "s|$str| |" $file ; retval=$?
+    fi
+    echo "Verify string"
+    grep -E "$str" $file
+    fi
+    file=/etc/yum.conf
+    str='\]'
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -i $file -e "s|$str|\]\ngpgcheck=1|" ; retval=$?
+    fi
+    echo "Verify string"
+    grep -E -A1 "$str" $file
+    fi
   args:
     executable: /bin/bash
   when: ansible_distribution == "Rocky"

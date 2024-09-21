@@ -12,22 +12,18 @@
   block:
     - name: TWGCB-01-008-0161 check
       become: true
-      ignore_errors: true
-      shell: \
-        value=`grep -r logfile /etc/sudoers*|head -1|awk -F= '{print $2}'`
-        grep $value /etc/audit/rules.d/actions.rules
+      shell: |
+        value=`grep -r logfile /etc/sudoers*`
       register: command_output
       
   rescue:
-    - name: TWGCB-01-008-0161 add
+    - name: TWGCB-01-008-0161 add 1
       become: true
       ignore_errors: true
       shell: |
-        [ ! -f /etc/audit/rules.d/actions.rules ] && touch /etc/audit/rules.d/actions.rules
-        grep -r logfile /etc/sudoers* ; retval=$?
-        [ $retval -ne 0 ] &&  grep -r logfile /etc/sudoers* | sed -e 's/.*logfile=//;s/,? .*//' | xargs -l -I FILENAME echo -w FILENAME -p wa -k actions 2>/dev/null >> /etc/audit/rules.d/actions.rules
+        grep -r logfile /etc/sudoers* | sed -e 's/.*logfile=//;s/,? .*//' | xargs -l -I FILENAME echo -w FILENAME -p wa -k actions 2>/dev/null >> /etc/audit/rules.d/actions.rules
       register: command_output
-      
+
 - name: TWGCB-01-008-0161
   become: true
   shell: augenrules --load > /dev/null 2>&1
