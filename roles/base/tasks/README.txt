@@ -1,0 +1,180 @@
+
+add file 
+- name: TWGCB-01-008-0042 TWGCB-01-008-0042 TWGCB-01-008-0232 push /etc/security/limits.d/gcb.conf
+  become: true
+  copy:
+    src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/security/limits.d/gcb.conf
+    dest: /etc/security/limits.d
+    owner: root
+    group: root
+    mode: 0644
+
+replace abc b or abc=b
+    file=/etc/login.defs
+    repl='ENCRYPT_METHOD=SHA512'
+    echo $repl|grep '=';retval=$?
+    if [ $retval -eq 0 ];then
+    str1=`echo $repl|awk -F= '{print $1}'`
+    str="^\s*${str1}\s*="
+    else
+    str1=`echo $repl|awk '{print $1}'`
+    str="^\s*${str1}"
+    fi
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
+    else
+    echo "$repl" >> $file
+    fi
+    else
+    echo "$repl" >> $file
+    fi
+    echo "Verify string"
+    grep -E "$str" $file
+    
+
+remove string all line 
+    file=/etc/pam.d/su
+    str='^\s*auth\s*required\s*pam_wheel.so\s*use_uid.*'
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -i $file -e "s|$str| |" $file ; retval=$?
+    fi
+    echo "Verify string"
+    grep -E "$str" $file
+    fi
+
+    file=/etc/ssh/sshd_config
+    strs='.*Ciphers.* .*MACS.* .*KexAlgorithms.*' 
+    for str in $strs;do
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -i $file -e "s|$str| |" $file ; retval=$?
+    fi
+    fi
+    done
+
+remove string   
+    file=/etc/sudoers
+    str='NOPASSWD'
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -i $file -e "s|$str| |" $file ; retval=$?
+    echo "Verify string"
+    grep -E "$str" $file
+    fi
+    fi
+
+    dir=/etc/sudoers.d
+    str='NOPASSWD'
+    for i in `ls $dir/*`;do
+    file=$i
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -i $file -e "s|$str| |" $file ; retval=$?
+    echo "Verify string"
+    grep -E "$str" $file
+    fi
+    fi
+    done
+    
+add comment 
+
+    file=/etc/sudoers
+    str='^\s*auth\s*required\s*pam_wheel.so\s*use_uid.*'
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -i $file -e "s|$str|# \1|" $file ; retval=$?
+    fi
+    echo "Verify string"
+    grep -E "$str" $file
+    fi
+
+    dir=/etc/sudoers.d
+    str='^\s*auth\s*required\s*pam_wheel.so\s*use_uid.*'
+    for file in `ls $dir/*`;do
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -i $file -e "s|$str|# \1|" $file ; retval=$?
+    fi
+    echo "Verify string"
+    grep -E "$str" $file
+    fi
+    done
+    
+    
+    file=/etc/ssh/sshd_config
+    strs='.*Ciphers.* .*MACS.* .*KexAlgorithms.*' 
+    for str in $strs;do
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -i $file -e "s|$str|# \1|" $file ; retval=$?
+    fi
+    fi
+    done
+
+
+
+    file=/etc/sudoers
+    str='NOPASSWD'
+    gcbtmp=/etc/sudoers.gcbtmp
+    echo -n > $gcbtmp
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    cat $file|while read x;do
+    grep -E "$str" $file >/dev/null 2>&1; retval=$?
+    [ $? -eq 0 ] && echo "#"$x >> $gcbtmp
+    [ $? -eq 0 ] || echo $x >> $gcbtmp
+    done
+    cat $gcbtmp > $file
+    echo "Verify string"
+    grep -E "$str" $file
+    fi
+    fi
+    
+    
+    
+    dir=/etc/sudoers.d
+    str='NOPASSWD'
+    for i in `ls $dir/*`;do
+    file=$i
+    gcbtmp=$i.gcbtmp
+    echo -n > $gcbtmp
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    cat $file|while read x;do
+    grep -E "$str" $file >/dev/null 2>&1; retval=$?
+    [ $? -eq 0 ] && echo "#"$x >> $gcbtmp
+    [ $? -eq 0 ] || echo $x >> $gcbtmp
+    done
+    cat $gcbtmp > $file
+    echo "Verify string"
+    grep -E "$str" $file
+    fi
+    fi
+    done
+    
+    
+normal user change cmd    
+    cmd="chage --mindays 3000"
+    cat /etc/passwd|awk -F: '{ if ( $3 > 999 && $3 < 65534 ) { print $1 } }'|xargs -l $cmd

@@ -5,9 +5,11 @@ install_package:
   - aide # TWGCB-01-008-0036
   - audit # TWGCB-01-008-0132
   - audit-libs # TWGCB-01-008-0132
-  - rsyslog # TWGCB-01-008-0185 TWGCB-01-008-0174  ISSUE
+  - rsyslog # TWGCB-01-008-0185 TWGCB-01-008-0174 ISSUE
   - libselinux # TWGCB-01-008-0185
-  - kbd.x86_64 # TWGCB-01-008-0233
+  - kbd # TWGCB-01-008-0233
+  - firewalld # TWGCB-01-008-0244
+  - openssh-server  # TWGCB-01-008-0262
 removed_package:
   - xinetd # TWGCB-01-008-0092
   - ypbind # TWGCB-01-008-0102
@@ -25,11 +27,15 @@ disable_packages:
   - smb # TWGCB-01-008-0098
   - vsftpd # TWGCB-01-008-0099
   - ypserv # TWGCB-01-008-0100
+  - iptables # TWGCB-01-008-0246
+  - ip6tables # TWGCB-01-008-0246
 enable_packages:
+  - tmp.mount # TWGCB-01-008-0004
   - kdump # TWGCB-01-008-0101
   - auditd # TWGCB-01-008-0133
   - rsyslog # TWGCB-01-008-0175
   - crond # TWGCB-01-008-0192
-  - tmp.mount # TWGCB-01-008-0004
+  - firewalld # TWGCB-01-008-0245
+  - sshd # TWGCB-01-008-0262
 partition_list:
   - / # TWGCB-01-008-0061 TWGCB-01-008-0065

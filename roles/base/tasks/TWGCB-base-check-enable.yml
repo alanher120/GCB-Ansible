@@ -1,5 +1,5 @@
 ---
-- name: TWGCB-base-check-disable Rocky-6
+- name: TWGCB-base-check-disable Rocky
   ignore_errors: true
   become: true
   service:
@@ -8,40 +8,7 @@
     name: "{{ item }}"
   with_items:
     "{{ enable_packages }}"
-  when: ansible_distribution == "Rocky" and ansible_distribution_major_version == "6"
-
-- name: TWGCB-base-check-disable Rocky-7
-  ignore_errors: true
-  become: true
-  systemd:
-    enabled: yes
-    state: started
-    name: "{{ item }}"
-  with_items:
-    "{{ enable_packages }}"
-  when: ansible_distribution == "Rocky" and ansible_distribution_major_version == "7"
-
-- name: TWGCB-base-check-disable Rocky-8
-  ignore_errors: true
-  become: true
-  systemd:
-    enabled: yes
-    state: started
-    name: "{{ item }}"
-  with_items:
-    "{{ enable_packages }}"
-  when: ansible_distribution == "Rocky" and ansible_distribution_major_version == "8"
-
-- name: TWGCB-base-check-disable Rocky-9
-  ignore_errors: true
-  become: true
-  systemd:
-    enabled: yes
-    state: started
-    name: "{{ item }}"
-  with_items:
-    "{{ enable_packages }}"
-  when: ansible_distribution == "Rocky" and ansible_distribution_major_version == "9"
+  when: ansible_distribution == "Rocky" 
 
 - name: TWGCB-base-check-disable CentOS-6
   ignore_errors: true

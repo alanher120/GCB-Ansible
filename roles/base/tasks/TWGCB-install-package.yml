@@ -1,16 +1,25 @@
+- name: TWGCB-install-package Rocky
+  become: true
+  dnf:
+    state: present 
+    name: "{{ item }}"
+  with_items:
+    "{{ install_package }}"
+  when: ansible_distribution == "Rocky" 
+
 - name: TWGCB-install-package OracleLinux-9
   become: true
   dnf:
-    state: latest
+    state: present 
     name: "{{ item }}"
   with_items:
     "{{ install_package }}"
   when: ansible_distribution == "OracleLinux" and ansible_distribution_major_version == "9"
 
-- name: TWGCB-install-package
+- name: TWGCB-install-package CentOS-7
   become: true
   yum:
-    state: latest
+    state: present 
     name: "{{ item }}"
   with_items:
     "{{ install_package }}"

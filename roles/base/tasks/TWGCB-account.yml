@@ -7,15 +7,6 @@
     group: root
     mode: 0644
 
-- name: TWGCB-account push /etc/login.defs
-  become: true
-  copy:
-    src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/login.defs
-    dest: /etc
-    owner: root
-    group: root
-    mode: 0644
-
 - name: TWGCB-account push /etc/bashrc
   become: true
   copy:
@@ -85,7 +76,7 @@
   shell: |
     #!/bin/bash
     source /etc/os-release
-    if [ "$VERSION_ID" == "8.2" -o "$VERSION_ID" == "8.1" -o "$VERSION_ID" == "8.0" -o "$VERSION_ID" == "8" ];then
+    if [ "$VERSION_ID" == "8.1" -o "$VERSION_ID" == "8.0" -o "$VERSION_ID" == "8" ];then
     CP=$(authselect current | awk 'NR == 1 {print $3}' | grep custom/)
     for FN in system-auth password-auth; do
     [[ -n $CP ]] && PTF=/etc/authselect/$CP/$FN || PTF=/etc/authselect/$FN
@@ -108,7 +99,7 @@
   shell: |
     #!/bin/bash
     source /etc/os-release
-    if [ "$VERSION_ID" == "8.2" -o "$VERSION_ID" == "8.1" -o "$VERSION_ID" == "8.0" -o "$VERSION_ID" == "8" ];then
+    if [ "$VERSION_ID" == "8.1" -o "$VERSION_ID" == "8.0" -o "$VERSION_ID" == "8" ];then
     CP=$(authselect current | awk 'NR == 1 {print $3}' | grep custom/)
     for FN in system-auth password-auth; do
     [[ -n $CP ]] && PTF=/etc/authselect/$CP/$FN || PTF=/etc/authselect/$FN
@@ -175,8 +166,8 @@
     [ $retval -eq 0 ] && grep -E "^\s*crypt_style\s*=\s*sha512" /etc/libuser.conf ; retval=$?
     [ $retval -ne 0 ] && echo crypt_style = sha512 >> /etc/libuser.conf 
     [ -f /etc/login.defs ] && retval=0
-    [ $retval -eq 0 ] && grep -E "^\s*ENCRYPT_METHOD\s*=\s*SHA512" /etc/login.defs ; retval=$?
-    [ $retval -ne 0 ] && echo ENCRYPT_METHOD = SHA512 >> /etc/login.defs 
+    [ $retval -eq 0 ] && grep -E "^\s*ENCRYPT_METHOD\s*SHA512" /etc/login.defs ; retval=$?
+    [ $retval -ne 0 ] && echo ENCRYPT_METHOD SHA512 >> /etc/login.defs 
     authselect create-profile pwENCY -b sssd --symlink-meta
     authselect select custom/pwENCY with-sudo with-faillock without-nullok
     CP=$(authselect current | awk 'NR == 1 {print $3}' | grep custom/)
@@ -188,28 +179,294 @@
   args:
     executable: /bin/bash
 
+- name: TWGCB-01-008-0225
+  become: true
+  ignore_errors: true
+  shell: |
+    #!/bin/bash
+    file=/etc/login.defs
+    repl="PASS_MIN_DAYS 1"
+    str1=`echo $repl|awk '{print $1}'`
+    str="^\s*${str1}"
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
+    else
+    echo "$repl" >> /etc/login.defs
+    fi
+    else
+    echo "$repl" >> /etc/login.defs
+    fi
+    grep -E "$str" $file
+    cmd="chage --mindays 1"
+    cat /etc/passwd|awk -F: '{ if ( $3 > 999 && $3 < 65534 ) { print $1 } }'|xargs -l $cmd
+  args:
+    executable: /bin/bash
+
+- name: TWGCB-01-008-0226
+  become: true
+  ignore_errors: true
+  shell: |
+    #!/bin/bash
+    file=/etc/login.defs
+    repl="PASS_WARN_AGE 14"
+    str1=`echo $repl|awk '{print $1}'`
+    str="^\s*${str1}"
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
+    else
+    echo "$repl" >> /etc/login.defs
+    fi
+    else
+    echo "$repl" >> /etc/login.defs
+    fi
+    grep -E "$str" $file
+    cmd="chage --warndays 14"
+    cat /etc/passwd|awk -F: '{ if ( $3 > 999 && $3 < 65534 ) { print $1 } }'|xargs -l $cmd
+  args:
+    executable: /bin/bash
+
+- name: TWGCB-01-008-0227
+  become: true
+  ignore_errors: true
+  shell: |
+    #!/bin/bash
+    file=/etc/login.defs
+    repl="PASS_MAX_DAYS 90"
+    str1=`echo $repl|awk '{print $1}'`
+    str="^\s*${str1}"
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
+    else
+    echo "$repl" >> /etc/login.defs
+    fi
+    else
+    echo "$repl" >> /etc/login.defs
+    fi
+    grep -E "$str" $file
+    cmd="chage --maxdays 90"
+    cat /etc/passwd|awk -F: '{ if ( $3 > 999 && $3 < 65534 ) { print $1 } }'|xargs -l $cmd
+  args:
+    executable: /bin/bash
+
 - name: TWGCB-01-008-0228
   become: true
   ignore_errors: true
-  command: useradd -D -f 30
+  shell: |
+    #!/bin/bash
+    useradd -D -f 30
+    cmd="chage --inactive 30"
+    cat /etc/passwd|awk -F: '{ if ( $3 > 999 && $3 < 65534 ) { print $1 } }'|xargs -l $cmd
+  args:
+    executable: /bin/bash
 
+- name: TWGCB-01-008-0229
+  become: true
+  ignore_errors: true
+  shell: |
+    #!/bin/bash
+    file=/etc/login.defs
+    repl="FAIL_DELAY 4"
+    echo $repl|grep '=';retval=$?
+    if [ $retval -eq 0 ];then
+    str1=`echo $repl|awk -F= '{print $1}'`
+    str="^\s*${str1}\s*="
+    else
+    str1=`echo $repl|awk '{print $1}'`
+    str="^\s*${str1}"
+    fi
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
+    else
+    echo "$repl" >> /etc/login.defs
+    fi
+    else
+    echo "$repl" >> /etc/login.defs
+    fi
+    echo "Verify string"
+    grep -E "$str" $file
+  args:
+    executable: /bin/bash
 
+- name: TWGCB-01-008-0230
+  become: true
+  ignore_errors: true
+  shell: |
+    #!/bin/bash
+    file=/etc/login.defs
+    repl="CREATE_HOME yes"
+    echo $repl|grep '=';retval=$?
+    if [ $retval -eq 0 ];then
+    str1=`echo $repl|awk -F= '{print $1}'`
+    str="^\s*${str1}\s*="
+    else
+    str1=`echo $repl|awk '{print $1}'`
+    str="^\s*${str1}"
+    fi
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
+    else
+    echo "$repl" >> /etc/login.defs
+    fi
+    else
+    echo "$repl" >> /etc/login.defs
+    fi
+    echo "Verify string"
+    grep -E "$str" $file
+  args:
+    executable: /bin/bash
+
+- name: TWGCB-01-008-0231 1
+  become: true
+  ignore_errors: true
+  shell: |
+    #!/bin/bash
+    file=/etc/sudoers
+    str="NOPASSWD"
+    gcbtmp=/etc/sudoers.gcbtmp
+    echo -n > $gcbtmp
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    cat $file|while read x;do
+    grep -E "$str" $file >/dev/null 2>&1; retval=$?
+    [ $? -eq 0 ] && echo "#"$x >> $gcbtmp
+    [ $? -eq 0 ] || echo $x >> $gcbtmp
+    done
+    cat $gcbtmp > $file
+    echo "Verify string"
+    grep -E "$str" $file
+    fi
+    fi
+  args:
+    executable: /bin/bash
+
+- name: TWGCB-01-008-0231 2
+  become: true
+  ignore_errors: true
+  shell: |
+    #!/bin/bash
+    file=/etc/sudoers
+    str='!authenticate'
+    gcbtmp=/etc/sudoers.gcbtmp
+    echo -n > $gcbtmp
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    cat $file|while read x;do
+    grep -E "$str" $file >/dev/null 2>&1; retval=$?
+    [ $? -eq 0 ] && echo "#"$x >> $gcbtmp
+    [ $? -eq 0 ] || echo $x >> $gcbtmp
+    done
+    cat $gcbtmp > $file
+    echo "Verify string"
+    grep -E "$str" $file
+    fi
+    fi
+  args:
+    executable: /bin/bash
+    
+- name: TWGCB-01-008-0231 3
+  become: true
+  ignore_errors: true
+  shell: |
+    #!/bin/bash
+    dir=/etc/sudoers.d
+    str='NOPASSWD'
+    for i in `ls $dir/*`;do
+    file=$i
+    gcbtmp=$i.gcbtmp
+    echo -n > $gcbtmp
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    cat $file|while read x;do
+    grep -E "$str" $file >/dev/null 2>&1; retval=$?
+    [ $? -eq 0 ] && echo "#"$x >> $gcbtmp
+    [ $? -eq 0 ] || echo $x >> $gcbtmp
+    done
+    cat $gcbtmp > $file
+    echo "Verify string"
+    grep -E "$str" $file
+    fi
+    fi
+    done
+  args:
+    executable: /bin/bash
+    
+- name: TWGCB-01-008-0231 4
+  become: true
+  ignore_errors: true
+  shell: |
+    #!/bin/bash
+    dir=/etc/sudoers.d
+    str='!authenticate'
+    for i in `ls $dir/*`;do
+    file=$i
+    gcbtmp=$i.gcbtmp
+    echo -n > $gcbtmp
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    cat $file|while read x;do
+    grep -E "$str" $file >/dev/null 2>&1; retval=$?
+    [ $? -eq 0 ] && echo "#"$x >> $gcbtmp
+    [ $? -eq 0 ] || echo $x >> $gcbtmp
+    done
+    cat $gcbtmp > $file
+    echo "Verify string"
+    grep -E "$str" $file
+    fi
+    fi
+    done
+  args:
+    executable: /bin/bash
+    
 - name: TWGCB-01-008-0237 1
   become: true
   ignore_errors: true
   shell: |
     #!/bin/bash
+    echo "確認 nologin 非 root 系統帳號"
     awk -F: '($1!="root" && $1!="sync" && $1!="shutdown" && $1!="halt" && $1!~/^\+/ && $3<'"$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)"' && $7!="'"$(which nologin)"'" && $7!="/bin/false") {print $1}' /etc/passwd | while read user; do usermod -s $(which nologin) $user; done
+    echo "鎖定 nologin 非 root 系統帳號"
+    awk -F: '($1!="root" && $1!~/^\+/ && $3<'"$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)"') {print $1}' /etc/passwd | xargs -I '{}' passwd -S '{}' | awk '($2!="L" && $2!="LK") {print $1}' | while read user; do usermod -L $user; done
   args:
     executable: /bin/bash
 
-
-- name: TWGCB-01-008-0237 2
+- name: TWGCB-01-008-0238
   become: true
   ignore_errors: true
   shell: |
     #!/bin/bash
-    awk -F: '($1!="root" && $1!~/^\+/ && $3<'"$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)"') {print $1}' /etc/passwd | xargs -I '{}' passwd -S '{}' | awk '($2!="L" && $2!="LK") {print $1}' | while read user; do usermod -L $user; done
+    file=/etc/bashrc
+    str='TMOUT=900'
+    if[ -f $file ];then
+    grep "$str" $file;retval=0
+    if[ $retval -ne 0 ];then
+    cat /etc/bashrc > /etc/bashrc.gcbtmp
+    echo "$str" > /etc/bashrc
+    cat /etc/bashrc.gcbtmp >> /etc/bashrc
+    fi
+    fi
   args:
     executable: /bin/bash
 
@@ -218,5 +475,84 @@
   ignore_errors: true
   command: usermod -g 0 root
 
+- name: TWGCB-01-008-0241
+  become: true
+  ignore_errors: true
+  shell: |
+    #!/bin/bash
+    file=/etc/bashrc
+    repl='umask 027'
+    echo $repl|grep '=';retval=$?
+    if [ $retval -eq 0 ];then
+    str1=`echo $repl|awk -F= '{print $1}'`
+    str="^\s*${str1}\s*="
+    else
+    str1=`echo $repl|awk '{print $1}'`
+    str="^\s*${str1}"
+    fi
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
+    else
+    echo "$repl" >> /etc/login.defs
+    fi
+    else
+    echo "$repl" >> /etc/login.defs
+    fi
+    echo "Verify string"
+    grep -E "$str" $file
+  args:
+    executable: /bin/bash
 
+- name: TWGCB-01-008-0242
+  become: true
+  ignore_errors: true
+  shell: |
+    #!/bin/bash
+    file=/etc/login.defs
+    repl='umask 027'
+    echo $repl|grep '=';retval=$?
+    if [ $retval -eq 0 ];then
+    str1=`echo $repl|awk -F= '{print $1}'`
+    str="^\s*${str1}\s*="
+    else
+    str1=`echo $repl|awk '{print $1}'`
+    str="^\s*${str1}"
+    fi
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
+    else
+    echo "$repl" >> /etc/login.defs
+    fi
+    else
+    echo "$repl" >> /etc/login.defs
+    fi
+    echo "Verify string"
+    grep -E "$str" $file
+  args:
+    executable: /bin/bash
 
+- name: TWGCB-01-008-0243
+  become: true
+  ignore_errors: true
+  shell: |
+    #!/bin/bash
+    file=/etc/pam.d/su
+    str='^\s*auth\s*required\s*pam_wheel.so\s*use_uid.*'
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -i $file -e "s|$str| |" $file ; retval=$?
+    fi
+    echo "auth required pam_wheel.so use_uid" >> $file
+    echo "Verify string"
+    grep -E "$str" $file
+    fi
+  args:
+    executable: /bin/bash

@@ -32,3 +32,25 @@
     "{{ disable_packages }}"
   when: ansible_distribution == "OracleLinux" and ansible_distribution_major_version == "9"
 
+- name: TWGCB-base-check-disable Rocky 1
+  ignore_errors: true
+  become: true
+  systemd:
+    enabled: no
+    state: stopped
+    name: "{{ item }}"
+  with_items:
+    "{{ disable_packages }}"
+  when: ansible_distribution == "Rocky"
+
+- name: TWGCB-base-check-disable Rocky 2
+  become: true
+  ignore_errors: true
+  shell: |
+    #!/bin/bash
+    systemctl --now mask {{ item }}
+  args:
+    executable: /bin/bash
+  with_items:
+    "{{ disable_packages }}"
+  when: ansible_distribution == "Rocky"
