@@ -19,7 +19,7 @@
     when: playbook_action in gcb_action
   - include_tasks: TWGCB-01-008-0003.yml
     when: playbook_action in gcb_action
-  - include_tasks: TWGCB-01-008-0004.yml  ## need-check
+  - include_tasks: TWGCB-01-008-0004.yml
     when: playbook_action in gcb_action
   - include_tasks: TWGCB-01-008-0029.yml
     when: playbook_action in gcb_action
@@ -145,7 +145,6 @@
   - include_tasks: TWGCB-01-008-0219.yml
     when: playbook_action in gcb_action
 
-    when: playbook_action in gcb_action
   - include_tasks: TWGCB-audit.yml
     when: playbook_action in gcb_action
   - include_tasks: TWGCB-rsyslog.yml

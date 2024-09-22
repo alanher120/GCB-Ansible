@@ -3,8 +3,8 @@
   become: true
   ansible.builtin.lineinfile:
     path: /etc/sudoers
-    regexp: '^#includedir'
-    line: 'includedir /etc/sudoers.d'
+    regexp: '^\s*#\s*includedir'
+    line: '#includedir /etc/sudoers.d'
   ignore_errors: yes
 
 - name: TWGCB-01-008-0034 /etc/sudoers/use_pty
