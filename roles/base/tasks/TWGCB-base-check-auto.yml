@@ -31,6 +31,15 @@
     - sed -ri 's/(^shadow:[^:]*:[^:]*:)([^:]+$)/\1/' /etc/group # 執行以下指令，從shadow群組移除使用者帳號
   when: result.stdout != ""
 
+- name: TWGCB-01-008-0107 setting /etc/dnf/dnf.conf and /etc/yum.conf clean_requirements_on_remove=True
+  become: true
+  shell: |
+    sed -ri "s/^\s*(clean_requirements_on_remove\s*)(=)(\s*\S+\b).*$/\1\2True/" /etc/dnf/dnf.conf
+    sed -ri "s/^\s*(clean_requirements_on_remove\s*)(=)(\s*\S+\b).*$/\1\2True/" /etc/yum.conf
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  
 - name: TWGCB-01-008-0108 1
   become: true
   ignore_errors: true

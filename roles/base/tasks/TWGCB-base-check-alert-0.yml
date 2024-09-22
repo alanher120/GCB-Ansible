@@ -1,8 +1,8 @@
 ---    
-- name: TWGCB-01-008-0093
+- name: TWGCB-01-008-0093 chrony.conf NTP Server setting
   become: true
   shell: |
-    cat /etc/chrony.conf|grep -E '^\s+server|^server'
+    grep -E '^\s*server|^server' /etc/chrony.conf
   args:
     executable: /bin/bash
   ignore_errors: true
@@ -11,11 +11,11 @@
 - debug:
     var: command_output.stdout_lines
     
-- name: TWGCB-01-008-0107
+- name: TWGCB-01-008-0107 /etc/dnf/dnf.conf and /etc/yum.conf clean_requirements_on_remove=True
   become: true
   shell: |
-    cat /etc/dnf/dnf.conf |grep clean_requirements_on_remove|grep -v ^#
-    cat /etc/yum.conf |grep clean_requirements_on_remove|grep -v ^#
+    grep -E '^\s*clean_requirements_on_remove' /etc/dnf/dnf.conf |grep -v ^#|grep -Ei '=\s*true'
+    grep -E '^\s*clean_requirements_on_remove' /etc/yum.conf |grep -v ^#|grep -Ei '=\s*true'
   args:
     executable: /bin/bash
   ignore_errors: true
@@ -23,4 +23,4 @@
 
 - debug:
     var: command_output.stdout_lines
-        
+    
