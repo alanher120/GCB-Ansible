@@ -1,0 +1,56 @@
+---
+- name: TWGCB-01-008-0231 1 ## skip
+  become: true
+  ignore_errors: true
+  shell: |
+    #!/bin/bash
+    file=/etc/sudoers
+    str="NOPASSWD"
+    gcbtmp=/etc/sudoers.gcbtmp
+    echo -n > $gcbtmp
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    cat $file|while read x;do
+    grep -E "$str" $file >/dev/null 2>&1; retval=$?
+    [ $? -eq 0 ] && echo "#"$x >> $gcbtmp
+    [ $? -eq 0 ] || echo $x >> $gcbtmp
+    done
+    cat $gcbtmp > $file
+    echo "Verify string"
+    grep -E "$str" $file
+    fi
+    fi
+  args:
+    executable: /bin/bash
+
+- name: TWGCB-01-008-0231 3
+  become: true
+  ignore_errors: true
+  shell: |
+    #!/bin/bash
+    dir=/etc/sudoers.d
+    str='NOPASSWD'
+    for i in `ls $dir/*`;do
+    file=$i
+    gcbtmp=$i.gcbtmp
+    echo -n > $gcbtmp
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    cat $file|while read x;do
+    grep -E "$str" $file >/dev/null 2>&1; retval=$?
+    [ $? -eq 0 ] && echo "#"$x >> $gcbtmp
+    [ $? -eq 0 ] || echo $x >> $gcbtmp
+    done
+    cat $gcbtmp > $file
+    echo "Verify string"
+    grep -E "$str" $file
+    fi
+    fi
+    done
+  args:
+    executable: /bin/bash
+    

@@ -2,12 +2,12 @@
 - name: TWGCB-01-008-0149
   become: true
   shell: |
-    [ ! -f /etc/audit/rules.d/audit.rules ] && touch /etc/audit/rules.d/audit.rules
-    grep -E '\-w /var/run/faillock/ \-p wa \-k logins' /etc/audit/rules.d/audit.rules ; retval=$?
-    [ $retval -ne 0 ] && echo -w /var/run/faillock/ -p wa -k logins >> /etc/audit/rules.d/audit.rules
-    grep -E '\-w /var/log/lastlog \-p wa \-k logins' /etc/audit/rules.d/audit.rules ; retval=$?
-    [ $retval -ne 0 ] && echo -w /var/log/lastlog -p wa -k logins >> /etc/audit/rules.d/audit.rules
-    augenrules --load > /dev/null 2>&1
+    if [ -f /etc/audit/rules.d/audit.rules ];then
+    sed -ri "s/^.*(\s\/var\/run\/faillock\/\s).*$/# *REMOVED* \1/" /etc/audit/rules.d/audit.rules
+    sed -ri "s/^.*(\s\/var\/run\/faillock\s).*$/# *REMOVED* \1/" /etc/audit/rules.d/audit.rules
+    sed -ri "s/^.*(\s\/var\/log\/lastlog\s).*$/# *REMOVED* \1/" /etc/audit/rules.d/audit.rules
+    echo -w /var/run/faillock/ -p wa -k logins >> /etc/audit/rules.d/audit.rules
+    echo -w /var/log/lastlog -p wa -k logins >> /etc/audit/rules.d/audit.rules
   args:
     executable: /bin/bash
   ignore_errors: true

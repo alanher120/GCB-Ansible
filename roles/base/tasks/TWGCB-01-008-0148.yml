@@ -2,12 +2,12 @@
 - name: TWGCB-01-008-0148
   become: true
   shell: |
-    [ ! -f /etc/audit/rules.d/audit.rules ] && touch /etc/audit/rules.d/audit.rules
-    grep -E '\-w /etc/sudoers \-p wa \-k scope' /etc/audit/rules.d/audit.rules ; retval=$?
-    [ $retval -ne 0 ] && echo -w /etc/sudoers -p wa -k scope >> /etc/audit/rules.d/audit.rules
-    grep -E '\-w /etc/sudoers.d/ \-p wa \-k scope' /etc/audit/rules.d/audit.rules ; retval=$?
-    [ $retval -ne 0 ] && echo -w /etc/sudoers.d/ -p wa -k scope >> /etc/audit/rules.d/audit.rules
-    augenrules --load > /dev/null 2>&1
+    if [ -f /etc/audit/rules.d/audit.rules ];then
+    sed -ri "s/^.*(\s\/etc\/sudoers\s).*$/# *REMOVED* \1/" /etc/audit/rules.d/audit.rules
+    sed -ri "s/^.*(\s\/etc\/sudoers\.d\/\s).*$/# *REMOVED* \1/" /etc/audit/rules.d/audit.rules
+    sed -ri "s/^.*(\s\/etc\/sudoers\.d\s).*$/# *REMOVED* \1/" /etc/audit/rules.d/audit.rules
+    echo -w /etc/sudoers -p wa -k scope >> /etc/audit/rules.d/audit.rules
+    echo -w /etc/sudoers.d/ -p wa -k scope >> /etc/audit/rules.d/audit.rules
   args:
     executable: /bin/bash
   ignore_errors: true

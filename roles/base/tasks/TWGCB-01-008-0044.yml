@@ -3,7 +3,6 @@
   become: true
   shell: |
     update-crypto-policies --set FUTURE
-    update-crypto-policies
   args:
     executable: /bin/bash
   ignore_errors: yes

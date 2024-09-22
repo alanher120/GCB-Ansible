@@ -3,7 +3,7 @@
   become: true
   ansible.builtin.lineinfile:
     path: /etc/sudoers
-    regexp: '^\s*#\s*includedir'
+    regexp: '^\s*#*\s*includedir'
     line: '#includedir /etc/sudoers.d'
   ignore_errors: yes
 

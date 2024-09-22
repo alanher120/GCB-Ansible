@@ -9,7 +9,7 @@
     mode: 0644
   when: ansible_distribution == "OracleLinux" and ansible_distribution_major_version == "9"
 
-- name: TWGCB-01-008-0032 push /etc/yum.conf and /etc/yum.repos.d/*.repo
+- name: TWGCB-01-008-0032 push /etc/dnf/dnf.conf /etc/yum.conf and /etc/yum.repos.d/*.repo
   become: true
   shell: |
     # remove gpgcheck
@@ -51,6 +51,28 @@
     grep -E "$str" $file
     fi
     file=/etc/yum.conf
+    str='\]'
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -i $file -e "s|$str|\]\ngpgcheck=1|" ; retval=$?
+    fi
+    echo "Verify string"
+    grep -E -A1 "$str" $file
+    fi
+    file=/etc/dnf/dnf.conf
+    str='^\s*gpgcheck\s*=.*'
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -i $file -e "s|$str| |" $file ; retval=$?
+    fi
+    echo "Verify string"
+    grep -E "$str" $file
+    fi
+    file=/etc/dnf/dnf.conf
     str='\]'
     if [ -f $file ];then
     echo "Search string"

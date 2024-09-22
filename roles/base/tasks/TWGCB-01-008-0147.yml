@@ -2,10 +2,10 @@
 - name: TWGCB-01-008-0147
   become: true
   shell: |
-    [ ! -f /etc/audit/auditd.conf ] && touch /etc/audit/auditd.conf
-    grep -E '^\s*[m]ax_log_file_action\s*[=]' /etc/audit/auditd.conf ; retval=$?
-    [ $retval -eq 0 ] && sed -E -i /etc/audit/auditd.conf -e 's/^\s*[m]ax_log_file_action\s*[=].*/max_log_file_action = keep_logs/'
-    [ $retval -ne 0 ] && echo max_log_file_action = keep_logs >> /etc/audit/auditd.conf
+    if [ -f /etc/audit/auditd.conf ];then
+    sed -ri 's/^\s*(max_log_file_action\s*)(=)(\s*\S+\b).*$/# *REMOVED* \1/' /etc/audit/auditd.conf
+    echo max_log_file_action = keep_logs >> /etc/audit/auditd.conf
+    fi
   args:
     executable: /bin/bash
   ignore_errors: true

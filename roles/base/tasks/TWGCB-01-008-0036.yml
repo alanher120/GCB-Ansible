@@ -1,6 +1,16 @@
+- name: TWGCB-01-008-0036 remove file /var/lib/aide/aide.db.gz
+  become: true
+  shell: |
+    #!/bin/bash
+    [ -f /var/lib/aide/aide.db.gz ] && rm -f /var/lib/aide/aide.db.gz
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  
 - name: TWGCB-01-008-0036 init
   become: true
   command: "{{ item }}"
   with_items: 
     - aide --init
     - mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+    
