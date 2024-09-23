@@ -7,14 +7,14 @@
     group: root
     mode: 0644
 
-- name: TWGCB-account push /etc/bashrc
-  become: true
-  copy:
-    src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/bashrc
-    dest: /etc
-    owner: root
-    group: root
-    mode: 0644
+#- name: TWGCB-account push /etc/bashrc
+  #become: true
+  #copy:
+    #src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/bashrc
+    #dest: /etc
+    #owner: root
+    #group: root
+    #mode: 0644
 
 - name: TWGCB-account push /etc/profile.d/gcb.sh
   become: true
@@ -416,7 +416,7 @@
     cat $file > $gcbtmp
     sed -i $gcbtmp -e "s|\(.*$str.*\)|# \1|"
     echo "$repl" >> $gcbtmp
-    cat $gcbtmp >> $file
+    cat $gcbtmp > $file
     rm -f $gcbtmp
     else
     echo "add $str "
@@ -441,14 +441,14 @@
     repl='umask 027'
     gcbtmp=$file.gcbtmp
     if [ -f $file ];then
-    grep "$str" $file;retval=0
+    grep "$str" $file ;retval=0
     if [ $retval -eq 0 ];then
     echo "remove $str "
     echo "add $str "
     cat $file > $gcbtmp
     sed -i $gcbtmp -e "s|\(.*$str.*\)|# \1|"
     echo "$repl" >> $gcbtmp
-    cat $gcbtmp >> $file
+    cat $gcbtmp > $file
     rm -f $gcbtmp
     else
     echo "add $str "
@@ -479,10 +479,10 @@
     if [ $retval -eq 0 ];then
     sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
     else
-    echo "$repl" >> /etc/login.defs
+    echo "$repl" >> $file
     fi
     else
-    echo "$repl" >> /etc/login.defs
+    echo "$repl" >> $file
     fi
     echo "Verify string"
     grep -E "$str" $file
