@@ -464,28 +464,24 @@
   shell: |
     #!/bin/bash
     file=/etc/login.defs
+    str='umask '
     repl='umask 027'
-    echo $repl|grep '=';retval=$?
-    if [ $retval -eq 0 ];then
-    str1=`echo $repl|awk -F= '{print $1}'`
-    str="^\s*${str1}\s*="
-    else
-    str1=`echo $repl|awk '{print $1}'`
-    str="^\s*${str1}"
-    fi
+    gcbtmp=$file.gcbtmp
     if [ -f $file ];then
-    echo "Search string"
-    grep -E "$str" $file ; retval=$?
+    grep "$str" $file ;retval=0
     if [ $retval -eq 0 ];then
-    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
+    echo "remove $str "
+    echo "add $str "
+    cat $file > $gcbtmp
+    sed -i $gcbtmp -e "s|\(.*$str.*\)|# \1|"
+    echo "$repl" >> $gcbtmp
+    cat $gcbtmp > $file
+    rm -f $gcbtmp
     else
-    echo "$repl" >> $file
+    echo "add $str "
+    echo $repl >> $file
     fi
-    else
-    echo "$repl" >> $file
     fi
-    echo "Verify string"
-    grep -E "$str" $file
   args:
     executable: /bin/bash
 
