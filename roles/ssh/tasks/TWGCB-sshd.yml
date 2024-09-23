@@ -15,7 +15,7 @@
     fi
     fi
     done
-    cat /etc/passwd|awk -F: 'BEGIN  { printf "AllowUsers " } { if ( $3 > 999 && $3 < 65534 ) { printf $1"," } } END {printf "root\n"}' >> $file
+    cat /etc/passwd|awk -F: 'BEGIN  { printf "AllowUsers " } { if ( $3 > 999 && $3 < 65534 ) { printf $1" " } } END {printf "root\n"}' >> $file
     echo "AllowGroups" >> $file
     echo "DenyUsers" >> $file
     echo "DenyGroups" >> $file
