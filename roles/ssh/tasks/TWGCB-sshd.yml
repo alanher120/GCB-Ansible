@@ -42,10 +42,10 @@
     if [ $retval -eq 0 ];then
     sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
     else
-    echo "$repl" >> /etc/login.defs
+    echo "$repl" >> $file
     fi
     else
-    echo "$repl" >> /etc/login.defs
+    echo "$repl" >> $file
     fi
     echo "Verify string"
     grep -E "$str" $file
