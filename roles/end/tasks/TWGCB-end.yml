@@ -114,16 +114,4 @@
     done
   args:
     executable: /bin/bash
-
-- name: TWGCB-01-008-0231 files
-  find:
-    paths: "/etc/sudoers.d/"
-    patterns: "*"
-  register: files
-
-- name: TWGCB-01-008-0231 replace string
-  replace:
-    path: "{{ item.path }}"
-    regexp: '(.*NOPASSWD.*)'
-    replace: '# \1'
-  with_items: "{{ files.files }}"
+    
