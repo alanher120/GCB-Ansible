@@ -349,6 +349,7 @@
     [ $? -eq 0 ] || echo $x >> $gcbtmp
     done
     cat $gcbtmp > $file
+    rm -f $gcbtmp
     echo "Verify string"
     grep -E "$str" $file
     fi
@@ -377,6 +378,7 @@
     [ $? -eq 0 ] || echo $x >> $gcbtmp
     done
     cat $gcbtmp > $file
+    rm -f $gcbtmp
     echo "Verify string"
     grep -E "$str" $file
     fi
@@ -403,13 +405,15 @@
   shell: |
     #!/bin/bash
     file=/etc/bashrc
+    gcbtmp=$file.gcbtmp
     str='TMOUT=900'
     if[ -f $file ];then
     grep "$str" $file;retval=0
     if[ $retval -ne 0 ];then
-    cat /etc/bashrc > /etc/bashrc.gcbtmp
+    cat $file > $gcbtmp
     echo "$str" > /etc/bashrc
-    cat /etc/bashrc.gcbtmp >> /etc/bashrc
+    cat $gcbtmp >> $file
+    rm -f $gcbtmp
     fi
     fi
   args:
