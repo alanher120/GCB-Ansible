@@ -1,5 +1,15 @@
 - name: TWGCB-boot /boot/grub2/grub.cfg
   become: true
+  ignore_errors: true
+  file:
+    path: /boot/grub2/grub.cfg
+    owner: root  # TWGCB-01-008-0038
+    group: root  # TWGCB-01-008-0038
+    mode: '0600' # TWGCB-01-008-0039
+
+- name: TWGCB-boot /boot/efi/EFI/rocky/grub.cfg
+  become: true
+  ignore_errors: true
   file:
     path: /boot/grub2/grub.cfg
     owner: root  # TWGCB-01-008-0038
@@ -8,6 +18,16 @@
 
 - name: TWGCB-boot /boot/grub2/grubenv
   become: true
+  ignore_errors: true
+  file:
+    path: /boot/grub2/grubenv
+    owner: root  # TWGCB-01-008-0038
+    group: root  # TWGCB-01-008-0038
+    mode: '0600' # TWGCB-01-008-0039
+
+- name: TWGCB-boot /boot/efi/EFI/rocky/grubenv
+  become: true
+  ignore_errors: true
   file:
     path: /boot/grub2/grubenv
     owner: root  # TWGCB-01-008-0038
