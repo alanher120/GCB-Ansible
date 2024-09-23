@@ -1,5 +1,5 @@
 ---
-- name: TWGCB-01-008-0231 1 ## skip
+- name: TWGCB-01-008-0231 1
   become: true
   ignore_errors: true
   shell: |
@@ -13,19 +13,78 @@
     grep -E "$str" $file ; retval=$?
     if [ $retval -eq 0 ];then
     cat $file|while read x;do
-    grep -E "$str" $file >/dev/null 2>&1; retval=$?
-    [ $? -eq 0 ] && echo "#"$x >> $gcbtmp
-    [ $? -eq 0 ] || echo $x >> $gcbtmp
+    echo $x | grep -E "$str" >/dev/null 2>&1; retval=$?
+    [ $retval -eq 0 ] && echo "#"$x >> $gcbtmp
+    [ $retval -eq 0 ] || echo $x >> $gcbtmp
     done
     cat $gcbtmp > $file
+    rm -f $gcbtmp
     echo "Verify string"
     grep -E "$str" $file
     fi
     fi
   args:
     executable: /bin/bash
-
+    
+- name: TWGCB-01-008-0231 2
+  become: true
+  ignore_errors: true
+  shell: |
+    #!/bin/bash
+    file=/etc/sudoers
+    str='!authenticate'
+    gcbtmp=/etc/sudoers.gcbtmp
+    echo -n > $gcbtmp
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    cat $file|while read x;do
+    echo $x | grep -E "$str" >/dev/null 2>&1; retval=$?
+    [ $retval -eq 0 ] && echo "#"$x >> $gcbtmp
+    [ $retval -eq 0 ] || echo $x >> $gcbtmp
+    done
+    cat $gcbtmp > $file
+    rm -f $gcbtmp
+    echo "Verify string"
+    grep -E "$str" $file
+    fi
+    fi
+  args:
+    executable: /bin/bash
+    
 - name: TWGCB-01-008-0231 3
+  become: true
+  ignore_errors: true
+  shell: |
+    #!/bin/bash
+    dir=/etc/sudoers.d
+    str='!authenticate'
+    for i in `ls $dir/*`;do
+    file=$i
+    gcbtmp=$i.gcbtmp
+    echo -n > $gcbtmp
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    cat $file|while read x;do
+    #echo $x | grep -E "$str" >/dev/null 2>&1; retval=$?
+    echo $x | grep -E "$str" ; retval=$?
+    [ $retval -eq 0 ] && echo "#"$x >> $gcbtmp
+    [ $retval -eq 0 ] || echo $x >> $gcbtmp
+    done
+    cat $gcbtmp > $file
+    rm -f $gcbtmp
+    echo "Verify string"
+    grep -E "$str" $file
+    fi
+    fi
+    done
+  args:
+    executable: /bin/bash
+    
+- name: TWGCB-01-008-0231 4
   become: true
   ignore_errors: true
   shell: |
@@ -41,11 +100,13 @@
     grep -E "$str" $file ; retval=$?
     if [ $retval -eq 0 ];then
     cat $file|while read x;do
-    grep -E "$str" $file >/dev/null 2>&1; retval=$?
-    [ $? -eq 0 ] && echo "#"$x >> $gcbtmp
-    [ $? -eq 0 ] || echo $x >> $gcbtmp
+    #echo $x | grep -E "$str" >/dev/null 2>&1; retval=$?
+    echo $x | grep -E "$str" ; retval=$?
+    [ $retval -eq 0 ] && echo "#"$x >> $gcbtmp
+    [ $retval -eq 0 ] || echo $x >> $gcbtmp
     done
     cat $gcbtmp > $file
+    rm -f $gcbtmp
     echo "Verify string"
     grep -E "$str" $file
     fi
@@ -53,4 +114,16 @@
     done
   args:
     executable: /bin/bash
-    
+
+- name: TWGCB-01-008-0231 files
+  find:
+    paths: "/etc/sudoers.d/"
+    patterns: "*"
+  register: files
+
+- name: TWGCB-01-008-0231 replace string
+  replace:
+    path: "{{ item.path }}"
+    regexp: '(.*NOPASSWD.*)'
+    replace: '# \1'
+  with_items: "{{ files.files }}"
