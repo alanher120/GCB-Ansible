@@ -441,7 +441,7 @@
     repl='umask 027'
     gcbtmp=$file.gcbtmp
     if [ -f $file ];then
-    grep "$str" $file ;retval=0
+    tail -1 $file|grep "$str";retval=0
     if [ $retval -eq 0 ];then
     echo "remove $str "
     echo "add $str "
