@@ -1,0 +1,7 @@
+# 套入GCB設定項目: SSH
+---
+- hosts: servers
+  vars:
+    - playbook_action: set-gcb
+  roles:
+      - { role: end }
