@@ -710,7 +710,7 @@
 - name: TWGCB-01-008-0271 push /etc/crypto-policies/back-ends/opensshserver.config
   become: true
   copy:
-    src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/security/pwquality.conf
+    src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/crypto-policies/back-ends/opensshserver.config
     dest: /etc/security
     owner: root
     group: root
