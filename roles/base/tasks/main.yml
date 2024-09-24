@@ -25,7 +25,7 @@
     when: playbook_action in gcb_action
   - include_tasks: TWGCB-01-008-0031.yml
     when: playbook_action in gcb_action
-  - include_tasks: TWGCB-01-008-0032.yml
+  - include_tasks: TWGCB-01-008-0032.yml  # yum.repos.d
     when: playbook_action in gcb_action
   - include_tasks: TWGCB-01-008-0034.yml
     when: playbook_action in gcb_action
@@ -58,15 +58,15 @@
   - include_tasks: TWGCB-01-008-0145.yml
     when: playbook_action in gcb_action
 
-  - include_tasks: TWGCB-01-008-0146.yml # 新增的部分
+  - include_tasks: TWGCB-01-008-0146.yml  # 取代 TWGCB-audit.yml
     when: playbook_action in gcb_action
-  - include_tasks: TWGCB-01-008-0147.yml
+  - include_tasks: TWGCB-01-008-0147.yml  # 取代 TWGCB-audit.yml
     when: playbook_action in gcb_action
-  - include_tasks: TWGCB-01-008-0148.yml  # 取消 TWGCB-audit.yml 取代
+  - include_tasks: TWGCB-01-008-0148.yml  # 取代 TWGCB-audit.yml
     when: playbook_action in gcb_action
-  - include_tasks: TWGCB-01-008-0149.yml
+  - include_tasks: TWGCB-01-008-0149.yml  # 取代 TWGCB-audit.yml
     when: playbook_action in gcb_action
-  - include_tasks: TWGCB-01-008-0150.yml
+  - include_tasks: TWGCB-01-008-0150.yml  # 取代 TWGCB-audit.yml
     when: playbook_action in gcb_action
   - include_tasks: TWGCB-01-008-0151.yml
     when: playbook_action in gcb_action
@@ -114,6 +114,7 @@
     when: playbook_action in gcb_action
   - include_tasks: TWGCB-01-008-0173.yml
     when: playbook_action in gcb_action
+  
   - include_tasks: TWGCB-01-008-0176.yml
     when: playbook_action in gcb_action
   - include_tasks: TWGCB-01-008-0177.yml
@@ -147,8 +148,8 @@
   - include_tasks: TWGCB-01-008-0219.yml
     when: playbook_action in gcb_action
 
-  - include_tasks: TWGCB-audit.yml
-    when: playbook_action in gcb_action
+  #- include_tasks: TWGCB-audit.yml
+    #when: playbook_action in gcb_action
   - include_tasks: TWGCB-rsyslog.yml
     when: playbook_action in gcb_action
   - include_tasks: TWGCB-base-execute.yml
