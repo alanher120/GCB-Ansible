@@ -9,6 +9,35 @@ add file
     group: root
     mode: 0644
 
+
+add line text
+- name: Add a line to a file if the file does not exist, without passing regexp
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    line: 192.168.1.99 foo.lab.net foo
+    create: yes
+
+
+replace string only
+- name: Replace old hostname with new hostname (requires Ansible >= 2.4)
+  ansible.builtin.replace:
+    path: /etc/hosts
+    regexp: '(\s*)old\.host\.name(\s+.*)\s*$'
+    replace: '\1new.host.name\2'
+
+
+
+- name: Replace a localhost entry with our own
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    regexp: '^127\.0\.0\.1'
+    line: 127.0.0.1 localhost
+    owner: root
+    group: root
+    mode: '0644'
+
+
+
 replace abc b or abc=b
     file=/etc/login.defs
     repl='ENCRYPT_METHOD=SHA512'
