@@ -1,5 +1,5 @@
 ---
-- name: TWGCB-01-008-0035 /etc/sudoers/use_pty
+- name: TWGCB-01-008-0035 /etc/sudoers/default_log_file
   become: true
   copy:
     src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/sudoers.d/default_log_file

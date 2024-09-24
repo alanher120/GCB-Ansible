@@ -62,7 +62,7 @@
     when: playbook_action in gcb_action
   - include_tasks: TWGCB-01-008-0147.yml
     when: playbook_action in gcb_action
-  - include_tasks: TWGCB-01-008-0148.yml
+  - include_tasks: TWGCB-01-008-0148.yml  # 取消 TWGCB-audit.yml 取代
     when: playbook_action in gcb_action
   - include_tasks: TWGCB-01-008-0149.yml
     when: playbook_action in gcb_action
