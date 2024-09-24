@@ -127,11 +127,12 @@
     when: playbook_action in gcb_action
   - include_tasks: TWGCB-01-008-0207.yml
     when: playbook_action in gcb_action
-  - include_tasks: TWGCB-01-008-0210.yml
+
+  - include_tasks: TWGCB-01-008-0210.yml  # 取代 TWGCB-account push /etc/security/pwquality.conf
     when: playbook_action in gcb_action
-  - include_tasks: TWGCB-01-008-0211.yml
+  - include_tasks: TWGCB-01-008-0211.yml  # 取代 TWGCB-account push /etc/security/pwquality.conf
     when: playbook_action in gcb_action
-  - include_tasks: TWGCB-01-008-0212.yml
+  - include_tasks: TWGCB-01-008-0212.yml  # 取代 TWGCB-account push /etc/security/pwquality.conf
     when: playbook_action in gcb_action
   - include_tasks: TWGCB-01-008-0213.yml
     when: playbook_action in gcb_action

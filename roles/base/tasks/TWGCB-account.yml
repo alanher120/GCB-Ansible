@@ -1,11 +1,11 @@
-- name: TWGCB-account push /etc/security/pwquality.conf
-  become: true
-  copy:
-    src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/security/pwquality.conf
-    dest: /etc/security
-    owner: root
-    group: root
-    mode: 0644
+#- name: TWGCB-account push /etc/security/pwquality.conf
+  #become: true
+  #copy:
+    #src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/security/pwquality.conf
+    #dest: /etc/security
+    #owner: root
+    #group: root
+    #mode: 0644
 
 #- name: TWGCB-account push /etc/bashrc
   #become: true
