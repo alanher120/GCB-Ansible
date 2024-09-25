@@ -7,7 +7,7 @@
     executable: /bin/bash
   ignore_errors: true
   
-- name: TWGCB-01-008-0036 init
+- name: TWGCB-01-008-0036 aide --init
   become: true
   command: "{{ item }}"
   with_items: 
