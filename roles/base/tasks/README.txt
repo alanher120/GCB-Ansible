@@ -1,4 +1,39 @@
 
+    #!/bin/bash
+    # replace string 
+    files=2.sh
+    method=1 # replace a -> b or remove
+    strs='\s*umask\s*[0-9]{1,4}'
+    #repl='umask 022'
+    #method=2 # replace a xx or a=xx
+    #repl='umask 027'
+    #strs=`echo $repl|awk '{print $1}'`
+    for file in $files;do
+    for str in $strs;do
+    if [ -f "$file" ];then
+    echo "Search string ~ $file"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    if [ $method -eq 1 ];then
+    echo "Run method 1"
+    if [ -z "$repl" ];then
+    sed -ri $file -e "s|($str)| # REMOVE \1|" ; retval=$?
+    else
+    sed -ri $file -e "s|($str)| $repl |" ; retval=$?
+    fi
+    fi
+    if [ $method -eq 2 ];then
+    echo "Run method 1"
+    sed -ri $file -e "s|($str).*|$repl|" ; retval=$?
+    fi
+    fi
+    fi
+    echo "Verify string ~ at $file"
+    grep -E "$str" $file ; retval=$?
+    done
+    done
+    
+===
 add file 
 - name: TWGCB-01-008-0042 TWGCB-01-008-0042 TWGCB-01-008-0232 push /etc/security/limits.d/gcb.conf
   become: true
