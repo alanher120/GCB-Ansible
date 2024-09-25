@@ -1,19 +1,21 @@
 ---
-- name: TWGCB-01-008-0266
+- name: TWGCB-01-008-0266 ~ file /etc/ssh/sshd_config add string AllowUsers  AllowGroups DenyUsers DenyGroups
   become: true
   ignore_errors: true
   shell: |
     #!/bin/bash
-    file=/etc/ssh/sshd_config
-    strs='^\s*AllowUsers.* ^\s*AllowGroups.* ^\s*DenyUsers.* ^\s*DenyGroups.*' 
+    files=/etc/ssh/sshd_config
+    strs='\s*AllowUsers.* \s*AllowGroups.* \s*DenyUsers.* \s*DenyGroups.*'
+    for file in $files;do
     for str in $strs;do
     if [ -f $file ];then
     echo "Search string"
     grep -E "$str" $file ; retval=$?
     if [ $retval -eq 0 ];then
-    sed -i $file -e "s|$str| |" $file ; retval=$?
+    sed -ri $file -e "s|($str)|# REMOVE \1|" ; retval=$?
     fi
     fi
+    done
     done
     cat /etc/passwd|awk -F: 'BEGIN  { printf "AllowUsers " } { if ( $3 > 999 && $3 < 65534 ) { printf $1" " } } END {printf "root\n"}' >> $file
     echo "AllowGroups" >> $file
@@ -24,13 +26,13 @@
   args:
     executable: /bin/bash
     
-- name: TWGCB-01-008-0263
+- name: TWGCB ~ file /etc/ssh/sshd_config
   become: true
   ignore_errors: true
   shell: |
     #!/bin/bash
     file=/etc/ssh/sshd_config
-    repl='Protocol 2'
+    repl='{{item}}'
     echo $repl|grep '=';retval=$?
     if [ $retval -eq 0 ];then
     str1=`echo $repl|awk -F= '{print $1}'`
@@ -54,595 +56,27 @@
     grep -E "$str" $file
   args:
     executable: /bin/bash
-    
-- name: TWGCB-01-008-0272
-  become: true
-  ignore_errors: true
-  shell: |
-    #!/bin/bash
-    file=/etc/ssh/sshd_config
-    repl='LogLevel INFO'
-    echo $repl|grep '=';retval=$?
-    if [ $retval -eq 0 ];then
-    str1=`echo $repl|awk -F= '{print $1}'`
-    str="^\s*${str1}\s*="
-    else
-    str1=`echo $repl|awk '{print $1}'`
-    str="^\s*${str1}"
-    fi
-    if [ -f $file ];then
-    echo "Search string"
-    grep -E "$str" $file ; retval=$?
-    if [ $retval -eq 0 ];then
-    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
-    else
-    echo "$repl" >> $file
-    fi
-    else
-    echo "$repl" >> $file
-    fi
-    echo "Verify string"
-    grep -E "$str" $file
-  args:
-    executable: /bin/bash
-
-- name: TWGCB-01-008-0273
-  become: true
-  ignore_errors: true
-  shell: |
-    #!/bin/bash
-    file=/etc/ssh/sshd_config
-    repl='X11Forwarding no'
-    echo $repl|grep '=';retval=$?
-    if [ $retval -eq 0 ];then
-    str1=`echo $repl|awk -F= '{print $1}'`
-    str="^\s*${str1}\s*="
-    else
-    str1=`echo $repl|awk '{print $1}'`
-    str="^\s*${str1}"
-    fi
-    if [ -f $file ];then
-    echo "Search string"
-    grep -E "$str" $file ; retval=$?
-    if [ $retval -eq 0 ];then
-    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
-    else
-    echo "$repl" >> $file
-    fi
-    else
-    echo "$repl" >> $file
-    fi
-    echo "Verify string"
-    grep -E "$str" $file
-  args:
-    executable: /bin/bash
-
-- name: TWGCB-01-008-0274
-  become: true
-  ignore_errors: true
-  shell: |
-    #!/bin/bash
-    file=/etc/ssh/sshd_config
-    repl='MaxAuthTries 4'
-    echo $repl|grep '=';retval=$?
-    if [ $retval -eq 0 ];then
-    str1=`echo $repl|awk -F= '{print $1}'`
-    str="^\s*${str1}\s*="
-    else
-    str1=`echo $repl|awk '{print $1}'`
-    str="^\s*${str1}"
-    fi
-    if [ -f $file ];then
-    echo "Search string"
-    grep -E "$str" $file ; retval=$?
-    if [ $retval -eq 0 ];then
-    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
-    else
-    echo "$repl" >> $file
-    fi
-    else
-    echo "$repl" >> $file
-    fi
-    echo "Verify string"
-    grep -E "$str" $file
-  args:
-    executable: /bin/bash
-
-- name: TWGCB-01-008-0275
-  become: true
-  ignore_errors: true
-  shell: |
-    #!/bin/bash
-    file=/etc/ssh/sshd_config
-    repl='IgnoreRhosts yes'
-    echo $repl|grep '=';retval=$?
-    if [ $retval -eq 0 ];then
-    str1=`echo $repl|awk -F= '{print $1}'`
-    str="^\s*${str1}\s*="
-    else
-    str1=`echo $repl|awk '{print $1}'`
-    str="^\s*${str1}"
-    fi
-    if [ -f $file ];then
-    echo "Search string"
-    grep -E "$str" $file ; retval=$?
-    if [ $retval -eq 0 ];then
-    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
-    else
-    echo "$repl" >> $file
-    fi
-    else
-    echo "$repl" >> $file
-    fi
-    echo "Verify string"
-    grep -E "$str" $file
-  args:
-    executable: /bin/bash
-
-- name: TWGCB-01-008-0276
-  become: true
-  ignore_errors: true
-  shell: |
-    #!/bin/bash
-    file=/etc/ssh/sshd_config
-    repl='HostbasedAuthentication no'
-    echo $repl|grep '=';retval=$?
-    if [ $retval -eq 0 ];then
-    str1=`echo $repl|awk -F= '{print $1}'`
-    str="^\s*${str1}\s*="
-    else
-    str1=`echo $repl|awk '{print $1}'`
-    str="^\s*${str1}"
-    fi
-    if [ -f $file ];then
-    echo "Search string"
-    grep -E "$str" $file ; retval=$?
-    if [ $retval -eq 0 ];then
-    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
-    else
-    echo "$repl" >> $file
-    fi
-    else
-    echo "$repl" >> $file
-    fi
-    echo "Verify string"
-    grep -E "$str" $file
-  args:
-    executable: /bin/bash
-
-- name: TWGCB-01-008-0277
-  become: true
-  ignore_errors: true
-  shell: |
-    #!/bin/bash
-    file=/etc/ssh/sshd_config
-    repl='PermitRootLogin no'
-    echo $repl|grep '=';retval=$?
-    if [ $retval -eq 0 ];then
-    str1=`echo $repl|awk -F= '{print $1}'`
-    str="^\s*${str1}\s*="
-    else
-    str1=`echo $repl|awk '{print $1}'`
-    str="^\s*${str1}"
-    fi
-    if [ -f $file ];then
-    echo "Search string"
-    grep -E "$str" $file ; retval=$?
-    if [ $retval -eq 0 ];then
-    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
-    else
-    echo "$repl" >> $file
-    fi
-    else
-    echo "$repl" >> $file
-    fi
-    echo "Verify string"
-    grep -E "$str" $file
-  args:
-    executable: /bin/bash
-
-- name: TWGCB-01-008-0278
-  become: true
-  ignore_errors: true
-  shell: |
-    #!/bin/bash
-    file=/etc/ssh/sshd_config
-    repl='PermitEmptyPasswords no'
-    echo $repl|grep '=';retval=$?
-    if [ $retval -eq 0 ];then
-    str1=`echo $repl|awk -F= '{print $1}'`
-    str="^\s*${str1}\s*="
-    else
-    str1=`echo $repl|awk '{print $1}'`
-    str="^\s*${str1}"
-    fi
-    if [ -f $file ];then
-    echo "Search string"
-    grep -E "$str" $file ; retval=$?
-    if [ $retval -eq 0 ];then
-    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
-    else
-    echo "$repl" >> $file
-    fi
-    else
-    echo "$repl" >> $file
-    fi
-    echo "Verify string"
-    grep -E "$str" $file
-  args:
-    executable: /bin/bash
-    
-- name: TWGCB-01-008-0279
-  become: true
-  ignore_errors: true
-  shell: |
-    #!/bin/bash
-    file=/etc/ssh/sshd_config
-    repl='PermitUserEnvironment no'
-    echo $repl|grep '=';retval=$?
-    if [ $retval -eq 0 ];then
-    str1=`echo $repl|awk -F= '{print $1}'`
-    str="^\s*${str1}\s*="
-    else
-    str1=`echo $repl|awk '{print $1}'`
-    str="^\s*${str1}"
-    fi
-    if [ -f $file ];then
-    echo "Search string"
-    grep -E "$str" $file ; retval=$?
-    if [ $retval -eq 0 ];then
-    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
-    else
-    echo "$repl" >> $file
-    fi
-    else
-    echo "$repl" >> $file
-    fi
-    echo "Verify string"
-    grep -E "$str" $file
-  args:
-    executable: /bin/bash
-
-- name: TWGCB-01-008-0280
-  become: true
-  ignore_errors: true
-  shell: |
-    #!/bin/bash
-    file=/etc/ssh/sshd_config
-    repl='ClientAliveInterval 600'
-    echo $repl|grep '=';retval=$?
-    if [ $retval -eq 0 ];then
-    str1=`echo $repl|awk -F= '{print $1}'`
-    str="^\s*${str1}\s*="
-    else
-    str1=`echo $repl|awk '{print $1}'`
-    str="^\s*${str1}"
-    fi
-    if [ -f $file ];then
-    echo "Search string"
-    grep -E "$str" $file ; retval=$?
-    if [ $retval -eq 0 ];then
-    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
-    else
-    echo "$repl" >> $file
-    fi
-    else
-    echo "$repl" >> $file
-    fi
-    echo "Verify string"
-    grep -E "$str" $file
-  args:
-    executable: /bin/bash
-
-- name: TWGCB-01-008-0280
-  become: true
-  ignore_errors: true
-  shell: |
-    #!/bin/bash
-    file=/etc/ssh/sshd_config
-    repl='ClientAliveCountMax 0'
-    echo $repl|grep '=';retval=$?
-    if [ $retval -eq 0 ];then
-    str1=`echo $repl|awk -F= '{print $1}'`
-    str="^\s*${str1}\s*="
-    else
-    str1=`echo $repl|awk '{print $1}'`
-    str="^\s*${str1}"
-    fi
-    if [ -f $file ];then
-    echo "Search string"
-    grep -E "$str" $file ; retval=$?
-    if [ $retval -eq 0 ];then
-    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
-    else
-    echo "$repl" >> $file
-    fi
-    else
-    echo "$repl" >> $file
-    fi
-    echo "Verify string"
-    grep -E "$str" $file
-  args:
-    executable: /bin/bash
-
-- name: TWGCB-01-008-0281
-  become: true
-  ignore_errors: true
-  shell: |
-    #!/bin/bash
-    file=/etc/ssh/sshd_config
-    repl='LoginGraceTime 60'
-    echo $repl|grep '=';retval=$?
-    if [ $retval -eq 0 ];then
-    str1=`echo $repl|awk -F= '{print $1}'`
-    str="^\s*${str1}\s*="
-    else
-    str1=`echo $repl|awk '{print $1}'`
-    str="^\s*${str1}"
-    fi
-    if [ -f $file ];then
-    echo "Search string"
-    grep -E "$str" $file ; retval=$?
-    if [ $retval -eq 0 ];then
-    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
-    else
-    echo "$repl" >> $file
-    fi
-    else
-    echo "$repl" >> $file
-    fi
-    echo "Verify string"
-    grep -E "$str" $file
-  args:
-    executable: /bin/bash
-
-- name: TWGCB-01-008-0282
-  become: true
-  ignore_errors: true
-  shell: |
-    #!/bin/bash
-    file=/etc/ssh/sshd_config
-    repl='UsePAM yes'
-    echo $repl|grep '=';retval=$?
-    if [ $retval -eq 0 ];then
-    str1=`echo $repl|awk -F= '{print $1}'`
-    str="^\s*${str1}\s*="
-    else
-    str1=`echo $repl|awk '{print $1}'`
-    str="^\s*${str1}"
-    fi
-    if [ -f $file ];then
-    echo "Search string"
-    grep -E "$str" $file ; retval=$?
-    if [ $retval -eq 0 ];then
-    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
-    else
-    echo "$repl" >> $file
-    fi
-    else
-    echo "$repl" >> $file
-    fi
-    echo "Verify string"
-    grep -E "$str" $file
-  args:
-    executable: /bin/bash
-  
-- name: TWGCB-01-008-0283
-  become: true
-  ignore_errors: true
-  shell: |
-    #!/bin/bash
-    file=/etc/ssh/sshd_config
-    repl='AllowTcpForwarding no'
-    echo $repl|grep '=';retval=$?
-    if [ $retval -eq 0 ];then
-    str1=`echo $repl|awk -F= '{print $1}'`
-    str="^\s*${str1}\s*="
-    else
-    str1=`echo $repl|awk '{print $1}'`
-    str="^\s*${str1}"
-    fi
-    if [ -f $file ];then
-    echo "Search string"
-    grep -E "$str" $file ; retval=$?
-    if [ $retval -eq 0 ];then
-    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
-    else
-    echo "$repl" >> $file
-    fi
-    else
-    echo "$repl" >> $file
-    fi
-    echo "Verify string"
-    grep -E "$str" $file
-  args:
-    executable: /bin/bash
-  
-- name: TWGCB-01-008-0284
-  become: true
-  ignore_errors: true
-  shell: |
-    #!/bin/bash
-    file=/etc/ssh/sshd_config
-    repl='maxstartups 10:30:60'
-    echo $repl|grep '=';retval=$?
-    if [ $retval -eq 0 ];then
-    str1=`echo $repl|awk -F= '{print $1}'`
-    str="^\s*${str1}\s*="
-    else
-    str1=`echo $repl|awk '{print $1}'`
-    str="^\s*${str1}"
-    fi
-    if [ -f $file ];then
-    echo "Search string"
-    grep -E "$str" $file ; retval=$?
-    if [ $retval -eq 0 ];then
-    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
-    else
-    echo "$repl" >> $file
-    fi
-    else
-    echo "$repl" >> $file
-    fi
-    echo "Verify string"
-    grep -E "$str" $file
-  args:
-    executable: /bin/bash
-
-- name: TWGCB-01-008-0285
-  become: true
-  ignore_errors: true
-  shell: |
-    #!/bin/bash
-    file=/etc/ssh/sshd_config
-    repl='MaxSessions 4'
-    echo $repl|grep '=';retval=$?
-    if [ $retval -eq 0 ];then
-    str1=`echo $repl|awk -F= '{print $1}'`
-    str="^\s*${str1}\s*="
-    else
-    str1=`echo $repl|awk '{print $1}'`
-    str="^\s*${str1}"
-    fi
-    if [ -f $file ];then
-    echo "Search string"
-    grep -E "$str" $file ; retval=$?
-    if [ $retval -eq 0 ];then
-    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
-    else
-    echo "$repl" >> $file
-    fi
-    else
-    echo "$repl" >> $file
-    fi
-    echo "Verify string"
-    grep -E "$str" $file
-  args:
-    executable: /bin/bash
-
-- name: TWGCB-01-008-0286
-  become: true
-  ignore_errors: true
-  shell: |
-    #!/bin/bash
-    file=/etc/ssh/sshd_config
-    repl='StrictModes yes'
-    echo $repl|grep '=';retval=$?
-    if [ $retval -eq 0 ];then
-    str1=`echo $repl|awk -F= '{print $1}'`
-    str="^\s*${str1}\s*="
-    else
-    str1=`echo $repl|awk '{print $1}'`
-    str="^\s*${str1}"
-    fi
-    if [ -f $file ];then
-    echo "Search string"
-    grep -E "$str" $file ; retval=$?
-    if [ $retval -eq 0 ];then
-    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
-    else
-    echo "$repl" >> $file
-    fi
-    else
-    echo "$repl" >> $file
-    fi
-    echo "Verify string"
-    grep -E "$str" $file
-  args:
-    executable: /bin/bash
-
-- name: TWGCB-01-008-0287
-  become: true
-  ignore_errors: true
-  shell: |
-    #!/bin/bash
-    file=/etc/ssh/sshd_config
-    repl='Compression no'
-    echo $repl|grep '=';retval=$?
-    if [ $retval -eq 0 ];then
-    str1=`echo $repl|awk -F= '{print $1}'`
-    str="^\s*${str1}\s*="
-    else
-    str1=`echo $repl|awk '{print $1}'`
-    str="^\s*${str1}"
-    fi
-    if [ -f $file ];then
-    echo "Search string"
-    grep -E "$str" $file ; retval=$?
-    if [ $retval -eq 0 ];then
-    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
-    else
-    echo "$repl" >> $file
-    fi
-    else
-    echo "$repl" >> $file
-    fi
-    echo "Verify string"
-    grep -E "$str" $file
-  args:
-    executable: /bin/bash
-
-- name: TWGCB-01-008-0288
-  become: true
-  ignore_errors: true
-  shell: |
-    #!/bin/bash
-    file=/etc/ssh/sshd_config
-    repl='IgnoreUserKnownHosts yes'
-    echo $repl|grep '=';retval=$?
-    if [ $retval -eq 0 ];then
-    str1=`echo $repl|awk -F= '{print $1}'`
-    str="^\s*${str1}\s*="
-    else
-    str1=`echo $repl|awk '{print $1}'`
-    str="^\s*${str1}"
-    fi
-    if [ -f $file ];then
-    echo "Search string"
-    grep -E "$str" $file ; retval=$?
-    if [ $retval -eq 0 ];then
-    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
-    else
-    echo "$repl" >> $file
-    fi
-    else
-    echo "$repl" >> $file
-    fi
-    echo "Verify string"
-    grep -E "$str" $file
-  args:
-    executable: /bin/bash
-
-- name: TWGCB-01-008-0289
-  become: true
-  ignore_errors: true
-  shell: |
-    #!/bin/bash
-    file=/etc/ssh/sshd_config
-    repl='PrintLastLog yes'
-    echo $repl|grep '=';retval=$?
-    if [ $retval -eq 0 ];then
-    str1=`echo $repl|awk -F= '{print $1}'`
-    str="^\s*${str1}\s*="
-    else
-    str1=`echo $repl|awk '{print $1}'`
-    str="^\s*${str1}"
-    fi
-    if [ -f $file ];then
-    echo "Search string"
-    grep -E "$str" $file ; retval=$?
-    if [ $retval -eq 0 ];then
-    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
-    else
-    echo "$repl" >> $file
-    fi
-    else
-    echo "$repl" >> $file
-    fi
-    echo "Verify string"
-    grep -E "$str" $file
-  args:
-    executable: /bin/bash
+  with_items:
+    - Protocol 2 #TWGCB-01-008-0263
+    - LogLevel INFO #TWGCB-01-008-0272
+    - X11Forwarding no #TWGCB-01-008-0273
+    - MaxAuthTries 4 #TWGCB-01-008-0274
+    - IgnoreRhosts yes #TWGCB-01-008-0275
+    - HostbasedAuthentication no #TWGCB-01-008-0276
+    - PermitRootLogin no #TWGCB-01-008-0277
+    - PermitEmptyPasswords no #TWGCB-01-008-0278
+    - PermitUserEnvironment no #TWGCB-01-008-0279
+    - ClientAliveInterval 600 #TWGCB-01-008-0280
+    - ClientAliveCountMax 0 #TWGCB-01-008-0280
+    - LoginGraceTime 60 #TWGCB-01-008-0281
+    - UsePAM yes #TWGCB-01-008-0282
+    - AllowTcpForwarding no #TWGCB-01-008-0283
+    - maxstartups 10:30:60 #TWGCB-01-008-0284
+    - MaxSessions 4 #TWGCB-01-008-0285
+    - StrictModes yes #TWGCB-01-008-0286
+    - Compression no #TWGCB-01-008-0287
+    - IgnoreUserKnownHosts yes #TWGCB-01-008-0288
+    - PrintLastLog yes #TWGCB-01-008-0289
     
 - name: TWGCB-01-008-0290
   become: true
@@ -721,8 +155,10 @@
   ignore_errors: true
   shell: |
     #!/bin/bash
-    chown root:root /etc/ssh/sshd_config
-    systemctl restart sshd
-    chmod 0600 /etc/ssh/sshd_config
+    {{item}}
   args:
     executable: /bin/bash
+  with_items:
+    - systemctl restart sshd #TWGCB-01-008-0265
+    - chmod 0600 /etc/ssh/sshd_config #TWGCB-01-008-0263
+    - chown root:root /etc/ssh/sshd_config #TWGCB-01-008-0264

@@ -4,114 +4,61 @@
   ignore_errors: true
   shell: |
     #!/bin/bash
-    file=/etc/sudoers
-    str="NOPASSWD"
-    gcbtmp=/etc/sudoers.gcbtmp
-    echo -n > $gcbtmp
+    files=`find /etc/sudoers.d/*`
+    strs='.*NOPASSWD.*' 
+    for file in $files;do
+    for str in $strs;do
     if [ -f $file ];then
     echo "Search string"
     grep -E "$str" $file ; retval=$?
     if [ $retval -eq 0 ];then
-    cat $file|while read x;do
-    echo $x | grep -E "$str" >/dev/null 2>&1; retval=$?
-    [ $retval -eq 0 ] && echo "#"$x >> $gcbtmp
-    [ $retval -eq 0 ] || echo $x >> $gcbtmp
+    sed -ri $file -e "s|($str)|# REMOVE \1|"; retval=$?
+    fi
+    fi
     done
-    cat $gcbtmp > $file
-    rm -f $gcbtmp
-    echo "Verify string"
-    grep -E "$str" $file
-    fi
-    fi
-  args:
-    executable: /bin/bash
-    
-- name: TWGCB-01-008-0231 2
-  become: true
-  ignore_errors: true
-  shell: |
+    done
     #!/bin/bash
-    file=/etc/sudoers
-    str='!authenticate'
-    gcbtmp=/etc/sudoers.gcbtmp
-    echo -n > $gcbtmp
+    files='/etc/sudoers'
+    strs='.*NOPASSWD.*' 
+    for file in $files;do
+    for str in $strs;do
     if [ -f $file ];then
     echo "Search string"
     grep -E "$str" $file ; retval=$?
     if [ $retval -eq 0 ];then
-    cat $file|while read x;do
-    echo $x | grep -E "$str" >/dev/null 2>&1; retval=$?
-    [ $retval -eq 0 ] && echo "#"$x >> $gcbtmp
-    [ $retval -eq 0 ] || echo $x >> $gcbtmp
+    sed -ri $file -e "s|($str)|# REMOVE \1|" ; retval=$?
+    fi
+    fi
     done
-    cat $gcbtmp > $file
-    rm -f $gcbtmp
-    echo "Verify string"
-    grep -E "$str" $file
+    done
+    files=`find /etc/sudoers.d/*`
+    strs='.*!authenticate.*' 
+    for file in $files;do
+    for str in $strs;do
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -ri $file -e "s|($str)|# REMOVE \1|" ; retval=$?
     fi
     fi
-  args:
-    executable: /bin/bash
-    
-- name: TWGCB-01-008-0231 3
-  become: true
-  ignore_errors: true
-  shell: |
+    done
+    done
     #!/bin/bash
-    dir=/etc/sudoers.d
-    str='!authenticate'
-    for i in `ls $dir/*`;do
-    file=$i
-    gcbtmp=$i.gcbtmp
-    echo -n > $gcbtmp
+    files='/etc/sudoers'
+    strs='.*!authenticate.*' 
+    for file in $files;do
+    for str in $strs;do
     if [ -f $file ];then
     echo "Search string"
     grep -E "$str" $file ; retval=$?
     if [ $retval -eq 0 ];then
-    cat $file|while read x;do
-    #echo $x | grep -E "$str" >/dev/null 2>&1; retval=$?
-    echo $x | grep -E "$str" ; retval=$?
-    [ $retval -eq 0 ] && echo "#"$x >> $gcbtmp
-    [ $retval -eq 0 ] || echo $x >> $gcbtmp
-    done
-    cat $gcbtmp > $file
-    rm -f $gcbtmp
-    echo "Verify string"
-    grep -E "$str" $file
+    sed -ri $file -e "s|($str)|# REMOVE \1|" ; retval=$?
     fi
     fi
     done
-  args:
-    executable: /bin/bash
+    done
     
-- name: TWGCB-01-008-0231 4
-  become: true
-  ignore_errors: true
-  shell: |
-    #!/bin/bash
-    dir=/etc/sudoers.d
-    str='NOPASSWD'
-    for i in `ls $dir/*`;do
-    file=$i
-    gcbtmp=$i.gcbtmp
-    echo -n > $gcbtmp
-    if [ -f $file ];then
-    echo "Search string"
-    grep -E "$str" $file ; retval=$?
-    if [ $retval -eq 0 ];then
-    cat $file|while read x;do
-    #echo $x | grep -E "$str" >/dev/null 2>&1; retval=$?
-    echo $x | grep -E "$str" ; retval=$?
-    [ $retval -eq 0 ] && echo "#"$x >> $gcbtmp
-    [ $retval -eq 0 ] || echo $x >> $gcbtmp
-    done
-    cat $gcbtmp > $file
-    rm -f $gcbtmp
-    echo "Verify string"
-    grep -E "$str" $file
-    fi
-    fi
-    done
   args:
     executable: /bin/bash
     

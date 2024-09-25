@@ -7,15 +7,6 @@
     #group: root
     #mode: 0644
 
-#- name: TWGCB-account push /etc/bashrc
-  #become: true
-  #copy:
-    #src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/bashrc
-    #dest: /etc
-    #owner: root
-    #group: root
-    #mode: 0644
-
 - name: TWGCB-account push /etc/profile.d/gcb.sh
   become: true
   copy:
@@ -342,64 +333,48 @@
   args:
     executable: /bin/bash
 
+#- name: TWGCB-account push /etc/bashrc
+  #become: true
+  #copy:
+    #src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/bashrc
+    #dest: /etc
+    #owner: root
+    #group: root
+    #mode: 0644
+    
 - name: TWGCB-01-008-0238
   become: true
   ignore_errors: true
   shell: |
     #!/bin/bash
     file=/etc/bashrc
-    str='TMOUT=900'
-    repl='readonly TMOUT=900 ; export TMOUT'
-    gcbtmp=$file.gcbtmp
-    if [ -f $file ];then
-    grep "$str" $file;retval=0
-    if [ $retval -eq 0 ];then
-    echo "remove $str "
-    echo "add $str "
-    cat $file > $gcbtmp
-    sed -i $gcbtmp -e "s|\(.*$str.*\)|# \1|"
-    echo "$repl" >> $gcbtmp
-    cat $gcbtmp > $file
-    rm -f $gcbtmp
-    else
-    echo "add $str "
-    echo $repl >> $file
-    fi
-    fi
-  args:
-    executable: /bin/bash
-
-- name: TWGCB-01-008-0240
-  become: true
-  ignore_errors: true
-  command: usermod -g 0 root
-
-- name: TWGCB-01-008-0241
-  become: true
-  ignore_errors: true
-  shell: |
-    #!/bin/bash
-    file=/etc/bashrc
-    str='umask '
     repl='umask 027'
-    gcbtmp=$file.gcbtmp
-    if [ -f $file ];then
-    tail -1 $file|grep "$str";retval=0
+    echo $repl|grep '=';retval=$?
     if [ $retval -eq 0 ];then
-    echo "remove $str "
-    echo "add $str "
-    cat $file > $gcbtmp
-    sed -i $gcbtmp -e "s|\(.*$str.*\)|# \1|"
-    echo "$repl" >> $gcbtmp
-    cat $gcbtmp > $file
-    rm -f $gcbtmp
+    str1=`echo $repl|awk -F= '{print $1}'`
+    str="^\s*${str1}\s*="
     else
-    echo "add $str "
-    echo $repl >> $file
+    str1=`echo $repl|awk '{print $1}'`
+    str="^\s*${str1}"
     fi
+    if [ -f $file ];then
+    echo "Search string"
+    grep -E "$str" $file ; retval=$?
+    if [ $retval -eq 0 ];then
+    sed -i $file -e "s|$str.*|$repl|" $file ; retval=$?
+    else
+    echo "$repl" >> $file
     fi
+    else
+    echo "$repl" >> $file
+    fi
+    echo "Verify string"
+    grep -E "$str" $file
   args:
     executable: /bin/bash
+  with_items:
+    - TMOUT=900 #TWGCB-01-008-0238
+    - umask 027 #TWGCB-01-008-0241
 
 - name: TWGCB-01-008-0242
   become: true
@@ -427,6 +402,11 @@
     fi
   args:
     executable: /bin/bash
+
+- name: TWGCB-01-008-0240
+  become: true
+  ignore_errors: true
+  command: usermod -g 0 root
 
 - name: TWGCB-01-008-0243
   become: true
