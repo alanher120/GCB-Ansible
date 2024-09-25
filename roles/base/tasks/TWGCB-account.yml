@@ -78,7 +78,7 @@
     else
     [ ! -f /etc/security/faillock.conf ] && touch /etc/security/faillock.conf
     grep "^\s*deny\s*=" /etc/security/faillock.conf ; retval=$?
-    [ $retval -ne 0 ] && echo deny = 5 >> /etc/security/pwquality.conf
+    [ $retval -ne 0 ] && echo deny = 5 >> /etc/security/faillock.conf
     [ $retval -eq 0 ] && sed -i /etc/security/faillock.conf -e 's/^\s*deny\s*=.*/deny=5/'
     fi
   args:
@@ -100,7 +100,7 @@
     else
     [ ! -f /etc/security/faillock.conf ] && touch /etc/security/faillock.conf
     grep "^\s*unlock_time\s*=" /etc/security/faillock.conf ; retval=$?
-    [ $retval -ne 0 ] && echo unlock_time = 900 >> /etc/security/pwquality.conf
+    [ $retval -ne 0 ] && echo unlock_time = 900 >> /etc/security/faillock.conf
     [ $retval -eq 0 ] && sed -i /etc/security/faillock.conf -e 's/^\s*unlock_time\s*=.*/unlock_time=900/'
     fi
   args:
