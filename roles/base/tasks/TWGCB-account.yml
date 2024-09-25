@@ -348,7 +348,7 @@
   shell: |
     #!/bin/bash
     file=/etc/bashrc
-    repl='umask 027'
+    repl='{{item}}'
     echo $repl|grep '=';retval=$?
     if [ $retval -eq 0 ];then
     str1=`echo $repl|awk -F= '{print $1}'`
