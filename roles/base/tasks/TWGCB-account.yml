@@ -154,19 +154,20 @@
   shell: |
     #!/bin/bash
     [ -f /etc/libuser.conf ] && retval=0
-    [ $retval -eq 0 ] && grep -E "^\s*crypt_style\s*=\s*sha512" /etc/libuser.conf ; retval=$?
-    [ $retval -ne 0 ] && echo crypt_style = sha512 >> /etc/libuser.conf 
+    [ $retval -eq 0 ] && (grep -E "^\s*crypt_style\s*=.*" /etc/libuser.conf ; retval=$?)
+    [ $retval -eq 0 ] && sed -ri /etc/libuser.conf -e 's|(\s*crypt_style\s*=)(.*)|\1 sha512|'
+    [ $retval -ne 0 ] && sed -ri /etc/libuser.conf -e 's|(\[defaults\])|\1\n crypt_style=sha512|'
     [ -f /etc/login.defs ] && retval=0
-    [ $retval -eq 0 ] && grep -E "^\s*ENCRYPT_METHOD\s*SHA512" /etc/login.defs ; retval=$?
-    [ $retval -ne 0 ] && echo ENCRYPT_METHOD SHA512 >> /etc/login.defs 
-    authselect create-profile pwENCY -b sssd --symlink-meta
-    authselect select custom/pwENCY with-sudo with-faillock without-nullok
+    [ $retval -eq 0 ] && (grep -E "^\s*ENCRYPT_METHOD\s*SHA512" /etc/login.defs ; retval=$?)
+    [ $retval -ne 0 ] && (sed -i /etc/login.defs -e 's|^\s*ENCRYPT_METHOD\s*.*| |' ; echo ENCRYPT_METHOD SHA512 >> /etc/login.defs)
     CP=$(authselect current | awk 'NR == 1 {print $3}' | grep custom/)
     for FN in system-auth password-auth; do
     [[ -n $CP ]] && PTF=/etc/authselect/$CP/$FN || PTF=/etc/authselect/$FN
     [[ -z $(grep -E '^\s*password\s+sufficient\s+pam_unix.so\s+.*sha512\s*.*$' $PTF) ]] && sed -ri 's/^\s*(password\s+sufficient\s+pam_unix.so\s+)(.*)$/\1\2 sha512/' $PTF
     done
     authselect apply-changes
+    authselect create-profile pwENCY -b sssd --symlink-meta
+    authselect select custom/pwENCY with-sudo with-faillock without-nullok
   args:
     executable: /bin/bash
 

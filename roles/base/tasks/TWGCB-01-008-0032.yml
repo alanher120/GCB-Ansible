@@ -13,8 +13,10 @@
   become: true
   shell: |
     # remove gpgcheck
-    dir=`ls /etc/yum.repos.d/*.repo`
-    str='^\s*gpgcheck\s*=.*'
+    dir1=`ls /etc/yum.repos.d/*.repo`
+    dir="$dir1 /etc/yum.conf /etc/dnf/dnf.conf"
+    strs='^\s*gpgcheck\s*=.* ^\s*localpkg_gpgcheck\s*=.*'
+    for str in  $strs;do
     for file in $dir;do
     if [ -f $file ];then
     echo "Search string"
@@ -26,7 +28,9 @@
     grep -E "$str" $file
     fi
     done
-    dir=`ls /etc/yum.repos.d/*.repo`
+    done
+    dir1=`ls /etc/yum.repos.d/*.repo`
+    dir="$dir1 /etc/yum.conf /etc/dnf/dnf.conf"
     str='\]'
     for file in $dir;do
     if [ -f $file ];then
@@ -39,50 +43,6 @@
     grep -E -A1 "$str" $file
     fi
     done
-    file=/etc/yum.conf
-    str='^\s*gpgcheck\s*=.*'
-    if [ -f $file ];then
-    echo "Search string"
-    grep -E "$str" $file ; retval=$?
-    if [ $retval -eq 0 ];then
-    sed -i $file -e "s|$str| |" $file ; retval=$?
-    fi
-    echo "Verify string"
-    grep -E "$str" $file
-    fi
-    file=/etc/yum.conf
-    str='\]'
-    if [ -f $file ];then
-    echo "Search string"
-    grep -E "$str" $file ; retval=$?
-    if [ $retval -eq 0 ];then
-    sed -i $file -e "s|$str|\]\ngpgcheck=1\nlocalpkg_gpgcheck=1|" ; retval=$?
-    fi
-    echo "Verify string"
-    grep -E -A1 "$str" $file
-    fi
-    file=/etc/dnf/dnf.conf
-    str='^\s*gpgcheck\s*=.*'
-    if [ -f $file ];then
-    echo "Search string"
-    grep -E "$str" $file ; retval=$?
-    if [ $retval -eq 0 ];then
-    sed -i $file -e "s|$str| |" $file ; retval=$?
-    fi
-    echo "Verify string"
-    grep -E "$str" $file
-    fi
-    file=/etc/dnf/dnf.conf
-    str='\]'
-    if [ -f $file ];then
-    echo "Search string"
-    grep -E "$str" $file ; retval=$?
-    if [ $retval -eq 0 ];then
-    sed -i $file -e "s|$str|\]\ngpgcheck=1\nlocalpkg_gpgcheck=1|" ; retval=$?
-    fi
-    echo "Verify string"
-    grep -E -A1 "$str" $file
-    fi
   args:
     executable: /bin/bash
   when: ansible_distribution == "Rocky"

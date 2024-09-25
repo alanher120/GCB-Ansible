@@ -2,10 +2,11 @@
 - name: TWGCB-01-008-0145
   become: true
   shell: |
-    if [ -f /etc/aide.conf ];then
+    file='/etc/aide.conf'
+    if [ -f $file ];then
     str=`echo {{ item }} | awk '{print $1}'`
-    sed -i /etc/aide.conf -e "s|^\s*$str.*||"
-    echo {{item}} >> /etc/aide.conf
+    sed -i $file -e "s|^\s*$str.*||"
+    echo {{item}} >> $file
     fi
   args:
     executable: /bin/bash
