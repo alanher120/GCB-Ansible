@@ -369,6 +369,10 @@
     else
     echo "$repl" >> $file
     fi
+    if [ "$str" == "umask" ];then
+    tail -1 $file | grep umask ; retval=$?
+    [ $retval -ne 0 ] && echo "umask 027" >> $file
+    fi
     echo "Verify string"
     grep -E "$str" $file
   args:
