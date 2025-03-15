@@ -150,7 +150,7 @@
     group: root
     mode: 0644
 
-- name: TWGCB-01-008-0265 TWGCB-01-008-0264 TWGCB-01-008-0263
+- name: TWGCB-01-008-0263 TWGCB-01-008-0264 TWGCB-01-008-0265
   become: true
   ignore_errors: true
   shell: |
