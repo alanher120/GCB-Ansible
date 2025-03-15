@@ -2,7 +2,7 @@
 - name: TWGCB-01-008-0093 chrony.conf NTP Server setting
   become: true
   shell: |
-    grep -E '^\s*server|^server' /etc/chrony.conf
+    grep -E '^\s*server' /etc/chrony.conf
   args:
     executable: /bin/bash
   ignore_errors: true
