@@ -8,7 +8,7 @@
     group: root
     mode: 0644
 
-- name: TWGCB-01-008-0003 command
+- name: TWGCB-01-008-0003 command rmmod udf
   ignore_errors: true
   become: true
   command: rmmod udf
