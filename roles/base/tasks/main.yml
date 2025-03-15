@@ -167,6 +167,7 @@
     when: playbook_action in gcb_action
   - include_tasks: TWGCB-account.yml
     when: playbook_action in gcb_action
+
   - include_tasks: TWGCB-base-check-alert-1.yml    # 有出現值   要跳出警告
     when: playbook_action in gcb_action
   - include_tasks: TWGCB-base-check-alert-0.yml    # 沒有出現值 要跳出警告
