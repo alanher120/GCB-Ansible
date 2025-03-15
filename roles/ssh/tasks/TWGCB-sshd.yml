@@ -26,6 +26,51 @@
   args:
     executable: /bin/bash
     
+- name: TWGCB-01-008-0267
+  become: true
+  ignore_errors: true
+  shell: |
+    #!/bin/bash
+    find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chown root:root {} \;
+  args:
+    executable: /bin/bash
+
+- name: TWGCB-01-008-0268
+  become: true
+  ignore_errors: true
+  shell: |
+    #!/bin/bash
+    find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chmod 0600 {} \;
+  args:
+    executable: /bin/bash
+
+- name: TWGCB-01-008-0269
+  become: true
+  ignore_errors: true
+  shell: |
+    #!/bin/bash
+    find /etc/ssh -xdev -type f -name 'ssh_host_*_key.pub' -exec chown root:root {} \;
+  args:
+    executable: /bin/bash
+
+- name: TWGCB-01-008-0270
+  become: true
+  ignore_errors: true
+  shell: |
+    #!/bin/bash
+    find /etc/ssh -xdev -type f -name 'ssh_host_*_key.pub' -exec chmod 644 {} \;
+  args:
+    executable: /bin/bash
+
+- name: TWGCB-01-008-0271 push /etc/crypto-policies/back-ends/opensshserver.config
+  become: true
+  copy:
+    src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/crypto-policies/back-ends/opensshserver.config
+    dest: /etc/security
+    owner: root
+    group: root
+    mode: 0644
+
 - name: TWGCB ~ file /etc/ssh/sshd_config
   become: true
   ignore_errors: true
@@ -105,51 +150,6 @@
   args:
     executable: /bin/bash
     
-- name: TWGCB-01-008-0267
-  become: true
-  ignore_errors: true
-  shell: |
-    #!/bin/bash
-    find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chown root:root {} \;
-  args:
-    executable: /bin/bash
-
-- name: TWGCB-01-008-0268
-  become: true
-  ignore_errors: true
-  shell: |
-    #!/bin/bash
-    find /etc/ssh -xdev -type f -name 'ssh_host_*_key' -exec chmod 0600 {} \;
-  args:
-    executable: /bin/bash
-
-- name: TWGCB-01-008-0269
-  become: true
-  ignore_errors: true
-  shell: |
-    #!/bin/bash
-    find /etc/ssh -xdev -type f -name 'ssh_host_*_key.pub' -exec chown root:root {} \;
-  args:
-    executable: /bin/bash
-
-- name: TWGCB-01-008-0270
-  become: true
-  ignore_errors: true
-  shell: |
-    #!/bin/bash
-    find /etc/ssh -xdev -type f -name 'ssh_host_*_key.pub' -exec chmod 644 {} \;
-  args:
-    executable: /bin/bash
-
-- name: TWGCB-01-008-0271 push /etc/crypto-policies/back-ends/opensshserver.config
-  become: true
-  copy:
-    src: files/{{ansible_distribution}}/{{ansible_distribution_major_version}}/etc/crypto-policies/back-ends/opensshserver.config
-    dest: /etc/security
-    owner: root
-    group: root
-    mode: 0644
-
 - name: TWGCB-01-008-0263 TWGCB-01-008-0264 TWGCB-01-008-0265
   become: true
   ignore_errors: true
