@@ -1,5 +1,5 @@
 ---
-- name: TWGCB-01-008-0231 1
+- name: TWGCB-01-008-0231
   become: true
   ignore_errors: true
   shell: |
