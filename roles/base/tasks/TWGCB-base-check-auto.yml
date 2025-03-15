@@ -10,9 +10,9 @@
   become: true
   command: "{{ item }}"
   with_items: 
-    - update-crypto-policies --set FUTURE
-    - update-crypto-policies
-    #- fips-mode-setup --enable
+    #- update-crypto-policies --set FUTURE
+    #- update-crypto-policies
+    - fips-mode-setup --enable
   when: result.stdout != ""
 
 - name: TWGCB-01-008-0091 check
