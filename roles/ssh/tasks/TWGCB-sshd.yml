@@ -158,7 +158,7 @@
     {{item}}
   args:
     executable: /bin/bash
-  with_items:
-    - systemctl restart sshd #TWGCB-01-008-0265
+  with_items:    
     - chmod 0600 /etc/ssh/sshd_config #TWGCB-01-008-0263
     - chown root:root /etc/ssh/sshd_config #TWGCB-01-008-0264
+    - systemctl restart sshd #TWGCB-01-008-0265
