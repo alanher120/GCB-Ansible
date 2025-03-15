@@ -8,7 +8,7 @@
     group: root
     mode: 0644
 
-- name: TWGCB-01-008-0031 command
+- name: TWGCB-01-008-0031 command rmmod usb-storage
   ignore_errors: true
   become: true
   command: rmmod usb-storage
