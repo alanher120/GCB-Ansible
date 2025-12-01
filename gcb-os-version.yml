@@ -1,3 +1,4 @@
+# 查看各主機 OS 版本
 ---
 - hosts: servers
   tasks:
